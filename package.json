@@ -4,7 +4,7 @@
   "description": "kinobook app to view, edit, add information about films, leave comments and create recommendations of films for user",
   "main": "index.js",
   "scripts": {
-    "install:all": "npm install && npm run install:shared && npm run build:shared && npm run install:backend && npm run install:frontend && npm run install:mobile",
+    "install:all": "npm install && npm run install:backend && npm run install:frontend",
     "install:backend": "cd packages/backend && npm install",
     "install:frontend": "cd packages/frontend && npm install",
     "build:all": "npm run build:shared && npm run build:backend && npm run build:frontend",
@@ -12,13 +12,14 @@
     "build:frontend": "cd packages/frontend && npm run build",
     "start:backend": "cd packages/backend && npm run start",
     "start:frontend": "cd packages/frontend && npm run start",
-    "prettier:fix:all": "npm run prettier:fix:backend && npm run prettier:fix:frontend && npm run prettier:fix:mobile && npm run prettier:fix:shared",
+    "prettier:fix:all": "npm run prettier:fix:backend && npm run prettier:fix:frontend",
     "prettier:fix:backend": "cd packages/backend && npm run prettier:fix",
     "prettier:fix:frontend": "cd packages/frontend && npm run prettier:fix",
-    "lint:fix:all": "npm run lint:fix:backend && npm run lint:fix:frontend &&  npm run lint:fix:mobile && npm run lint:fix:shared",
+    "lint:fix:all": "npm run lint:fix:backend && npm run lint:fix:frontend",
     "lint:fix:backend": "cd packages/backend && npm run lint:fix",
     "lint:fix:frontend": "cd packages/frontend && npm run lint:fix",
-    "fix:all": "npm run lint:fix:all && npm run prettier:fix:all"
+    "fix:all": "npm run lint:fix:all && npm run prettier:fix:all",
+    "hooks:pre-commit": "npm run prettier:fix:all && npm run lint:fix:all"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.30.5",
