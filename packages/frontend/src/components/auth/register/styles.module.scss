@@ -1,0 +1,28 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 300px;
+}
+
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+
+  button {
+    margin-top: $spaces_md;
+  }
+}
+
+.inputWrapper {
+  margin-bottom: $spaces_sm;
+}
+
+
+h3 {
+  color: $text_primary;
+  margin-bottom: $spaces_sm;
+  font-size: $h3;
+}

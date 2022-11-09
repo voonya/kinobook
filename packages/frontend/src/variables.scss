@@ -1,0 +1,88 @@
+// COLORS
+
+$bg_dark: #292929;
+$bg_lightdark: #3e3e3e;
+$bg_primary: #5e2b78;
+$bg_lightprimary: #9347ba;
+$text_primary: #fff;
+$danger: #ed3434;
+
+$box_shadow: 0px 3px 8px 8px #222020;
+
+
+
+// SPACES
+$spaces_xxs: 2.5px;
+$spaces_xs: 5px;
+$spaces_sm: 10px;
+$spaces_md: 15px;
+$spaces_lg: 20px;
+$spaces_xl: 25px;
+$spaces_xl1: 30px;
+$spaces_xl2: 35px;
+$spaces_xl5: 55px;
+
+
+// FONT SIZES
+
+$h1: 64px;
+$h3: 36px;
+$h4: 22px;
+$h5: 18px;
+$h6: 16px;
+$body1: 16px;
+$body2: 14px;
+$body3: 12px;
+$label: 14px;
+$button: 16px;
+$buttonSmall: 12px;
+$caption: 12px;
+
+
+// BREAKPOINTS
+
+$bp_xs: 480px;
+$bp_sm: 576px;
+$bp_md: 768px;
+$bp_lg: 992px;
+$bp_xl: 1200px;
+$bp_xxl: 1400px;
+
+
+
+@mixin xs {
+  @media (max-width: #{$bp_xs}) {
+    @content;
+  }
+}
+
+
+@mixin sm {
+  @media (max-width: #{$bp_sm}) {
+    @content;
+  }
+}
+
+@mixin md {
+  @media (max-width: #{$bp_md}) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @media (max-width: #{$bp_lg}) {
+    @content;
+  }
+}
+
+@mixin xl {
+  @media (max-width: #{$bp_xl}) {
+    @content;
+  }
+}
+
+@mixin xl {
+  @media (max-width: #{$bp_xxl}) {
+    @content;
+  }
+}

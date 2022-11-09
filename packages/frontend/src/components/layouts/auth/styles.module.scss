@@ -1,0 +1,60 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $bg_dark;
+}
+
+.innerWrapper {
+  display: flex;
+
+  align-items: center;
+  justify-content: flex-end;
+  box-shadow: $box_shadow;
+
+  flex-direction: row;
+  padding: 0 0 0 $spaces_xl5;
+
+  @include lg {
+    padding: 0 0 $spaces_xl2 0;
+    flex-direction: column-reverse;
+    width: 400px;
+    height: auto;
+  }
+
+  @include xs {
+    width: 100%;
+    height: 100%;
+  }
+
+}
+
+.image {
+  width: 400px;
+  height: 550px;
+  margin: 0 0 0 $spaces_xl5;
+
+  img {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    object-fit: cover;
+  }
+
+  @include xs {
+    width: 100%;
+    height: 200px;
+  }
+
+  @include lg {
+    height: 200px;
+    width: 100%;
+    margin: 0 0 $spaces_xl2 0;
+  }
+
+
+}

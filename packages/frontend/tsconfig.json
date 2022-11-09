@@ -18,9 +18,28 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": "./",
+    "paths": {
+      "@components": [
+        "src/components"
+      ],
+      "@pages": [
+        "src/pages"
+      ],
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@common": [
+        "src/common"
+      ],
+    }
   },
   "include": [
-    "src"
+    "src",
+    "**/*.ts",
+    "**/*.tsx",
+    "typings.d.ts",
+    "public"
   ]
 }
