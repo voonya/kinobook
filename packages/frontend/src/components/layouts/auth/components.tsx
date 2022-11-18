@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import authBg from '@assets/images/auth-bg.jpg'; //'public/images/auth-bg.jpg'
+import authBg from '@assets/images/auth-bg.jpg';
 import styles from './styles.module.scss';
 
 interface AuthLayoutProps {

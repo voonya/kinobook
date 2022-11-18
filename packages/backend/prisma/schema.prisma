@@ -1,0 +1,136 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+model User {
+  id        String      @id @default(uuid()) @db.Uuid
+  username  String      @unique @db.VarChar(128)
+  email     String      @unique @db.VarChar(256)
+  password  String      @db.VarChar(256)
+  role      Role        @default(USER)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  auth      Auth[]
+  bookmarks Bookmarks[]
+  review    Review[]
+  viewed    Viewed[]
+}
+
+model Auth {
+  id           String   @id @default(uuid()) @db.Uuid
+  user         User     @relation(fields: [userId], references: [id])
+  userId       String   @db.Uuid
+  refreshToken String   @db.VarChar(2048)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Movie {
+  id          String      @id @default(uuid()) @db.Uuid
+  title       String      @db.VarChar(512)
+  description String      @db.VarChar(4096)
+  tagline     String      @db.VarChar(512)
+  releaseDate DateTime
+  runtime     Int
+  budget      BigInt
+  revenue     BigInt
+  averageRate Decimal     @db.Decimal(2, 2)
+  countVotes  BigInt
+  poster      String      @db.VarChar(1024)
+  genres      Genre[]
+  countries   Country[]
+  writers     Writer[]
+  actors      Actor[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  Bookmarks   Bookmarks[]
+  Review      Review[]
+  Viewed      Viewed[]
+}
+
+model Actor {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(256)
+  surname   String   @db.VarChar(256)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  movie     Movie?   @relation(fields: [movieId], references: [id])
+  movieId   String?  @db.Uuid
+}
+
+model Writer {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(256)
+  surname   String   @db.VarChar(256)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  movie     Movie?   @relation(fields: [movieId], references: [id])
+  movieId   String?  @db.Uuid
+}
+
+model Genre {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(128)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  movie     Movie?   @relation(fields: [movieId], references: [id])
+  movieId   String?  @db.Uuid
+}
+
+model Country {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(128)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  movie     Movie?   @relation(fields: [movieId], references: [id])
+  movieId   String?  @db.Uuid
+}
+
+model Bookmarks {
+  id        String   @id @default(uuid()) @db.Uuid
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  movieId   String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id        String   @id @default(uuid()) @db.Uuid
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  movieId   String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.Uuid
+  rate      Decimal  @db.Decimal(2, 2)
+  private   Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  viewed    Viewed[]
+}
+
+model Viewed {
+  id        String   @id @default(uuid()) @db.Uuid
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  movieId   String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.Uuid
+  review    Review?  @relation(fields: [reviewId], references: [id])
+  reviewId  String?  @db.Uuid
+  rate      Decimal  @db.Decimal(2, 2)
+  private   Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -33,6 +33,9 @@
       "@common": [
         "src/common"
       ],
+      "@hooks": [
+        "src/hooks"
+      ],
     }
   },
   "include": [

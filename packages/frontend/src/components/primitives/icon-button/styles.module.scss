@@ -1,0 +1,29 @@
+button {
+  border-radius: 100%;
+
+  &[data-size='xs'] {
+    height: 30px;
+    width: 30px;
+  }
+
+  &[data-size='sm'] {
+    height: 30px;
+    width: 30px;
+  }
+
+  &[data-size='md'] {
+    height: 35px;
+    width: 35px;
+  }
+
+  &[data-size='lg'] {
+    height: 41px;
+    width: 41px;
+  }
+
+
+  &[data-size='xl'] {
+    height: 45px;
+    width: 45px;
+  }
+}

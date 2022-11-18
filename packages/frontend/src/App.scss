@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Akshar&family=PT+Sans&display=swap');
+@import 'src/variables';
 
 * {
   margin: 0;
@@ -6,4 +7,21 @@
   font-family: 'Akshar', sans-serif;
   font-family: 'PT Sans', sans-serif;
   box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+h5 {
+  font-size: $h5;
+  font-weight: 500;
 }

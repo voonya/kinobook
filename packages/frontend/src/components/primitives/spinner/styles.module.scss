@@ -1,0 +1,47 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  display: block;
+  width: 32px;
+  height: 32px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top: 2px solid $bg_lightdark;
+  animation: loaderAnim 1.2s linear infinite;
+
+
+  &[data-size='xs'] {
+    width: 10px;
+    height: 10px;
+  }
+
+  &[data-size='sm'] {
+    width: 15px;
+    height: 15px;
+  }
+
+  &[data-size='md'] {
+    width: 30px;
+    height: 30px;
+  }
+
+  &[data-size='lg'] {
+    width: 60px;
+    height: 60px;
+  }
+
+  &[data-color='white'] {
+    border-top: 2px solid #fff;
+  }
+}
+
+@keyframes loaderAnim {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

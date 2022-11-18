@@ -1,0 +1,15 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  min-width: 100%;
+  min-height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.innerWrapper {
+  flex: 1;
+  background-color: $bg_dark;
+}

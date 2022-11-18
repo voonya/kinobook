@@ -1,0 +1,75 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  width: 100%;
+  background-color: $bg_dark;
+  color: $text_primary;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+
+  padding: $spaces_md 0;
+
+  box-shadow: $box_shadow_light_upper;
+
+}
+
+.logo {
+  flex: 2;
+  display: flex;
+  align-items: center;
+
+  img {
+    height: 40px;
+  }
+
+  font-size: $h4;
+
+  @include md {
+    justify-content: center;
+  }
+
+  @include sm {
+    justify-content: center;
+    margin-left: -$spaces_md;
+    margin-bottom: $spaces_sm;
+  }
+}
+
+
+.info,
+.copyright {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  flex-basis: 150px;
+
+}
+
+.copyright {
+  @include md {
+    flex-basis: 100%;
+    margin-top: $spaces_md;
+  }
+}
+
+.info {
+  @include sm {
+    flex-basis: 100%;
+    margin-top: $spaces_md;
+    margin-bottom: $spaces_sm;
+  }
+
+  ul {
+    list-style: none;
+
+    a {
+      margin-left: $spaces_sm;
+    }
+  }
+}
