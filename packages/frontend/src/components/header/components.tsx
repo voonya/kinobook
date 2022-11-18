@@ -1,5 +1,6 @@
-import { navLinks, SPARoutes } from '@common';
-import { Container } from '@components';
+import type { IUser } from '@common';
+import { navLinks, SPARoutes, Role } from '@common';
+import { Container, AvatarButton } from '@components';
 import { useNavigate } from 'react-router-dom';
 import logo from '@assets/images/kinobook-icon-xl.png';
 import styles from './styles.module.scss';
@@ -7,10 +8,15 @@ import { useState } from 'react';
 
 const Header = () => {
   const navigate = useNavigate();
-  const user = { username: 'voonya' };
-  const userAbr = user.username.substring(0, 2).toUpperCase();
 
   const [isMenuOpen, setIsMenuOpen] = useState(true);
+
+  const user: IUser = {
+    id: '1',
+    email: 'dlyarobot@gmail.com',
+    username: 'voonya',
+    role: Role.ADMIN,
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -35,7 +41,10 @@ const Header = () => {
               </li>
             ))}
           </ul>
-          <div className={styles.profileBtn}>{userAbr}</div>
+          <AvatarButton
+            onClick={() => navigate(SPARoutes.PROFILE.replace(':id', user.id))}
+            user={user}
+          />
         </nav>
       </Container>
     </div>

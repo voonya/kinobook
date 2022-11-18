@@ -1,6 +1,12 @@
 import React from 'react';
 import { SPARoutes } from '@common';
-import { LoginPage, RegisterPage, NotFoundPage, HomePage } from '@pages';
+import {
+  LoginPage,
+  RegisterPage,
+  NotFoundPage,
+  HomePage,
+  ProfilePage,
+} from '@pages';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { PublicRoute } from './components/routes';
 import './App.scss';
@@ -9,7 +15,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={'/'} element={<HomePage />} />
+        <Route path={SPARoutes.HOME} element={<HomePage />} />
+        <Route path={SPARoutes.PROFILE} element={<ProfilePage />} />
         <Route
           path={SPARoutes.LOGIN}
           element={

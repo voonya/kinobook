@@ -1,0 +1,58 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  color: $text_primary;
+  padding: $spaces_xl5 0;
+}
+
+.info {
+  margin-left: $spaces_lg;
+
+
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: $spaces_md;
+
+  &>p {
+    font-size: $h3;
+    margin-left: $spaces_lg;
+  }
+
+}
+
+.table {
+  table-layout: fixed;
+  max-width: 90%;
+
+  td {
+    vertical-align: top;
+    overflow-wrap: break-word;
+    font-size: $h4;
+
+    &:first-of-type {
+      max-width: 100%;
+      white-space: nowrap;
+      position: relative;
+      color: $text_primary;
+      border-right: $spaces_sm solid transparent;
+      border-bottom: $spaces_sm solid transparent;
+
+      &:after {
+        content: ':';
+        top: 7px;
+      }
+    }
+  }
+
+  @include lg {
+    max-width: 100%;
+  }
+}
