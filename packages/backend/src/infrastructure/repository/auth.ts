@@ -6,6 +6,7 @@ import type { PrismaService } from './prisma';
 class AuthRepository implements IAuthRepository {
   constructor(private prisma: PrismaService) {}
 
+  // @Inject(forwardRef(() => PrismaService)) private prisma: PrismaService
   create(userId: string, refreshToken: string) {
     return this.prisma.auth.create({ data: { userId, refreshToken } });
   }
@@ -14,7 +15,11 @@ class AuthRepository implements IAuthRepository {
     return this.prisma.auth.findFirst({ where: { userId, refreshToken } });
   }
 
-  async deleteById(id) {
+  getByRefreshToken(refreshToken: string) {
+    return this.prisma.auth.findFirst({ where: { refreshToken } });
+  }
+
+  async deleteById(id: string) {
     return await this.prisma.auth.delete({ where: { id } });
   }
 

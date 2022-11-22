@@ -1,8 +1,10 @@
 import type { User } from '@domain/models';
 import type { IUserRepository } from '@domain/repository';
-import type { CreateUserDto } from '@domain/contracts';
+import type { IRegisterDto } from '@domain/contracts';
 import type { PrismaService } from './prisma';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 class UserRepository implements IUserRepository {
   constructor(private prisma: PrismaService) {}
 
@@ -18,7 +20,7 @@ class UserRepository implements IUserRepository {
     return this.prisma.user.findFirst({ where: { username } });
   }
 
-  create(user: CreateUserDto): Promise<User> {
+  create(user: IRegisterDto): Promise<User> {
     return this.prisma.user.create({ data: { ...user } });
   }
 }

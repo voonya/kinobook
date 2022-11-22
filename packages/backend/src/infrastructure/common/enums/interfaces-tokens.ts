@@ -1,0 +1,5 @@
+export enum InterfacesTokens {
+  AUTH_SERVICE = 'IAUTH_SERVICE',
+  JWT_SERVICE = 'IJWT_SERVICE',
+  USER_SERVICE = 'IUSER_SERVICE',
+}

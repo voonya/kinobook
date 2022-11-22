@@ -1,6 +1,6 @@
 import { BaseModel } from './base';
 
-export class User extends BaseModel {
+export class UserWithoutPassword extends BaseModel {
   id: string;
 
   email: string;
@@ -8,6 +8,8 @@ export class User extends BaseModel {
   username: string;
 
   role: string;
+}
 
+export class User extends UserWithoutPassword {
   password: string;
 }

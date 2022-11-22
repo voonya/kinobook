@@ -1,26 +1,37 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from '@application/services/auth';
-import type { BcryptService } from '@infrastructure/services/bcrypt/bcrypt.service';
+import { BcryptService } from '@infrastructure/services/bcrypt/bcrypt.service';
 import { JwtModule } from './../services/jwt/jwt.module';
-import type { JwtService } from '@infrastructure/services/jwt/jwt.service';
+import { JwtService } from '@infrastructure/services/jwt/jwt.service';
 import { BcryptModule } from '@infrastructure/services/bcrypt/bcrypt.module';
 import { RepositoriesModule } from '@infrastructure/repository/repositories.module';
-import type { UserRepository } from '@infrastructure/repository/user';
-import type { AuthRepository } from '@infrastructure/repository/auth';
+import { UserRepository } from '@infrastructure/repository/user';
+import { AuthRepository } from '@infrastructure/repository/auth';
+import { InterfacesTokens } from '@infrastructure/common';
+import { UserService } from '@application/services';
 
 @Module({
-  imports: [BcryptModule, JwtModule, RepositoriesModule],
+  imports: [RepositoriesModule, BcryptModule, JwtModule],
   providers: [
     {
-      inject: [BcryptModule, JwtModule, RepositoriesModule],
-      provide: AuthService,
+      inject: [BcryptService, JwtService, AuthRepository, UserRepository],
+      provide: InterfacesTokens.AUTH_SERVICE,
       useFactory: (
         bcrypt: BcryptService,
         jwt: JwtService,
-        userRep: UserRepository,
         authRep: AuthRepository,
+        userRep: UserRepository,
       ) => new AuthService(authRep, userRep, bcrypt, jwt),
+    },
+    {
+      provide: InterfacesTokens.JWT_SERVICE,
+      useClass: JwtService,
+    },
+    {
+      inject: [UserRepository],
+      provide: InterfacesTokens.USER_SERVICE,
+      useFactory: (userRep: UserRepository) => new UserService(userRep),
     },
   ],
   controllers: [AuthController],

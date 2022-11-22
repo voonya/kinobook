@@ -1,15 +1,11 @@
-import type { TokensResponse } from '@domain/contracts';
+import type { TokensResponse, LoginDto, IRegisterDto } from '@domain/contracts';
 
 export interface IAuthService {
-  login(email: string, password: string): Promise<TokensResponse>;
+  login(data: LoginDto): Promise<TokensResponse>;
 
-  register(
-    email: string,
-    username: string,
-    password: string,
-  ): Promise<TokensResponse>;
+  register(data: IRegisterDto): Promise<TokensResponse>;
 
   logout(userId: string, refreshToken: string): Promise<void>;
 
-  refresh(userId: string, refreshToken: string): Promise<string>;
+  refresh(refreshToken: string): Promise<TokensResponse>;
 }

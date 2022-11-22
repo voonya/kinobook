@@ -1,4 +1,10 @@
+import type { ITokenPayload } from '@domain/contracts';
+
 export interface IJwtService {
-  parseToken(token: string, secret: string): any;
-  createToken(payload: any, secret: string, expiresIn: string): string;
+  parseToken(token: string, secret: string): ITokenPayload;
+  createToken(
+    payload: ITokenPayload,
+    secret: string,
+    expiresIn: string,
+  ): string;
 }

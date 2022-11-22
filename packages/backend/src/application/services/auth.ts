@@ -1,5 +1,5 @@
 import type { User } from '@domain/models';
-import type { TokensResponse } from '@domain/contracts';
+import type { TokensResponse, LoginDto, IRegisterDto } from '@domain/contracts';
 import type {
   IAuthService,
   IBcryptService,
@@ -16,7 +16,8 @@ class AuthService implements IAuthService {
     private jwtService: IJwtService,
   ) {}
 
-  async login(email: string, password: string): Promise<TokensResponse> {
+  async login(data: LoginDto): Promise<TokensResponse> {
+    const { email, password } = data;
     const user = await this.userRepository.getByEmail(email);
     if (!user) {
       throw new BadRequestException('No user with this email!');
@@ -36,11 +37,8 @@ class AuthService implements IAuthService {
     return tokens;
   }
 
-  async register(
-    email: string,
-    username: string,
-    password: string,
-  ): Promise<TokensResponse> {
+  async register(data: IRegisterDto): Promise<TokensResponse> {
+    const { email, username, password } = data;
     const userByEmail = await this.userRepository.getByEmail(email);
     if (userByEmail) {
       throw new BadRequestException('User with this email already exist!');
@@ -77,11 +75,9 @@ class AuthService implements IAuthService {
     await this.authRepository.deleteById(row.id);
   }
 
-  async refresh(userId: string, refreshToken: string): Promise<string> {
-    const row = await this.authRepository.getByUserIdAndRefreshToken(
-      userId,
-      refreshToken,
-    );
+  async refresh(refreshToken: string): Promise<TokensResponse> {
+    const row = await this.authRepository.getByRefreshToken(refreshToken);
+
     if (!row) {
       throw new BadRequestException('You are not logined!');
     }
@@ -99,11 +95,13 @@ class AuthService implements IAuthService {
       throw new BadRequestException('Refresh token is expired!');
     }
 
-    const user = await this.userRepository.getById(userId);
+    const user = await this.userRepository.getById(decoded.id);
 
-    const newAccessToken = this.createAccessToken(user);
+    await this.authRepository.deleteById(row.id);
 
-    return newAccessToken;
+    const tokens = await this.registerNewEntry(user);
+
+    return tokens;
   }
 
   private createRefreshToken(user: User) {

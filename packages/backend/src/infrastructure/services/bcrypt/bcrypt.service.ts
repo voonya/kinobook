@@ -7,7 +7,7 @@ class BcryptService implements IBcryptService {
   }
 
   hash(data: string): Promise<string> {
-    return bcrypt.hash(data, process.env.HASH_SALT);
+    return bcrypt.hash(data, Number(process.env.HASH_SALT));
   }
 }
 

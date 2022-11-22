@@ -6,6 +6,7 @@ export interface IAuthRepository {
     userId: string,
     refreshToken: string,
   ): Promise<AuthModel>;
+  getByRefreshToken(refreshToken: string): Promise<AuthModel>;
   deleteById(id: string): Promise<AuthModel>;
   updateRefreshTokenById(
     id: string,
