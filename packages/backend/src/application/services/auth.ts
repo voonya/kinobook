@@ -1,12 +1,23 @@
 import type { User } from '@domain/models';
-import type { TokensResponse, LoginDto, IRegisterDto } from '@domain/contracts';
+import type {
+  ITokensResponse,
+  ILoginDto,
+  IRegisterDto,
+} from '@domain/contracts';
 import type {
   IAuthService,
   IBcryptService,
   IJwtService,
 } from '@domain/services';
 import type { IAuthRepository, IUserRepository } from '@domain/repository';
-import { BadRequestException } from '@nestjs/common';
+import {
+  AlreadyLogoutError,
+  NotLoginedError,
+  IncorrectUsernameOrPasswordError,
+  EmailTakenError,
+  UsernameTakenError,
+  TokenExpiredError,
+} from '@application/exeptions';
 
 class AuthService implements IAuthService {
   constructor(
@@ -16,11 +27,11 @@ class AuthService implements IAuthService {
     private jwtService: IJwtService,
   ) {}
 
-  async login(data: LoginDto): Promise<TokensResponse> {
+  async login(data: ILoginDto): Promise<ITokensResponse> {
     const { email, password } = data;
     const user = await this.userRepository.getByEmail(email);
     if (!user) {
-      throw new BadRequestException('No user with this email!');
+      throw new IncorrectUsernameOrPasswordError();
     }
 
     const isCorrectPassword = await this.bcryptService.comparePasswords(
@@ -29,7 +40,7 @@ class AuthService implements IAuthService {
     );
 
     if (!isCorrectPassword) {
-      throw new BadRequestException('Password is incorrect!');
+      throw new IncorrectUsernameOrPasswordError();
     }
 
     const tokens = await this.registerNewEntry(user);
@@ -37,16 +48,16 @@ class AuthService implements IAuthService {
     return tokens;
   }
 
-  async register(data: IRegisterDto): Promise<TokensResponse> {
+  async register(data: IRegisterDto): Promise<ITokensResponse> {
     const { email, username, password } = data;
     const userByEmail = await this.userRepository.getByEmail(email);
     if (userByEmail) {
-      throw new BadRequestException('User with this email already exist!');
+      throw new EmailTakenError();
     }
 
     const userByUsername = await this.userRepository.getByUsername(username);
     if (userByUsername) {
-      throw new BadRequestException('User with this username already exist!');
+      throw new UsernameTakenError();
     }
 
     const hashPassword = await this.bcryptService.hash(password);
@@ -69,17 +80,17 @@ class AuthService implements IAuthService {
     );
 
     if (!row) {
-      throw new BadRequestException('You are already logout!');
+      throw new AlreadyLogoutError();
     }
 
     await this.authRepository.deleteById(row.id);
   }
 
-  async refresh(refreshToken: string): Promise<TokensResponse> {
+  async refresh(refreshToken: string): Promise<ITokensResponse> {
     const row = await this.authRepository.getByRefreshToken(refreshToken);
 
     if (!row) {
-      throw new BadRequestException('You are not logined!');
+      throw new NotLoginedError();
     }
 
     // check if token expired;
@@ -92,7 +103,7 @@ class AuthService implements IAuthService {
     if (!decoded) {
       await this.authRepository.deleteById(row.id);
 
-      throw new BadRequestException('Refresh token is expired!');
+      throw new TokenExpiredError();
     }
 
     const user = await this.userRepository.getById(decoded.id);
@@ -104,7 +115,7 @@ class AuthService implements IAuthService {
     return tokens;
   }
 
-  private createRefreshToken(user: User) {
+  private createRefreshToken(user: User): string {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userWithoutPassword } = user;
 
@@ -115,7 +126,7 @@ class AuthService implements IAuthService {
     );
   }
 
-  private createAccessToken(user: User) {
+  private createAccessToken(user: User): string {
     // eslint-disable-next-line
     const { password, ...userWithoutPassword } = user;
 
@@ -126,14 +137,14 @@ class AuthService implements IAuthService {
     );
   }
 
-  private createTokens(user: User): TokensResponse {
+  private createTokens(user: User): ITokensResponse {
     const accessToken = this.createAccessToken(user);
     const refreshToken = this.createRefreshToken(user);
 
     return { accessToken, refreshToken };
   }
 
-  private async registerNewEntry(user: User): Promise<TokensResponse> {
+  private async registerNewEntry(user: User): Promise<ITokensResponse> {
     const tokens = this.createTokens(user);
 
     await this.authRepository.create(user.id, tokens.refreshToken);

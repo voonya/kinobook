@@ -1,4 +1,3 @@
-import type { TokensResponse } from '@domain/contracts';
 import {
   Controller,
   HttpCode,
@@ -7,29 +6,27 @@ import {
   Inject,
   Body,
   UseGuards,
-  Req,
   Res,
   BadRequestException,
 } from '@nestjs/common';
+import type { Response } from 'express';
+import type { ITokensResponse } from '@domain/contracts';
+import type { IAuthService } from '@domain/services';
+import type { User } from '@domain/models';
 import {
   Routes,
   AuthRoutes,
   CookieName,
   InterfacesTokens,
-} from '@infrastructure/common';
-import type { IAuthService } from '@domain/services';
-import type { Response } from 'express';
+} from '@infrastructure/common/enums';
 import type {
-  LoginRequestDto,
+  LoginDto,
   RefreshTokenRequest,
   RegisterDto,
 } from '@infrastructure/common/dto';
-import { UserReq } from '@infrastructure/common/decorators';
-import { JwtAuthGuard } from '@infrastructure/common/guards/auth';
-
+import { UserReq, Cookies } from '@infrastructure/common/decorators';
+import { JwtAuthGuard } from '@infrastructure/common/guards';
 import { getPath } from '@infrastructure/helpers';
-import type { User } from '@domain/models';
-import { Cookies } from '@infrastructure/common/decorators';
 
 @Controller(getPath(Routes.AUTH))
 export class AuthController {
@@ -39,7 +36,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post(AuthRoutes.LOGIN)
-  async login(@Body() data: LoginRequestDto, @Res() res: Response) {
+  async login(@Body() data: LoginDto, @Res() res: Response) {
     const tokens = await this.authService.login(data);
 
     return this.setRefreshCookieAndAccessToken(res, tokens);
@@ -76,7 +73,6 @@ export class AuthController {
   async logout(
     @UserReq() user: User,
     @Cookies() cookies: RefreshTokenRequest,
-    @Req() req,
     @Res() res,
   ) {
     const userId = user.id;
@@ -90,7 +86,7 @@ export class AuthController {
     return res;
   }
 
-  setRefreshCookieAndAccessToken(res: Response, tokens: TokensResponse) {
+  setRefreshCookieAndAccessToken(res: Response, tokens: ITokensResponse) {
     res.cookie(CookieName.REFRESH_TOKEN, tokens.refreshToken, {
       expires: new Date(
         new Date().getTime() +
