@@ -1,0 +1,33 @@
+@import 'src/variables.scss';
+
+.infoWrapper {
+  display: flex;
+  margin-bottom: $spaces_xl5;
+}
+
+.posterWrapper {
+  margin-right: $spaces_md;
+}
+
+.info {
+  width: 500px;
+
+  &>div:first-child {
+    margin-bottom: $spaces_md;
+  }
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: $spaces_md;
+
+  div {
+    margin-right: $spaces_md;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

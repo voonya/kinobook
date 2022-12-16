@@ -1,8 +1,8 @@
 @import 'src/variables.scss';
 
 .wrapper {
+  flex: 1;
   display: flex;
-  justify-content: center;
   flex-direction: column;
   align-items: center;
   color: $text_primary;
@@ -40,7 +40,6 @@
     &:first-of-type {
       max-width: 100%;
       white-space: nowrap;
-      position: relative;
       color: $text_primary;
       border-right: $spaces_sm solid transparent;
       border-bottom: $spaces_sm solid transparent;

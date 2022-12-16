@@ -1,4 +1,4 @@
-import type { User } from '@domain/models/user';
+import type { User } from '@domain/models';
 import type { IRegisterDto } from '@domain/contracts';
 
 export interface IUserRepository {

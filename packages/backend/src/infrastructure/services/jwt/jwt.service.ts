@@ -10,8 +10,8 @@ class JwtService implements IJwtService {
     }
   }
 
-  createToken(payload: any, secret: string, expiresIn: string): string {
-    return jwt.sign(payload, secret, {
+  createToken(payload: object, secret: string, expiresIn: string): string {
+    return jwt.sign({ ...payload }, secret, {
       expiresIn,
     });
   }

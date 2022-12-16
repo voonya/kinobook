@@ -1,14 +1,11 @@
-import type { Role } from '../enums';
+import type { BaseModel } from './base';
+import type { Role } from '@common';
 
-interface IUser {
-  id: string;
+interface IUser extends BaseModel {
   email: string;
   username: string;
   role: Role;
   avatar?: string;
-
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export type { IUser };

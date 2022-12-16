@@ -1,4 +1,7 @@
-import { Input, Button, PasswordInput } from '@components';
+import { useState } from 'react';
+import { Input, Button, PasswordInput, Spinner } from '@components';
+import { Link } from 'react-router-dom';
+import { SPARoutes } from '@common';
 import { useForm } from 'react-hook-form';
 import styles from './styles.module.scss';
 
@@ -9,8 +12,27 @@ export const RegisterForm = () => {
     formState: { errors },
   } = useForm();
 
+  const [loading, setLoading] = useState(false);
+  const [backendError, setBackendError] = useState('');
+
   const onSubmit = (data: any) => {
-    console.log(data);
+    setLoading(true);
+    setBackendError('');
+
+    fetch('http://localhost:8080/api/auth/register', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.statusCode === 400) {
+          setBackendError(data.message[0]);
+        }
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -41,7 +63,15 @@ export const RegisterForm = () => {
             {...register('password', { required: true })}
           />
         </div>
-        <Button type="submit">Зареєструватись</Button>
+        {backendError && (
+          <div className={styles.backendError}>{backendError}</div>
+        )}
+        <Button type="submit">
+          {loading ? <Spinner size="sm" color={'white'} /> : 'Зареєструватись'}
+        </Button>
+        <div className={styles.loginCaption}>
+          Вже маєте акаунт? <Link to={SPARoutes.LOGIN}>Увійдіть</Link>
+        </div>
       </form>
     </div>
   );

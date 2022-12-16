@@ -1,0 +1,64 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  width: 100%;
+}
+
+.label {
+  color: $text_primary;
+  font-size: $label;
+
+  span {
+    color: $danger;
+  }
+}
+
+.inner {
+  margin: $spaces_xs 0 $spaces_xxs 0;
+  width: 100%;
+  position: relative;
+
+  textarea {
+    resize: none;
+    height: 300px;
+    background-color: $bg_lightdark;
+    border: 1px solid $bg_lightdark;
+    font-size: $label;
+    padding: $spaces_sm $spaces_md;
+    color: $text_primary;
+    width: 100%;
+    border-radius: 3px;
+
+    &:focus {
+      caret-color: $text_primary;
+      outline: none !important;
+      border-color: $text_primary;
+    }
+
+    ::placeholder {
+      opacity: 0.2;
+    }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  i {
+    cursor: pointer;
+    color: $bg_lightprimary;
+    position: absolute;
+    right: $spaces_sm;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+}
+
+.error {
+  color: $danger;
+  font-size: $caption;
+  min-height: $body1;
+}

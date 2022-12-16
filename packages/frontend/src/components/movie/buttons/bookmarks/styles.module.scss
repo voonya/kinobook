@@ -1,0 +1,22 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  button {
+    background-color: $bg_lightpurple;
+    border: 1px solid $bg_primary;
+
+    transition: 0.4s ease all;
+
+    &:hover {
+
+      background-color: $bg_primary;
+    }
+  }
+
+  &.added {
+    button {
+
+      background-color: $bg_primary
+    }
+  }
+}

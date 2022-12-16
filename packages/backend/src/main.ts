@@ -8,7 +8,13 @@ import * as cookieParser from 'cookie-parser';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
-
+  app.enableCors({
+    'origin': 'http://localhost:3000',
+    'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    'preflightContinue': false,
+    'optionsSuccessStatus': 204,
+    'credentials': true,
+  });
   const logger = new LoggerService();
 
   app.useGlobalInterceptors(new RequestLoggingInterceptor(logger));
@@ -16,10 +22,11 @@ async function bootstrap(): Promise<void> {
   app.useGlobalFilters(new AllExceptionFilter(logger));
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true,
       whitelist: true,
       forbidNonWhitelisted: true,
+      transform: true,
       transformOptions: { enableImplicitConversion: true },
+      disableErrorMessages: process.env.NODE_ENV === 'production',
     }),
   );
   logger.log(`Server start on ${process.env.PORT || 8080}`, 'Server');

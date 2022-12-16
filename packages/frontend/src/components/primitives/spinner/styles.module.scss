@@ -4,11 +4,12 @@
   display: block;
   width: 32px;
   height: 32px;
-  margin: 8px;
   border-radius: 50%;
   border: 2px solid transparent;
-  border-top: 2px solid $bg_lightdark;
+  border-top: 2px solid #fff;
+  border-bottom: 2px solid #fff;
   animation: loaderAnim 1.2s linear infinite;
+  z-index: 0;
 
 
   &[data-size='xs'] {
@@ -33,6 +34,7 @@
 
   &[data-color='white'] {
     border-top: 2px solid #fff;
+    border-bottom: 2px solid #fff;
   }
 }
 

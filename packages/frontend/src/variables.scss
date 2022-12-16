@@ -1,11 +1,16 @@
 // COLORS
 
 $bg_dark: #292929;
+$bg_white: #fff;
 $bg_lightdark: #3e3e3e;
 $bg_primary: #5e2b78;
 $bg_lightprimary: #9347ba;
+$bg_lightpurple: #9c6cb5;
 $text_primary: #fff;
-$danger: #ed3434;
+$danger: #b31e1e;
+$orange: #FF7000;
+
+
 
 $box_shadow: 0px 3px 8px 8px #222020;
 $box_shadow_light: 0px 2px 4px 4px #222020;
@@ -86,4 +91,12 @@ $bp_xxl: 1400px;
   @media (max-width: #{$bp_xxl}) {
     @content;
   }
+}
+
+
+:export {
+  bgPrimary: $bg_primary;
+  bgLightPrimary: $bg_lightprimary;
+  danger: $danger;
+  bgLightDark: $bg_lightdark;
 }

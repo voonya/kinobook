@@ -29,7 +29,7 @@ export class AllExceptionFilter implements ExceptionFilter {
       messageObj = { message: [exception.message], statusCode: status };
     } else {
       messageObj = {
-        message: [(exception as Error).message],
+        message: ['Internal server error!'],
         statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
       };
     }
@@ -37,7 +37,7 @@ export class AllExceptionFilter implements ExceptionFilter {
     const responseData = {
       timestamp: new Date().toISOString(),
       statusCode: messageObj.statusCode,
-      message: messageObj.message,
+      error: [].concat(messageObj.message),
     };
 
     this.logMessage(request, messageObj, status, exception);

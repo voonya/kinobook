@@ -1,5 +1,17 @@
+@import 'src/variables.scss';
+
 button {
+  background-color: $bg_primary;
+  cursor: pointer;
+  color: $text_primary;
   border-radius: 100%;
+  border: 0;
+
+  transition: background-color 0.4s ease;
+
+  &:hover {
+    background-color: $bg_lightprimary;
+  }
 
   &[data-size='xs'] {
     height: 30px;
@@ -17,8 +29,8 @@ button {
   }
 
   &[data-size='lg'] {
-    height: 41px;
-    width: 41px;
+    height: 40px;
+    width: 40px;
   }
 
 

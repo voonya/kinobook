@@ -7,15 +7,26 @@ export interface ButtonProps
     'size' | 'className' | 'style' | 'type'
   > {
   type?: 'button' | 'submit' | 'reset';
+  color?: 'primary' | 'secondary' | 'danger';
+  size?: 'xs' | 'md' | 'lg';
 }
 
 export const Button = ({
   children,
   type = 'button',
+  color = 'primary',
+  size = 'md',
   onClick,
   ...props
 }: ButtonProps) => (
-  <button className={styles.button} type={type} onClick={onClick} {...props}>
+  <button
+    className={styles.button}
+    data-sizeVar={size}
+    type={type}
+    onClick={onClick}
+    data-color={color}
+    {...props}
+  >
     {children}
   </button>
 );

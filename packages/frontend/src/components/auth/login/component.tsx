@@ -1,5 +1,9 @@
-import { Input, Button, PasswordInput } from '@components';
+import { SPARoutes } from '@common';
+import { Button, Input, PasswordInput, Spinner } from '@components';
+import { useAppDispatch, useAppSelector } from '@hooks';
 import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { loginUser } from 'src/store/auth';
 import styles from './styles.module.scss';
 
 export const LoginForm = () => {
@@ -9,8 +13,14 @@ export const LoginForm = () => {
     formState: { errors },
   } = useForm();
 
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector((state) => state.auth.loading);
+  const authError = useAppSelector((state) => state.auth.error);
+
+  const navigate = useNavigate();
+
   const onSubmit = (data: any) => {
-    console.log(data);
+    dispatch(loginUser(data)).then(() => navigate(SPARoutes.HOME));
   };
 
   return (
@@ -33,7 +43,13 @@ export const LoginForm = () => {
             {...register('password', { required: true })}
           />
         </div>
-        <Button type="submit">Увійти</Button>
+        {authError && <div className={styles.backendError}>{authError}</div>}
+        <Button type="submit">
+          {isLoading ? <Spinner size="sm" color={'white'} /> : 'Увійти'}
+        </Button>
+        <div className={styles.registerCaption}>
+          Не маєте акаунту? <Link to={SPARoutes.REGISTER}>Зареєструйтесь</Link>
+        </div>
       </form>
     </div>
   );

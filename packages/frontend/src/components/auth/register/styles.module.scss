@@ -26,3 +26,18 @@ h3 {
   margin-bottom: $spaces_sm;
   font-size: $h3;
 }
+
+.backendError {
+  color: $danger;
+  font-size: $caption;
+}
+
+.loginCaption {
+  margin-top: $spaces_xs;
+  font-size: $caption;
+
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}

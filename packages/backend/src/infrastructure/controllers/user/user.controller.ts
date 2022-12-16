@@ -1,50 +1,44 @@
-import type { IUserRepository } from '@domain/repository/user';
-import { Controller, HttpCode, HttpStatus, Post, Inject } from '@nestjs/common';
+import { ITokenPayload } from '@domain/contracts';
+import { IUserService } from '@domain/services/entities/user';
+import {
+  InterfacesTokens,
+  Routes,
+  UserReq,
+  UserRoutes,
+} from '@infrastructure/common';
+import { getPath } from '@infrastructure/helpers';
+import { JwtUserInterceptor } from '@infrastructure/interceptors';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Inject,
+  Param,
+  ParseUUIDPipe,
+  Req,
+  UseInterceptors,
+} from '@nestjs/common';
+import { Request } from 'express';
 
-import { Routes, AuthRoutes } from '@infrastructure/common';
-
-@Controller(Routes.AUTH)
+@Controller(getPath(Routes.USER))
 export class UserController {
-  constructor(@Inject('userRep') private userRep: IUserRepository) {}
+  constructor(
+    @Inject(InterfacesTokens.USER_SERVICE) private userService: IUserService,
+  ) {}
 
   @HttpCode(HttpStatus.OK)
-  @Post(AuthRoutes.LOGIN)
-  async login() {
-    // call method of service
+  @Get(UserRoutes.GET_BY_ID)
+  @UseInterceptors(JwtUserInterceptor)
+  async getById(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Req() req: Request,
+    @UserReq() userJwt?: ITokenPayload,
+  ) {
+    if (userJwt?.id === id) {
+      return this.userService.getFullProfile(id);
+    }
 
-    // return tokens
-    //console.log(this.authService);
-
-    return { message: 'OK' };
+    return this.userService.getPublicProfile(id);
   }
-
-  // @HttpCode(HttpStatus.OK)
-  // @Post(AuthRoutes.REGISTER)
-  // async registration() {}
-
-  // @HttpCode(HttpStatus.OK)
-  // @Post(AuthRoutes.REFRESH)
-  // async refresh() {}
-
-  // @HttpCode(HttpStatus.OK)
-  // @Post('logout')
-  // async logout() {}
-
-  // setRefreshCookieAndAccessToken(
-  //   res: Response,
-  //   accessToken: string,
-  //   refreshToken: string,
-  // ) {
-  //   res.cookie('refreshToken', refreshToken, {
-  //     expires: new Date(
-  //       new Date().getTime() +
-  //       Number(process.env.TIME_LIVE_JWT_COOKIE_HOURS) * 60 * 60 * 1000,
-  //     ),
-  //     sameSite: 'strict',
-  //     httpOnly: true,
-  //     path: '/auth/refresh',
-  //   });
-  //   res.send({ accessToken });
-  //   return res;
-  // }
 }

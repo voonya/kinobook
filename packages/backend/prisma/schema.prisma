@@ -21,7 +21,7 @@ model User {
   password  String      @db.VarChar(256)
   role      Role        @default(USER)
   createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  updatedAt DateTime    @default(now())
   auth      Auth[]
   bookmarks Bookmarks[]
   review    Review[]
@@ -34,27 +34,28 @@ model Auth {
   userId       String   @db.Uuid
   refreshToken String   @db.VarChar(2048)
   createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  updatedAt    DateTime @default(now())
 }
 
 model Movie {
   id          String      @id @default(uuid()) @db.Uuid
   title       String      @db.VarChar(512)
   description String      @db.VarChar(4096)
-  tagline     String      @db.VarChar(512)
-  releaseDate DateTime
-  runtime     Int
-  budget      BigInt
-  revenue     BigInt
-  averageRate Decimal     @db.Decimal(2, 2)
-  countVotes  BigInt
-  poster      String      @db.VarChar(1024)
+  tagline     String?      @db.VarChar(512)
+  releaseDate DateTime?
+  runtime     Int?
+  budget      BigInt?
+  revenue     BigInt?
+  averageRate Decimal?     @db.Decimal(2, 2)
+  countVotes  BigInt?
+  poster      String?      @db.VarChar(1024)
+  trailer     String?      @db.VarChar(1024)
   genres      Genre[]
   countries   Country[]
   writers     Writer[]
   actors      Actor[]
   createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  updatedAt   DateTime    @default(now())
   Bookmarks   Bookmarks[]
   Review      Review[]
   Viewed      Viewed[]
@@ -75,7 +76,7 @@ model Writer {
   name      String   @db.VarChar(256)
   surname   String   @db.VarChar(256)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
   movie     Movie?   @relation(fields: [movieId], references: [id])
   movieId   String?  @db.Uuid
 }
@@ -84,7 +85,7 @@ model Genre {
   id        String   @id @default(uuid()) @db.Uuid
   name      String   @db.VarChar(128)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
   movie     Movie?   @relation(fields: [movieId], references: [id])
   movieId   String?  @db.Uuid
 }
@@ -93,7 +94,7 @@ model Country {
   id        String   @id @default(uuid()) @db.Uuid
   name      String   @db.VarChar(128)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
   movie     Movie?   @relation(fields: [movieId], references: [id])
   movieId   String?  @db.Uuid
 }
@@ -117,7 +118,7 @@ model Review {
   rate      Decimal  @db.Decimal(2, 2)
   private   Boolean
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
   viewed    Viewed[]
 }
 
@@ -132,5 +133,5 @@ model Viewed {
   rate      Decimal  @db.Decimal(2, 2)
   private   Boolean
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
 }

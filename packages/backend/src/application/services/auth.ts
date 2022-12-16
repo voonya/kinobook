@@ -1,23 +1,24 @@
-import type { User } from '@domain/models';
+import {
+  AlreadyLogoutError,
+  EmailTakenError,
+  IncorrectUsernameOrPasswordError,
+  NotLoginedError,
+  TokenExpiredError,
+  UsernameTakenError,
+} from '@application/exeptions';
 import type {
-  ITokensResponse,
   ILoginDto,
   IRegisterDto,
+  ITokensAndUserResponse,
+  ITokensResponse,
 } from '@domain/contracts';
+import { UserWithoutPassword } from '@domain/models';
+import type { IAuthRepository, IUserRepository } from '@domain/repository';
 import type {
   IAuthService,
   IBcryptService,
   IJwtService,
 } from '@domain/services';
-import type { IAuthRepository, IUserRepository } from '@domain/repository';
-import {
-  AlreadyLogoutError,
-  NotLoginedError,
-  IncorrectUsernameOrPasswordError,
-  EmailTakenError,
-  UsernameTakenError,
-  TokenExpiredError,
-} from '@application/exeptions';
 
 class AuthService implements IAuthService {
   constructor(
@@ -27,7 +28,7 @@ class AuthService implements IAuthService {
     private jwtService: IJwtService,
   ) {}
 
-  async login(data: ILoginDto): Promise<ITokensResponse> {
+  async login(data: ILoginDto): Promise<ITokensAndUserResponse> {
     const { email, password } = data;
     const user = await this.userRepository.getByEmail(email);
     if (!user) {
@@ -43,12 +44,14 @@ class AuthService implements IAuthService {
       throw new IncorrectUsernameOrPasswordError();
     }
 
-    const tokens = await this.registerNewEntry(user);
+    const userWithoutPassword = new UserWithoutPassword(user);
 
-    return tokens;
+    const tokens = await this.registerNewEntry(userWithoutPassword);
+
+    return { tokens, user: userWithoutPassword };
   }
 
-  async register(data: IRegisterDto): Promise<ITokensResponse> {
+  async register(data: IRegisterDto): Promise<ITokensAndUserResponse> {
     const { email, username, password } = data;
     const userByEmail = await this.userRepository.getByEmail(email);
     if (userByEmail) {
@@ -70,7 +73,7 @@ class AuthService implements IAuthService {
 
     const tokens = await this.registerNewEntry(user);
 
-    return tokens;
+    return { tokens, user };
   }
 
   async logout(userId: string, refreshToken: string): Promise<void> {
@@ -86,7 +89,7 @@ class AuthService implements IAuthService {
     await this.authRepository.deleteById(row.id);
   }
 
-  async refresh(refreshToken: string): Promise<ITokensResponse> {
+  async refresh(refreshToken: string): Promise<ITokensAndUserResponse> {
     const row = await this.authRepository.getByRefreshToken(refreshToken);
 
     if (!row) {
@@ -112,39 +115,35 @@ class AuthService implements IAuthService {
 
     const tokens = await this.registerNewEntry(user);
 
-    return tokens;
+    return { tokens, user };
   }
 
-  private createRefreshToken(user: User): string {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = user;
-
+  private createRefreshToken(user: UserWithoutPassword): string {
     return this.jwtService.createToken(
-      userWithoutPassword,
+      user,
       process.env.JWT_REFRESH_SECRET,
       process.env.JWT_REFRESH_EXPIRES,
     );
   }
 
-  private createAccessToken(user: User): string {
-    // eslint-disable-next-line
-    const { password, ...userWithoutPassword } = user;
-
+  private createAccessToken(user: UserWithoutPassword): string {
     return this.jwtService.createToken(
-      userWithoutPassword,
+      user,
       process.env.JWT_ACCESS_SECRET,
       process.env.JWT_ACCESS_EXPIRES,
     );
   }
 
-  private createTokens(user: User): ITokensResponse {
+  private createTokens(user: UserWithoutPassword): ITokensResponse {
     const accessToken = this.createAccessToken(user);
     const refreshToken = this.createRefreshToken(user);
 
     return { accessToken, refreshToken };
   }
 
-  private async registerNewEntry(user: User): Promise<ITokensResponse> {
+  private async registerNewEntry(
+    user: UserWithoutPassword,
+  ): Promise<ITokensResponse> {
     const tokens = this.createTokens(user);
 
     await this.authRepository.create(user.id, tokens.refreshToken);

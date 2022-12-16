@@ -4,3 +4,8 @@ export * from './primitives';
 export * from './footer';
 export * from './header';
 export * from './profile';
+export * from './movie';
+export * from './genres';
+export * from './countries';
+export * from './actors';
+export * from './writers';

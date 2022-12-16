@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import React from 'react';
-import { IconName, Icon } from '@components';
+import { Icon, IconName } from '@components';
+import React, { useState } from 'react';
 import styles from './styles.module.scss';
 
 interface PasswordInputProps extends React.HTMLProps<HTMLInputElement> {
@@ -11,10 +10,7 @@ interface PasswordInputProps extends React.HTMLProps<HTMLInputElement> {
 }
 
 const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
-  (
-    { label, labelRequiredMark, type, error, ...props }: PasswordInputProps,
-    ref,
-  ) => {
+  ({ label, labelRequiredMark, error, ...props }: PasswordInputProps, ref) => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const passwordIcon = passwordVisible ? IconName.EYE : IconName.EYE_SLASHED;
 
@@ -25,7 +21,11 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
           {labelRequiredMark && <span>*</span>}
         </label>
         <div className={styles.inner}>
-          <input ref={ref} type={type} placeholder="myInput" {...props} />
+          <input
+            ref={ref}
+            type={passwordVisible ? 'text' : 'password'}
+            {...props}
+          />
           <span
             className="icon"
             onClick={() => setPasswordVisible(!passwordVisible)}

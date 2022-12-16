@@ -1,32 +1,34 @@
-import {
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Inject,
-  Body,
-  UseGuards,
-  Res,
-  BadRequestException,
-} from '@nestjs/common';
-import type { Response } from 'express';
 import type { ITokensResponse } from '@domain/contracts';
-import type { IAuthService } from '@domain/services';
 import type { User } from '@domain/models';
+import { UserWithoutPassword } from '@domain/models/user';
+import type { IAuthService } from '@domain/services';
+import { Cookies, UserReq } from '@infrastructure/common/decorators';
 import {
-  Routes,
-  AuthRoutes,
-  CookieName,
-  InterfacesTokens,
-} from '@infrastructure/common/enums';
-import type {
   LoginDto,
   RefreshTokenRequest,
   RegisterDto,
 } from '@infrastructure/common/dto';
-import { UserReq, Cookies } from '@infrastructure/common/decorators';
+import {
+  AuthRoutes,
+  CookieName,
+  InterfacesTokens,
+  Routes,
+} from '@infrastructure/common/enums';
 import { JwtAuthGuard } from '@infrastructure/common/guards';
 import { getPath } from '@infrastructure/helpers';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Inject,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import type { Response } from 'express';
 
 @Controller(getPath(Routes.AUTH))
 export class AuthController {
@@ -37,9 +39,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post(AuthRoutes.LOGIN)
   async login(@Body() data: LoginDto, @Res() res: Response) {
-    const tokens = await this.authService.login(data);
+    console.log('Login data: ', data);
 
-    return this.setRefreshCookieAndAccessToken(res, tokens);
+    const result = await this.authService.login(data);
+
+    return this.setTokensCookie(res, result.tokens).send(result.user);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -47,9 +51,9 @@ export class AuthController {
   async registration(@Body() data: RegisterDto, @Res() res: Response) {
     await this.authService.register(data);
 
-    const tokens = await this.authService.login(data);
+    const result = await this.authService.login(data);
 
-    return this.setRefreshCookieAndAccessToken(res, tokens);
+    return this.setTokensCookie(res, result.tokens).send(result.user);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -62,9 +66,9 @@ export class AuthController {
       throw new BadRequestException('Refresh token must be provided!');
     }
 
-    const tokens = await this.authService.refresh(refreshTokenDto.refreshToken);
+    const result = await this.authService.refresh(refreshTokenDto.refreshToken);
 
-    return this.setRefreshCookieAndAccessToken(res, tokens);
+    return this.setTokensCookie(res, result.tokens).send(result.user);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -79,6 +83,7 @@ export class AuthController {
 
     await this.authService.logout(userId, cookies[CookieName.REFRESH_TOKEN]);
     res.clearCookie(CookieName.REFRESH_TOKEN);
+    res.clearCookie(CookieName.ACCESS_TOKEN);
     res.send({
       message: 'Success!',
     });
@@ -86,11 +91,18 @@ export class AuthController {
     return res;
   }
 
-  setRefreshCookieAndAccessToken(res: Response, tokens: ITokensResponse) {
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @Get(AuthRoutes.GET_CURRENT)
+  async getCurrentUser(@UserReq() user: User) {
+    return new UserWithoutPassword(user);
+  }
+
+  setTokensCookie(res: Response, tokens: ITokensResponse): Response {
     res.cookie(CookieName.REFRESH_TOKEN, tokens.refreshToken, {
       expires: new Date(
         new Date().getTime() +
-          Number(process.env.TIME_LIVE_JWT_REFRESH_COOKIE_H) * 60 * 60 * 1000,
+          Number(process.env.TIME_LIVE_JWT_REFRESH_COOKIE_M) * 60 * 1000,
       ),
       sameSite: 'strict',
       httpOnly: true,
@@ -100,13 +112,21 @@ export class AuthController {
     res.cookie(CookieName.REFRESH_TOKEN, tokens.refreshToken, {
       expires: new Date(
         new Date().getTime() +
-          Number(process.env.TIME_LIVE_JWT_REFRESH_COOKIE_H) * 60 * 60 * 1000,
+          Number(process.env.TIME_LIVE_JWT_REFRESH_COOKIE_M) * 60 * 1000,
       ),
       sameSite: 'strict',
       httpOnly: true,
+      path: getPath(Routes.AUTH, AuthRoutes.LOGOUT),
     });
-    tokens.accessToken;
 
-    return res.send({ accessToken: tokens.accessToken });
+    res.cookie(CookieName.ACCESS_TOKEN, tokens.accessToken, {
+      sameSite: 'strict',
+      expires: new Date(
+        new Date().getTime() +
+          Number(process.env.TIME_LIVE_JWT_ACCESS_COOKIE_M) * 60 * 1000,
+      ),
+    });
+
+    return res;
   }
 }
