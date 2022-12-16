@@ -3,13 +3,13 @@
 .wrapper {
   position: sticky;
   top: 0;
-
-  background-color: $bg_dark;
   color: $text_primary;
   box-shadow: $box_shadow_light;
-
+  background-color: $bg_dark;
   padding: $spaces_md;
+  z-index: 99;
 }
+
 
 
 .logo {
@@ -23,9 +23,12 @@
   }
 
   font-size: $h4;
+
+  z-index: 2;
 }
 
-nav {
+.menu,
+.burgerMenu {
   display: flex;
   align-items: center;
 
@@ -34,7 +37,6 @@ nav {
     display: flex;
     align-items: center;
 
-    margin-right: $spaces_xl;
 
     li {
       margin-right: $spaces_lg;
@@ -45,45 +47,96 @@ nav {
     }
   }
 
+
+
+
+}
+
+.menu {
   @include md {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
     display: none;
+  }
 
-    ul {
-      border-top: 1px solid $text_primary;
-      width: 100%;
-      flex-direction: column;
-      margin: 0;
+  a {
+    padding: $spaces_sm $spaces_sm;
+    transition: border-bottom 0.3s ease;
+    border-bottom: 2px solid transparent;
 
-      li {
-        width: 100%;
-        background-color: $bg_dark;
-        padding: $spaces_md 0;
-        margin: 0;
-        text-align: center;
-        transition: 0.3s ease all;
 
-        &:hover {
-          background-color: $bg_lightdark;
-        }
+    &:hover {
+      border-color: $bg_lightprimary;
+    }
 
-        a {
-          display: block;
-          width: 100%;
-        }
-      }
+    &.current {
+      border-color: 2px solid $bg_lightprimary;
+
     }
   }
 
-
+  button {
+    margin-left: $spaces_sm;
+  }
 }
 
-.menuOpen {
-  display: flex;
+
+.burgerMenu {
+  background-color: $bg_dark;
+  transition: visibility 0s, opacity 0.6s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+
+  button {
+    margin: $spaces_md 0;
+  }
+
+  ul {
+    width: 100%;
+    flex-direction: column;
+    margin: 0;
+
+    li {
+      width: 100%;
+      background-color: $bg_dark;
+
+      margin: 0;
+      text-align: center;
+
+      &:hover {
+        background-color: $bg_lightdark;
+      }
+
+      a {
+        display: block;
+        width: 100%;
+
+        padding: $spaces_md 0;
+
+        &.current {
+          background-color: $bg_lightdark;
+        }
+      }
+
+    }
+  }
+
+  @include md {
+    display: flex;
+  }
+
+  &.menuOpen {
+    visibility: visible;
+    opacity: 1;
+  }
 }
+
 
 .profileBtn {
   width: 40px;
@@ -110,6 +163,8 @@ nav {
   height: 20px;
   width: 25px;
   display: none;
+
+  z-index: 101;
 
   &::before,
   &::after {

@@ -1,0 +1,28 @@
+@import 'src/variables.scss';
+
+.table {
+  table-layout: fixed;
+
+  td {
+    vertical-align: top;
+    overflow-wrap: break-word;
+    font-size: $body1;
+
+    &:first-of-type {
+      white-space: nowrap;
+      position: relative;
+      color: $text_primary;
+      border-right: $spaces_sm solid transparent;
+      border-bottom: $spaces_sm solid transparent;
+
+      &:after {
+        content: ':';
+        top: 7px;
+      }
+    }
+
+    &:nth-child(2) {
+      padding-left: $spaces_xl;
+    }
+  }
+}

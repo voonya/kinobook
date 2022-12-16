@@ -1,0 +1,24 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  width: 100%;
+}
+
+.label {
+  display: inline-block;
+  margin-bottom: $spaces_xs;
+  color: $text_primary;
+  font-size: $label;
+
+  span {
+    color: $danger;
+  }
+
+
+}
+
+.error {
+  color: $danger;
+  font-size: $caption;
+  min-height: $body1;
+}

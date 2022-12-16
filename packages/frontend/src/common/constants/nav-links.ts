@@ -1,6 +1,6 @@
 import { SPARoutes } from '@common';
 
-interface NavLink {
+export interface NavLink {
   name: string;
   link: string;
   subLinks?: NavLink[];
@@ -8,16 +8,20 @@ interface NavLink {
 
 const navLinks: NavLink[] = [
   {
-    name: 'Каталог',
+    name: 'Catalogue',
+    link: SPARoutes.CATALOGUE,
+  },
+  {
+    name: 'Bookmarks',
+    link: SPARoutes.BOOKMARKS,
+  },
+  {
+    name: 'Viewed',
     link: SPARoutes.HOME,
   },
   {
-    name: 'Нотатки',
-    link: SPARoutes.HOME,
-  },
-  {
-    name: 'Переглянуті',
-    link: SPARoutes.HOME,
+    name: 'Dashboard',
+    link: SPARoutes.DASHBOARD,
   },
 ];
 

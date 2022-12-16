@@ -5,7 +5,7 @@ import styles from './styles.module.scss';
 interface IconButtonProps {
   icon: IconName;
   size?: IconSize;
-  onClick: () => void;
+  onClick?: () => void;
   style?: React.CSSProperties;
 }
 

@@ -1,0 +1,21 @@
+@import 'src/variables.scss';
+
+.spinnerWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spaces_xl1 0;
+}
+
+.formError {
+    display: block;
+    color: $danger;
+    font-size: $caption;
+    min-height: $body1;
+    margin-bottom: $spaces_xs;
+}
+
+.formControls {
+    display: flex;
+    gap: $spaces_md;
+}

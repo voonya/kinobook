@@ -1,0 +1,21 @@
+@import 'src/variables.scss';
+
+
+.wrapper {
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text_primary;
+
+  &[data-size='sm'] {
+    width: 40px;
+    height: 40px;
+  }
+
+  &[data-size='lg'] {
+    width: 100px;
+    height: 100px;
+    font-size: $h3;
+  }
+}

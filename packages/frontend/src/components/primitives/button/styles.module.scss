@@ -2,15 +2,57 @@
 
 
 .button {
-  padding: $spaces_sm $spaces_lg;
-  background-color: $bg_primary;
   border: 0;
   border-radius: 3px;
   color: $text_primary;
+  transition: background-color 0.4s ease;
+  display: flex;
+  justify-content: center;
+  padding: $spaces_sm $spaces_lg;
   font-size: $body1;
-  transition: 0.4s;
 
-  &:hover {
-    background-color: $bg_lightprimary;
+  &[data-color='primary'] {
+    background-color: $bg_primary;
+
+    &:hover {
+      background-color: $bg_lightprimary;
+    }
   }
+
+  &[data-color='secondary'] {
+    background-color: $bg_primary;
+
+    &:hover {
+      background-color: $bg_lightprimary;
+    }
+  }
+
+  &[data-color='danger'] {
+    background-color: $danger;
+  }
+
+  &:disabled {
+    background-color: $bg_lightpurple;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: $bg_lightpurple;
+    }
+  }
+
+  &[data-sizeVar='xs'] {
+    padding: $spaces_xs $spaces_sm;
+    font-size: $buttonSmall;
+  }
+
+  &[data-sizeVar='md'] {
+    padding: $spaces_sm $spaces_lg;
+    font-size: $body1;
+  }
+
+  &[data-sizeVar='md'] {
+    padding: $spaces_sm $spaces_lg;
+    font-size: $body1;
+  }
+
 }
