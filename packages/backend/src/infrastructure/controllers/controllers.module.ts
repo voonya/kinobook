@@ -7,17 +7,22 @@ import { ActorModule } from './actor/actor.module';
 import { WriterModule } from './writer/writer.module';
 import { GenreModule } from './genre/genre.module';
 import { CountryModule } from './country/country.module';
+import { BookmarkModule } from './bookmarks/bookmark.module';
+import { ViewedModule } from './viewed/viewed.module';
 
 @Module({
   imports: [
     AuthModule,
     MovieModule,
+    BookmarkModule,
     UserModule,
     FileControllerModule,
     ActorModule,
     WriterModule,
     GenreModule,
     CountryModule,
+    ViewedModule,
   ],
+  providers: [],
 })
 export class ControllersModule {}

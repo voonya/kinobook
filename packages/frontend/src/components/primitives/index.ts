@@ -11,3 +11,6 @@ export * from './multiselect';
 export * from './table';
 export * from './textarea';
 export * from './genre-tag';
+export * from './multirange';
+export * from './star-rate';
+export * from './pagination';

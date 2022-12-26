@@ -13,8 +13,13 @@ const BookmarkButton = ({
   size = 'lg',
   onClick,
 }: BookmarksButtonProps) => (
-  <div className={`${styles.wrapper} ${added ? styles.added : ''}`}>
-    <IconButton style={{}} onClick={onClick} size={size} icon={IconName.STAR} />
+  <div className={styles.wrapper}>
+    <IconButton
+      style={{}}
+      onClick={onClick}
+      size={size}
+      icon={added ? IconName.STAR_FILLED : IconName.STAR}
+    />
   </div>
 );
 

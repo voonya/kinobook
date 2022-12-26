@@ -97,7 +97,7 @@ class AuthService implements IAuthService {
     }
 
     // check if token expired;
-    const decoded = await this.jwtService.parseToken(
+    const decoded = this.jwtService.parseToken(
       row.refreshToken,
       process.env.JWT_REFRESH_SECRET,
     );

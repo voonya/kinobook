@@ -21,7 +21,7 @@ export const Button = ({
 }: ButtonProps) => (
   <button
     className={styles.button}
-    data-sizeVar={size}
+    data-sizevar={size}
     type={type}
     onClick={onClick}
     data-color={color}

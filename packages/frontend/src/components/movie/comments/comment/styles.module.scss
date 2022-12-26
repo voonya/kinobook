@@ -1,0 +1,36 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  display: flex;
+  flex: 1;
+  min-width: 550px;
+  align-items: flex-start;
+  padding: $spaces_md 0;
+}
+
+.avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spaces_sm;
+}
+
+.innerWrapper {
+  margin-left: $spaces_md;
+  flex: 1;
+  font-size: $caption;
+}
+
+.username {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &>span:first-child {
+    font-size: $body1;
+  }
+}
+
+.description {
+  margin-top: $spaces_md;
+}

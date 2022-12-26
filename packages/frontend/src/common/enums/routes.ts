@@ -15,7 +15,6 @@ export enum SPARoutes {
 }
 
 export enum DashboardRoutes {
-  USERS = 'users',
   MOVIES = 'movies',
   ACTORS = 'actors',
   WRITERS = 'writers',

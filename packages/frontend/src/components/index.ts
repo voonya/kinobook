@@ -9,3 +9,6 @@ export * from './genres';
 export * from './countries';
 export * from './actors';
 export * from './writers';
+export * from './router';
+export * from './viewed';
+export * from './routes';

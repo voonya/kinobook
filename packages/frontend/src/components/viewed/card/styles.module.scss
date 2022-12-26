@@ -1,0 +1,54 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  width: 70%;
+  flex: 1;
+  display: flex;
+  margin-bottom: $spaces_xl2;
+}
+
+.innerWrapper {
+  flex: 1;
+  margin-left: $spaces_md;
+}
+
+.poster {
+  position: relative;
+  margin-bottom: $spaces_md;
+  cursor: pointer;
+
+  button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(20%, -20%);
+  }
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.releaseDate {
+  font-size: $caption;
+  margin-top: $spaces_xs;
+  display: flex;
+  align-items: center;
+  gap: $spaces_xs;
+}
+
+.controls {
+  margin-top: $spaces_sm;
+  display: flex;
+  justify-content: center;
+  gap: $spaces_sm;
+}
+
+.description {
+  margin-top: $spaces_md;
+  font-size: $body2;
+  display: flex;
+  min-height: 75px;
+  text-align: justify;
+}

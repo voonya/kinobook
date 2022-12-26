@@ -29,27 +29,23 @@ export const MultiSelect = ({
   onChange,
   ref,
   error,
-}: MultiSelectOption) => {
-  console.log('options', options);
-
-  return (
-    <div className={styles.wrapper}>
-      <label className={styles.label}>
-        {label}
-        {labelRequiredMark && <span>*</span>}
-      </label>
-      <Select
-        styles={customStyles}
-        closeMenuOnSelect={false}
-        isMulti
-        placeholder={placeholder}
-        noOptionsMessage={() => noOptionsMessage}
-        options={options}
-        onChange={onChange}
-        value={value}
-        ref={ref}
-      />
-      <div className={styles.error}>{error}</div>
-    </div>
-  );
-};
+}: MultiSelectOption) => (
+  <div className={styles.wrapper}>
+    <label className={styles.label}>
+      {label}
+      {labelRequiredMark && <span>*</span>}
+    </label>
+    <Select
+      styles={customStyles}
+      closeMenuOnSelect={false}
+      isMulti
+      placeholder={placeholder}
+      noOptionsMessage={() => noOptionsMessage}
+      options={options}
+      onChange={onChange}
+      value={value}
+      ref={ref}
+    />
+    <div className={styles.error}>{error}</div>
+  </div>
+);

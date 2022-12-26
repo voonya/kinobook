@@ -1,13 +1,16 @@
 import { Actor } from '@domain/models';
+import { Role } from '@domain/enums';
 import type { IActorService } from '@domain/services';
 import {
   ActorRoutes,
   CreateActorDto,
   InterfacesTokens,
+  RolesGuard,
   Routes,
   UpdateActorDto,
 } from '@infrastructure/common';
 import { getPath } from '@infrastructure/helpers';
+import { JwtAuthGuard } from '@infrastructure/common';
 import {
   Body,
   Controller,
@@ -20,8 +23,12 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  SetMetadata,
+  UseGuards,
 } from '@nestjs/common';
 
+@SetMetadata('roles', [Role.ADMIN, Role.MODERATOR])
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller(getPath(Routes.ACTORS))
 export class ActorController {
   constructor(

@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Input, Button, PasswordInput, Spinner } from '@components';
 import { Link } from 'react-router-dom';
 import { SPARoutes } from '@common';
 import { useForm } from 'react-hook-form';
 import styles from './styles.module.scss';
+import { useAppDispatch, useAppSelector } from '@hooks';
+import { registerUser, clearAuthErrors } from 'src/store';
 
 export const RegisterForm = () => {
   const {
@@ -12,27 +14,16 @@ export const RegisterForm = () => {
     formState: { errors },
   } = useForm();
 
-  const [loading, setLoading] = useState(false);
-  const [backendError, setBackendError] = useState('');
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector((state) => state.auth.loading);
+  const authError = useAppSelector((state) => state.auth.error);
+
+  useEffect(() => {
+    dispatch(clearAuthErrors());
+  }, [dispatch]);
 
   const onSubmit = (data: any) => {
-    setLoading(true);
-    setBackendError('');
-
-    fetch('http://localhost:8080/api/auth/register', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.statusCode === 400) {
-          setBackendError(data.message[0]);
-        }
-      })
-      .finally(() => setLoading(false));
+    dispatch(registerUser(data));
   };
 
   return (
@@ -59,15 +50,16 @@ export const RegisterForm = () => {
           <PasswordInput
             label="Пароль"
             labelRequiredMark
-            error={errors.password && 'password'}
+            error={(errors.password?.message as string) || authError}
             {...register('password', { required: true })}
           />
         </div>
-        {backendError && (
-          <div className={styles.backendError}>{backendError}</div>
-        )}
         <Button type="submit">
-          {loading ? <Spinner size="sm" color={'white'} /> : 'Зареєструватись'}
+          {isLoading ? (
+            <Spinner size="sm" color={'white'} />
+          ) : (
+            'Зареєструватись'
+          )}
         </Button>
         <div className={styles.loginCaption}>
           Вже маєте акаунт? <Link to={SPARoutes.LOGIN}>Увійдіть</Link>

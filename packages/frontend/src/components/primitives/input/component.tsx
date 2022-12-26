@@ -4,12 +4,21 @@ import { Icon } from '@components';
 import styles from './styles.module.scss';
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
-  type?: 'text' | 'number' | 'password' | 'date' | 'file';
+  type?:
+    | 'text'
+    | 'number'
+    | 'password'
+    | 'date'
+    | 'file'
+    | 'range'
+    | 'checkbox';
   placeholder?: string;
   labelRequiredMark?: boolean;
   label?: string;
   error?: string;
+  errorBlock?: boolean;
   icon?: IconName;
+  color?: 'dark' | 'lightdark';
   accept?: string;
   onIconClick?: () => void;
 }
@@ -23,6 +32,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       icon,
       onIconClick,
       error,
+      color = 'lightdark',
+      errorBlock = true,
       ...props
     }: InputProps,
     ref,
@@ -33,14 +44,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {labelRequiredMark && <span>*</span>}
       </label>
       <div className={styles.inner}>
-        <input ref={ref} type={type} {...props} />
+        <input ref={ref} type={type} {...props} data-bgcolor={color} />
         {icon && (
           <span className="icon" onClick={() => onIconClick?.()}>
             <Icon name={icon} />
           </span>
         )}
       </div>
-      <div className={styles.error}>{error}</div>
+      {errorBlock && <div className={styles.error}>{error}</div>}
     </div>
   ),
 );

@@ -1,11 +1,14 @@
 import { Country } from '@domain/models';
 import type { ICountryService } from '@domain/services';
+import { Role } from '@domain/enums';
 import {
   CountryRoutes,
   CreateCountryDto,
   InterfacesTokens,
   Routes,
   UpdateCountryDto,
+  JwtAuthGuard,
+  RolesGuard,
 } from '@infrastructure/common';
 import { getPath } from '@infrastructure/helpers';
 import {
@@ -20,8 +23,12 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
+  SetMetadata,
 } from '@nestjs/common';
 
+@SetMetadata('roles', [Role.ADMIN, Role.MODERATOR])
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller(getPath(Routes.COUNTRIES))
 export class CountryController {
   constructor(

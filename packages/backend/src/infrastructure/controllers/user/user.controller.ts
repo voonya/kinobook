@@ -1,3 +1,4 @@
+import { IBookmarkService } from '@domain/services';
 import { ITokenPayload } from '@domain/contracts';
 import { IUserService } from '@domain/services/entities/user';
 import {
@@ -25,6 +26,8 @@ import { Request } from 'express';
 export class UserController {
   constructor(
     @Inject(InterfacesTokens.USER_SERVICE) private userService: IUserService,
+    @Inject(InterfacesTokens.BOOKMARK_SERVICE)
+    private bookmarkService: IBookmarkService,
   ) {}
 
   @HttpCode(HttpStatus.OK)

@@ -14,16 +14,16 @@ export const MOVIE_COLUMNS = [
   {
     Header: 'Release date',
     accessor: 'releaseDate',
-    Cell: (props: CellProps<{}>) => props.value ?? '-',
+    Cell: (props: CellProps<{}>) => (
+      <>{props.value ? new Date(props.value).toLocaleDateString() : '-'}</>
+    ),
   },
   {
     Header: 'Genres',
     accessor: 'genres',
     Cell: (props: CellProps<{}>) => {
-      console.log(props.value);
-
       if (!props.value) {
-        return '-';
+        return <>-</>;
       }
 
       return (
@@ -38,10 +38,8 @@ export const MOVIE_COLUMNS = [
   {
     Header: 'Poster',
     accessor: 'poster',
-    Cell: (props: CellProps<{}>) => {
-      console.log('cell props', props);
-
-      return <MoviePoster poster={props.value} size="xs" />;
-    },
+    Cell: (props: CellProps<{}>) => (
+      <MoviePoster poster={props.value} size="xs" />
+    ),
   },
 ];

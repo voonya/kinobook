@@ -4,6 +4,9 @@ import { genreReducer } from './genres';
 import { actorsReducer } from './actors/reducers';
 import { writerReducer } from './writers';
 import { countriesReducer } from './countries';
+import { bookmarksReducer } from './bookmarks';
+import { viewedReducer } from './viewed';
+import { viewModalReducer } from './viewed-modal';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +15,9 @@ export const store = configureStore({
     actors: actorsReducer,
     writers: writerReducer,
     countries: countriesReducer,
+    bookmarks: bookmarksReducer,
+    viewed: viewedReducer,
+    viewedModal: viewModalReducer,
   },
 });
 // Infer the `RootState` and `AppDispatch` types from the store itself

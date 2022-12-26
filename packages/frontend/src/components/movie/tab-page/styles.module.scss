@@ -1,0 +1,8 @@
+@import 'src/variables.scss';
+
+.search {
+  margin-bottom: $spaces_md;
+  display: flex;
+  align-items: center;
+  gap: $spaces_md;
+}

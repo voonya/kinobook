@@ -1,17 +1,18 @@
 import type { IActor, IActorForm } from '@common';
-import { actorSchema } from '@common';
-import { Button, Input, Spinner, Table } from '@components';
+import { actorSchema, ENTITY_PER_PAGE } from '@common';
+import { Button, Input, Spinner, Table, PaginationBar } from '@components';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-  createActor,
-  deleteActor,
-  getAllActors,
-  updateActor,
-} from 'src/services';
+  dispatchCreateActor,
+  dispatchGetActors,
+  dispatchUpdateActor,
+  dispatchDeleteActor,
+} from 'src/store';
 import styles from '../styles.module.scss';
 import { ACTOR_COLUMNS } from './table/columns';
+import { useAppDispatch, useAppSelector, usePagination } from '@hooks';
 
 const ActorsTabPage = () => {
   const {
@@ -21,49 +22,49 @@ const ActorsTabPage = () => {
     reset,
     formState: { errors },
   } = useForm<IActorForm>({ resolver: joiResolver(actorSchema) });
-  const [formError, setFormError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [actors, setActors] = useState<IActor[]>([]);
   const [actorEdit, setActorEdit] = useState<IActor | null>(null);
 
+  const actors = useAppSelector((state) => state.actors);
+  const dispatch = useAppDispatch();
+
+  const actorsCount = (actors.data || []).length;
+  const {
+    firstContentIndex,
+    lastContentIndex,
+    nextPage,
+    prevPage,
+    setPage,
+    page,
+    totalPages,
+  } = usePagination({ contentPerPage: ENTITY_PER_PAGE, count: actorsCount });
+
+  const paginatedValues = useMemo(
+    () => actors.data?.slice(firstContentIndex, lastContentIndex),
+    [actors, firstContentIndex, lastContentIndex],
+  );
+
+  if (actorsCount <= ENTITY_PER_PAGE && page !== 1) setPage(1);
+
   useEffect(() => {
-    setIsLoading(true);
-    getAllActors()
-      .then((data) => {
-        if (!data.error) {
-          setActors(data.actors);
-        }
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
+    if (!actors.data && !actors.loading) {
+      dispatch(dispatchGetActors());
+    }
+  }, [actors.data, actors.loading, dispatch]);
 
   const onCreateHandler = (data: any) => {
-    setFormError('');
-    setIsLoading(true);
-
-    let request;
     if (actorEdit) {
-      request = updateActor(actorEdit.id, data.name, data.surname);
-    } else {
-      request = createActor(data.name, data.surname);
+      dispatch(
+        dispatchUpdateActor({
+          id: actorEdit.id,
+          name: data.name,
+          surname: data.surname,
+        }),
+      );
+
+      return;
     }
 
-    request
-      .then((res) => {
-        if (res.error && res.statusCode === 400) {
-          setFormError(res.error[0]);
-
-          return;
-        }
-
-        return getAllActors();
-      })
-      .then((data) => {
-        if (!data.error) {
-          setActors(data.actors);
-        }
-      })
-      .finally(() => setIsLoading(false));
+    dispatch(dispatchCreateActor({ name: data.name, surname: data.surname }));
   };
 
   const onEdit = (data: IActor) => {
@@ -74,26 +75,11 @@ const ActorsTabPage = () => {
   };
 
   const onDeleteHandler = (id: string) => {
-    setIsLoading(true);
-    deleteActor(id)
-      .then((res) => {
-        if (res.error) {
-          return;
-        }
-
-        return getAllActors();
-      })
-      .then((data) => {
-        if (!data.error) {
-          setActors(data.actors);
-        }
-      })
-      .finally(() => setIsLoading(false));
+    dispatch(dispatchDeleteActor(id));
   };
 
   const onCancelHandler = () => {
     setActorEdit(null);
-    setFormError('');
     reset();
   };
 
@@ -111,36 +97,44 @@ const ActorsTabPage = () => {
         />
         <Input
           label="Surname"
-          labelRequiredMark
           {...register('surname')}
-          error={errors.surname?.message || formError}
+          error={errors.surname?.message}
         />
         {actorEdit ? (
           <div className={styles.formControls}>
-            <Button disabled={isLoading} type="submit">
-              {isLoading ? <Spinner size="xs" /> : 'Save'}
+            <Button disabled={actors.loading} type="submit">
+              {actors.loading ? <Spinner size="xs" /> : 'Save'}
             </Button>
-            <Button disabled={isLoading} onClick={onCancelHandler}>
+            <Button disabled={actors.loading} onClick={onCancelHandler}>
               Cancel
             </Button>
           </div>
         ) : (
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? <Spinner size="xs" /> : 'Create'}
+          <Button type="submit" disabled={actors.loading}>
+            {actors.loading ? <Spinner size="xs" /> : 'Create'}
           </Button>
         )}
       </form>
-      {isLoading ? (
+      {actors.loading ? (
         <div className={styles.spinnerWrapper}>
           <Spinner />
         </div>
       ) : (
         <Table
           disabled={!!actorEdit}
-          data={actors}
+          data={paginatedValues || []}
           columns={ACTOR_COLUMNS}
           onEdit={(data) => onEdit(data as IActor)}
           onDelete={onDeleteHandler}
+        />
+      )}
+      {actorsCount > 0 && (
+        <PaginationBar
+          firstPage={1}
+          page={page}
+          lastPage={totalPages}
+          onPrevPage={prevPage}
+          onNextPage={nextPage}
         />
       )}
     </div>

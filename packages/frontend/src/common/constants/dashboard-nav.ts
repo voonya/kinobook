@@ -3,10 +3,6 @@ import type { NavLink } from './nav-links';
 
 const dashBoardLinks: NavLink[] = [
   {
-    name: 'Users',
-    link: DashboardRoutes.USERS,
-  },
-  {
     name: 'Movies',
     link: DashboardRoutes.MOVIES,
   },

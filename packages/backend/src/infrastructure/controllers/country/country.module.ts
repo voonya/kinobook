@@ -6,9 +6,10 @@ import {
 } from '@infrastructure/repository';
 import { CountryController } from './country.controller';
 import { CountryService } from '@application/services';
+import { UserServiceModule } from '@infrastructure/services';
 
 @Module({
-  imports: [RepositoriesModule],
+  imports: [RepositoriesModule, UserServiceModule],
   providers: [
     {
       inject: [CountryRepository],

@@ -1,32 +1,86 @@
 import { createReducer } from '@reduxjs/toolkit';
 import type { IGenre } from '@common';
 import { combineReducers } from 'redux';
-import { getGenres } from './actions';
+import {
+  dispatchGetGenres,
+  dispatchCreateGenre,
+  dispatchDeleteGenre,
+  dispatchUpdateGenre,
+} from './actions';
 
 export interface GenresState {
-  genres: IGenre[] | null;
+  data: IGenre[] | null;
   error: string;
   loading: boolean;
 }
 
-const genres = createReducer<IGenre[] | null>(null, {
-  [getGenres.fulfilled.type]: (_, { payload }) => payload,
-  [getGenres.rejected.type]: () => [],
+const data = createReducer<IGenre[] | null>(null, {
+  [dispatchGetGenres.fulfilled.type]: (_, { payload }) => payload,
+  [dispatchGetGenres.rejected.type]: () => [],
+
+  [dispatchCreateGenre.fulfilled.type]: (state, { payload }) =>
+    state ? [payload, ...state] : [payload],
+
+  [dispatchDeleteGenre.fulfilled.type]: (state, { payload }) => {
+    if (!state) return;
+
+    const findIndex = state.findIndex(
+      (genre: IGenre) => genre.id === payload.id,
+    );
+
+    if (findIndex === -1) {
+      return;
+    }
+    const newGenres = [
+      ...state.slice(0, findIndex),
+      ...state.slice(findIndex + 1),
+    ];
+
+    return [...newGenres];
+  },
+
+  [dispatchUpdateGenre.fulfilled.type]: (state, { payload }) => {
+    if (!state) return;
+
+    const findIndex = state.findIndex(
+      (genre: IGenre) => genre.id === payload.id,
+    );
+
+    if (findIndex === -1) {
+      return;
+    }
+    const newGenres = [...state];
+    newGenres[findIndex] = payload;
+
+    return [...newGenres];
+  },
 });
 
 const loading = createReducer(false, {
-  [getGenres.pending.type]: () => true,
-  [getGenres.fulfilled.type]: () => false,
-  [getGenres.rejected.type]: () => false,
+  [dispatchGetGenres.pending.type]: () => true,
+  [dispatchGetGenres.fulfilled.type]: () => false,
+  [dispatchGetGenres.rejected.type]: () => false,
+
+  [dispatchCreateGenre.pending.type]: () => true,
+  [dispatchCreateGenre.fulfilled.type]: () => false,
+  [dispatchCreateGenre.rejected.type]: () => false,
+
+  [dispatchDeleteGenre.pending.type]: () => true,
+  [dispatchDeleteGenre.fulfilled.type]: () => false,
+  [dispatchDeleteGenre.rejected.type]: () => false,
+
+  [dispatchUpdateGenre.pending.type]: () => true,
+  [dispatchUpdateGenre.fulfilled.type]: () => false,
+  [dispatchUpdateGenre.rejected.type]: () => false,
 });
 
 const error = createReducer('', {
-  [getGenres.pending.type]: () => '',
-  [getGenres.rejected.type]: (_, { payload }) => payload,
+  [dispatchGetGenres.pending.type]: () => '',
+  [dispatchGetGenres.rejected.type]: (_, { payload }) => payload,
 });
 
 export const genreReducer = combineReducers({
-  genres,
+  data,
   error,
   loading,
 });

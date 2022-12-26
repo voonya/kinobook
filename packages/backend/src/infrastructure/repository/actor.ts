@@ -23,6 +23,11 @@ class ActorRepository implements IActorRepository {
 
   getAll(): Promise<Actor[]> {
     return this.prisma.actor.findMany({
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+      ],
       select: {
         id: true,
         name: true,

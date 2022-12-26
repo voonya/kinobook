@@ -35,7 +35,7 @@ CREATE TABLE "Movie" (
     "runtime" INTEGER NOT NULL,
     "budget" BIGINT NOT NULL,
     "revenue" BIGINT NOT NULL,
-    "averageRate" DECIMAL(2,2) NOT NULL,
+    "averageRate" DECIMAL(3,2) NOT NULL,
     "countVotes" BIGINT NOT NULL,
     "poster" VARCHAR(1024) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

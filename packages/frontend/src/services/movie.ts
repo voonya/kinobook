@@ -1,5 +1,50 @@
 import { getApiRoute, http } from 'src/helpers';
 import { ApiRoutes, MovieRoutes } from '@common';
+import type { IMoviesFiltes, IPaginationFilter } from '@common';
+
+const convertObjectToQueryParam = (
+  data: Record<string, any>,
+  keyObj: string,
+) => {
+  let param = '';
+
+  Object.keys(data).forEach((key) => {
+    if (data[key]) {
+      param += `${keyObj}[${key}]=${data[key]}&`;
+    }
+  });
+
+  return param.slice(0, -1);
+};
+
+export const convertMovieFiltersToQuery = (filters: IMoviesFiltes) => {
+  let queryParams = '';
+  queryParams = '?';
+  Object.keys(filters).forEach((key, i) => {
+    const typedKey = key as keyof IMoviesFiltes;
+    if (filters[typedKey]) {
+      let param = `${key}=`;
+      if (Array.isArray(filters[typedKey])) {
+        (filters[typedKey] as []).forEach((element) => {
+          param += `${element},`;
+        });
+        param = param.slice(0, -1);
+      } else if (typeof filters[typedKey] === 'object' && filters[typedKey]) {
+        param = convertObjectToQueryParam(
+          filters[typedKey] as Record<string, any>,
+          typedKey,
+        );
+      } else {
+        param += `${filters[typedKey]}`;
+      }
+
+      param = (i != 0 ? '&' : '') + param;
+      queryParams += param;
+    }
+  });
+
+  return queryParams;
+};
 
 export function createMovie(data: FormData) {
   const route = getApiRoute(ApiRoutes.MOVIE);
@@ -34,8 +79,23 @@ export function deleteMovie(id: string) {
   return http.delete(route);
 }
 
-export function getAllMovies() {
-  const route = getApiRoute(ApiRoutes.MOVIE, MovieRoutes.GET_ALL);
+export function getAllMovies(filters?: IMoviesFiltes) {
+  let route = getApiRoute(ApiRoutes.MOVIE, MovieRoutes.GET_ALL);
+
+  console.log(filters);
+
+  route += filters ? convertMovieFiltersToQuery(filters) : '';
+
+  return http.get(route);
+}
+
+export function getMovieViews(movieId: string, filters: IPaginationFilter) {
+  let route = getApiRoute(ApiRoutes.MOVIE, MovieRoutes.GET_VIEWES).replace(
+    ':id',
+    movieId,
+  );
+
+  route += filters ? convertMovieFiltersToQuery(filters) : '';
 
   return http.get(route);
 }

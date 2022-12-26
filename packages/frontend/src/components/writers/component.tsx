@@ -1,17 +1,18 @@
 import type { IWriter, IWriterForm } from '@common';
-import { writerSchema } from '@common';
-import { Button, Input, Spinner, Table } from '@components';
+import { writerSchema, ENTITY_PER_PAGE } from '@common';
+import { Button, Input, Spinner, Table, PaginationBar } from '@components';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  createWriter,
-  deleteWriter,
-  getAllWriters,
-  updateWriter,
-} from 'src/services';
 import styles from '../styles.module.scss';
 import { WRITER_COLUMNS } from './table/columns';
+import {
+  dispatchCreateWriter,
+  dispatchGetWriters,
+  dispatchUpdateWriter,
+  dispatchDeleteWriter,
+} from 'src/store';
+import { useAppDispatch, useAppSelector, usePagination } from '@hooks';
 
 const WritersTabPage = () => {
   const {
@@ -21,49 +22,44 @@ const WritersTabPage = () => {
     reset,
     formState: { errors },
   } = useForm<IWriterForm>({ resolver: joiResolver(writerSchema) });
-  const [formError, setFormError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [writers, setWriters] = useState<IWriter[]>([]);
+  const writers = useAppSelector((state) => state.writers);
+  const dispatch = useAppDispatch();
+
   const [writerEdit, setWriterEdit] = useState<IWriter | null>(null);
 
+  const writersCount = (writers.data || []).length;
+  const {
+    firstContentIndex,
+    lastContentIndex,
+    nextPage,
+    prevPage,
+    setPage,
+    page,
+    totalPages,
+  } = usePagination({ contentPerPage: ENTITY_PER_PAGE, count: writersCount });
+
+  if (writersCount <= ENTITY_PER_PAGE && page !== 1) setPage(1);
+
   useEffect(() => {
-    setIsLoading(true);
-    getAllWriters()
-      .then((data) => {
-        if (!data.error) {
-          setWriters(data.writers);
-        }
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
+    if (!writers.data && !writers.loading) {
+      dispatch(dispatchGetWriters());
+    }
+  }, [writers.data, writers.loading, dispatch]);
 
   const onCreateHandler = (data: any) => {
-    setFormError('');
-    setIsLoading(true);
-
-    let request;
     if (writerEdit) {
-      request = updateWriter(writerEdit.id, data.name, data.surname);
-    } else {
-      request = createWriter(data.name, data.surname);
+      dispatch(
+        dispatchUpdateWriter({
+          id: writerEdit.id,
+          name: data.name,
+          surname: data.surname,
+        }),
+      );
+
+      return;
     }
 
-    request
-      .then((res) => {
-        if (res.error && res.statusCode === 400) {
-          setFormError(res.error[0]);
-
-          return;
-        }
-
-        return getAllWriters();
-      })
-      .then((data) => {
-        if (!data.error) {
-          setWriters(data.writers);
-        }
-      })
-      .finally(() => setIsLoading(false));
+    dispatch(dispatchCreateWriter({ name: data.name, surname: data.surname }));
   };
 
   const onEdit = (data: IWriter) => {
@@ -74,26 +70,11 @@ const WritersTabPage = () => {
   };
 
   const onDeleteHandler = (id: string) => {
-    setIsLoading(true);
-    deleteWriter(id)
-      .then((res) => {
-        if (res.error) {
-          return;
-        }
-
-        return getAllWriters();
-      })
-      .then((data) => {
-        if (!data.error) {
-          setWriters(data.writers);
-        }
-      })
-      .finally(() => setIsLoading(false));
+    dispatch(dispatchDeleteWriter(id));
   };
 
   const onCancelHandler = () => {
     setWriterEdit(null);
-    setFormError('');
     reset();
   };
 
@@ -111,36 +92,44 @@ const WritersTabPage = () => {
         />
         <Input
           label="Surname"
-          labelRequiredMark
           {...register('surname')}
-          error={errors.surname?.message || formError}
+          error={errors.surname?.message}
         />
         {writerEdit ? (
           <div className={styles.formControls}>
-            <Button disabled={isLoading} type="submit">
-              {isLoading ? <Spinner size="xs" /> : 'Save'}
+            <Button disabled={writers.loading} type="submit">
+              {writers.loading ? <Spinner size="xs" /> : 'Save'}
             </Button>
-            <Button disabled={isLoading} onClick={onCancelHandler}>
+            <Button disabled={writers.loading} onClick={onCancelHandler}>
               Cancel
             </Button>
           </div>
         ) : (
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? <Spinner size="xs" /> : 'Create'}
+          <Button type="submit" disabled={writers.loading}>
+            {writers.loading ? <Spinner size="xs" /> : 'Create'}
           </Button>
         )}
       </form>
-      {isLoading ? (
+      {writers.loading ? (
         <div className={styles.spinnerWrapper}>
           <Spinner />
         </div>
       ) : (
         <Table
           disabled={!!writerEdit}
-          data={writers}
+          data={writers.data || []}
           columns={WRITER_COLUMNS}
           onEdit={(data) => onEdit(data as IWriter)}
           onDelete={onDeleteHandler}
+        />
+      )}
+      {writersCount > 0 && (
+        <PaginationBar
+          firstPage={1}
+          page={page}
+          lastPage={totalPages}
+          onPrevPage={prevPage}
+          onNextPage={nextPage}
         />
       )}
     </div>

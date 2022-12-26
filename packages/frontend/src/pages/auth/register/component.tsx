@@ -1,9 +1,9 @@
-import { AuthLayout, RegisterForm } from '@components';
+import { AuthLayout, RegisterForm, PublicRoute } from '@components';
 import { useTitle } from '@hooks';
 import { SPARoutes } from '@common';
 import './styles.scss';
 
-export const RegisterPage = () => {
+const Component = () => {
   useTitle(SPARoutes.REGISTER);
 
   return (
@@ -12,3 +12,9 @@ export const RegisterPage = () => {
     </AuthLayout>
   );
 };
+
+export const RegisterPage = () => (
+  <PublicRoute>
+    <Component />
+  </PublicRoute>
+);

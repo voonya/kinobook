@@ -1,17 +1,18 @@
 import type { ICountry, ICountryForm } from '@common';
-import { countrySchema } from '@common';
-import { Button, Input, Spinner, Table } from '@components';
+import { countrySchema, ENTITY_PER_PAGE } from '@common';
+import { Button, Input, Spinner, Table, PaginationBar } from '@components';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  createCountry,
-  deleteCountry,
-  getAllCountries,
-  updateCountry,
-} from 'src/services';
 import styles from '../styles.module.scss';
 import { COUNTRIES_COLUMNS } from './table/columns';
+import { useAppDispatch, useAppSelector, usePagination } from '@hooks';
+import {
+  dispatchGetCountries,
+  dispatchCreateCountry,
+  dispatchUpdateCountry,
+  dispatchDeleteCountry,
+} from 'src/store';
 
 const CountriesTabPage = () => {
   const {
@@ -21,49 +22,42 @@ const CountriesTabPage = () => {
     reset,
     formState: { errors },
   } = useForm<ICountryForm>({ resolver: joiResolver(countrySchema) });
-  const [formError, setFormError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [countries, setCountries] = useState<ICountry[]>([]);
+  const countries = useAppSelector((state) => state.countries);
+  const dispatch = useAppDispatch();
   const [countryEdit, setCountryEdit] = useState<ICountry | null>(null);
 
+  const countriesCount = (countries.data || []).length;
+  const {
+    firstContentIndex,
+    lastContentIndex,
+    nextPage,
+    prevPage,
+    setPage,
+    page,
+    totalPages,
+  } = usePagination({ contentPerPage: ENTITY_PER_PAGE, count: countriesCount });
+
+  const paginatedValues = useMemo(
+    () => countries.data?.slice(firstContentIndex, lastContentIndex),
+    [countries, firstContentIndex, lastContentIndex],
+  );
+
+  if (countriesCount <= ENTITY_PER_PAGE && page !== 1) setPage(1);
+
   useEffect(() => {
-    setIsLoading(true);
-    getAllCountries()
-      .then((data) => {
-        if (!data.error) {
-          setCountries(data.countries);
-        }
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
+    if (!countries.data && !countries.loading) {
+      dispatch(dispatchGetCountries());
+    }
+  }, [countries, dispatch]);
 
   const onCreateHandler = (data: any) => {
-    setFormError('');
-    setIsLoading(true);
-
-    let request;
     if (countryEdit) {
-      request = updateCountry(countryEdit.id, data.name);
-    } else {
-      request = createCountry(data.name);
+      dispatch(dispatchUpdateCountry({ id: countryEdit.id, name: data.name }));
+
+      return;
     }
 
-    request
-      .then((res) => {
-        if (res.error && res.statusCode === 400) {
-          setFormError(res.error[0]);
-
-          return;
-        }
-
-        return getAllCountries();
-      })
-      .then((data) => {
-        if (!data.error) {
-          setCountries(data.countries);
-        }
-      })
-      .finally(() => setIsLoading(false));
+    dispatch(dispatchCreateCountry(data.name));
   };
 
   const onEdit = (data: ICountry) => {
@@ -73,26 +67,11 @@ const CountriesTabPage = () => {
   };
 
   const onDeleteHandler = (id: string) => {
-    setIsLoading(true);
-    deleteCountry(id)
-      .then((res) => {
-        if (res.error) {
-          return;
-        }
-
-        return getAllCountries();
-      })
-      .then((data) => {
-        if (!data.error) {
-          setCountries(data.countries);
-        }
-      })
-      .finally(() => setIsLoading(false));
+    dispatch(dispatchDeleteCountry(id));
   };
 
   const onCancelHandler = () => {
     setCountryEdit(null);
-    setFormError('');
     reset();
   };
 
@@ -106,34 +85,43 @@ const CountriesTabPage = () => {
           label="Name"
           labelRequiredMark
           {...register('name')}
-          error={errors.name?.message || formError}
+          error={errors.name?.message}
         />
         {countryEdit ? (
           <div className={styles.formControls}>
-            <Button disabled={isLoading} type="submit">
-              {isLoading ? <Spinner size="xs" /> : 'Save'}
+            <Button disabled={countries.loading} type="submit">
+              {countries.loading ? <Spinner size="xs" /> : 'Save'}
             </Button>
-            <Button disabled={isLoading} onClick={onCancelHandler}>
+            <Button disabled={countries.loading} onClick={onCancelHandler}>
               Cancel
             </Button>
           </div>
         ) : (
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? <Spinner size="xs" /> : 'Create'}
+          <Button type="submit" disabled={countries.loading}>
+            {countries.loading ? <Spinner size="xs" /> : 'Create'}
           </Button>
         )}
       </form>
-      {isLoading ? (
+      {countries.loading ? (
         <div className={styles.spinnerWrapper}>
           <Spinner />
         </div>
       ) : (
         <Table
           disabled={!!countryEdit}
-          data={countries}
+          data={countries.data || []}
           columns={COUNTRIES_COLUMNS}
           onEdit={(data) => onEdit(data as ICountry)}
           onDelete={onDeleteHandler}
+        />
+      )}
+      {countriesCount > 0 && (
+        <PaginationBar
+          firstPage={1}
+          page={page}
+          lastPage={totalPages}
+          onPrevPage={prevPage}
+          onNextPage={nextPage}
         />
       )}
     </div>

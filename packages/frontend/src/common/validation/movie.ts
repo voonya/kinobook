@@ -59,7 +59,7 @@ const movieSchema = Joi.object({
       'string.min': minLengthMsg(8),
       'string.max': maxLengthMsg(1000),
     }),
-  releaseDate: Joi.date().allow(null).allow(''),
+  releaseDate: Joi.any().allow(null).allow(''),
   runtime: Joi.number()
     .allow(null)
     .allow('')

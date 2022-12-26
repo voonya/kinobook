@@ -1,9 +1,9 @@
-import { AuthLayout, LoginForm } from '@components';
+import { AuthLayout, LoginForm, PublicRoute } from '@components';
 import { useTitle } from '@hooks';
 import { SPARoutes } from '@common';
 import './styles.scss';
 
-export const LoginPage = () => {
+const Component = () => {
   useTitle(SPARoutes.LOGIN);
 
   return (
@@ -12,3 +12,9 @@ export const LoginPage = () => {
     </AuthLayout>
   );
 };
+
+export const LoginPage = () => (
+  <PublicRoute>
+    <Component />
+  </PublicRoute>
+);

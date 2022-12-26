@@ -40,6 +40,7 @@ export const customStyles: StylesConfig = {
     cursor: 'pointer',
     backgroundColor: `${vars.bgLightDark}`,
     '&:hover': { backgroundColor: `${vars.bgLightDark}` },
+    color: '#fff',
   }),
   multiValue: (styles) => ({
     ...styles,
@@ -61,5 +62,9 @@ export const customStyles: StylesConfig = {
   dropdownIndicator: (styles) => ({
     ...styles,
     ':hover': { color: `${vars.bgLightPrimary}` },
+  }),
+  input: (styles) => ({
+    ...styles,
+    color: '#fff',
   }),
 };

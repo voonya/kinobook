@@ -1,37 +1,45 @@
 @import 'src/variables.scss';
 
 .table {
-    width: 100%;
-    font-size: $body2;
-    padding: $spaces_xs;
-    border-collapse: collapse;
-    margin-top: $spaces_lg;
+  width: 100%;
+  font-size: $body2;
+  padding: $spaces_xs;
+  border-collapse: collapse;
+  margin-top: $spaces_lg;
 
+  td {
+    padding: 0 $spaces_xs;
+  }
+
+  th {
+    padding: $spaces_sm $spaces_sm;
+    background-color: $bg_primary;
+
+  }
+
+
+  tbody tr {
     td {
-        padding: 0 $spaces_xs;
+      text-align: center;
+      min-height: 60px;
+      height: 60px;
+
+      &:nth-last-child(1),
+      &:nth-last-child(2) {
+        width: 1%;
+        white-space: nowrap;
+        background-color: $bg_dark;
+      }
     }
+  }
+}
 
-    th {
-        padding: $spaces_sm $spaces_sm;
-        background-color: $bg_lightdark;
-    }
-
-    tbody tr {
-        // &:nth-child(odd) {
-        //     background-color: $bg_lightdark;
-        // }
-
-        td {
-            text-align: center;
-            min-height: 60px;
-            height: 60px;
-
-            &:nth-last-child(1),
-            &:nth-last-child(2) {
-                width: 1%;
-                white-space: nowrap;
-                background-color: $bg_dark;
-            }
-        }
-    }
+.placeholder {
+  padding: $spaces_xl2 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $bg_lightdark;
+  font-size: $h3;
 }

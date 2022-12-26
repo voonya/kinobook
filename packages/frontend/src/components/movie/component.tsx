@@ -1,5 +1,18 @@
+import { useNavigate } from 'react-router-dom';
+import { SPARoutes } from '@common';
 import type { IMovie } from '@common';
-import { Container } from '@components';
+import { Container, IconButton, MovieComments, IconName } from '@components';
+import {
+  useInBookmarks,
+  useInViewed,
+  useAppDispatch,
+  useAppSelector,
+} from '@hooks';
+import {
+  dispatchCreateBookmark,
+  dispatchDeleteBookmark,
+  openViewModal,
+} from 'src/store';
 import { BookmarkButton, ViewedButton } from './buttons';
 import { MovieInfo } from './info';
 import { MoviePoster } from './poster';
@@ -12,8 +25,39 @@ interface MovieProps {
 }
 
 const Movie = ({ movie }: MovieProps) => {
-  const filmViewed = false;
-  const bookmarksAdded = true;
+  const inBookmarks = useInBookmarks(movie.id);
+  const inViewed = useInViewed(movie.id);
+  const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
+
+  const user = useAppSelector((state) => state.auth.user);
+
+  const onBookmarkToggle = () => {
+    const cb = inBookmarks ? dispatchDeleteBookmark : dispatchCreateBookmark;
+    dispatch(cb(movie.id));
+  };
+
+  const inViewedClick = () => {
+    if (!inViewed) {
+      dispatch(openViewModal({ movieId: movie.id }));
+
+      return;
+    }
+  };
+
+  const onEdit = () => {
+    navigate(SPARoutes.UPDATE_MOVIE.replace(':id', movie.id));
+  };
+
+  // const onDelete = () => {
+  //   setIsLoading(true);
+  //   deleteMovie(id).then((data) => {
+  //     if (!data.error) {
+  //       return fetchMovies();
+  //     }
+  //   }).finally(() => setIsLoading(false));
+  // }
 
   return (
     <Container
@@ -27,10 +71,23 @@ const Movie = ({ movie }: MovieProps) => {
       <div className={styles.infoWrapper}>
         <div className={styles.posterWrapper}>
           <MoviePoster poster={movie.poster} size="lg" />
-          <div className={styles.controls}>
-            <BookmarkButton added={bookmarksAdded} />
-            <ViewedButton viewed={filmViewed} />
-          </div>
+          {user && (
+            <>
+              <div className={styles.controls}>
+                <BookmarkButton
+                  added={inBookmarks}
+                  onClick={onBookmarkToggle}
+                />
+                <ViewedButton viewed={inViewed} onClick={inViewedClick} />
+                <IconButton
+                  icon={IconName.PENCIL}
+                  color="success"
+                  size={'lg'}
+                  onClick={onEdit}
+                />
+              </div>
+            </>
+          )}
         </div>
         <div className={styles.info}>
           <MovieTitle title={movie.title} />
@@ -38,6 +95,8 @@ const Movie = ({ movie }: MovieProps) => {
         </div>
       </div>
       {movie.trailer && <YouTubePlayer link={movie.trailer} />}
+      <h4 className={styles.comments}>Comments</h4>
+      <MovieComments movieId={movie.id} />
     </Container>
   );
 };

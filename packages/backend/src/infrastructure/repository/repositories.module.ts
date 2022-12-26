@@ -7,6 +7,8 @@ import { ActorRepository } from './actor';
 import { GenreRepository } from './genre';
 import { WriterRepository } from './writer';
 import { CountryRepository } from './country';
+import { BookmarkRepository } from './bookmark';
+import { ViewedRepository } from './viewed';
 
 @Module({
   providers: [
@@ -18,6 +20,8 @@ import { CountryRepository } from './country';
     GenreRepository,
     WriterRepository,
     CountryRepository,
+    BookmarkRepository,
+    ViewedRepository,
   ],
   exports: [
     AuthRepository,
@@ -28,6 +32,8 @@ import { CountryRepository } from './country';
     GenreRepository,
     WriterRepository,
     CountryRepository,
+    BookmarkRepository,
+    ViewedRepository,
   ],
 })
 export class RepositoriesModule {}

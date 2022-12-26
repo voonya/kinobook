@@ -8,7 +8,7 @@
   justify-content: center;
   padding: $spaces_md $spaces_lg;
   background-color: $bg_lightdark;
-  border-radius: 3px;
+  border-radius: $border_radius_poster;
   width: 175px;
 }
 
@@ -22,5 +22,27 @@
     right: 0;
     top: 0;
     transform: translate(20%, -20%);
+  }
+}
+
+.body {
+  flex: 1;
+  width: 100%;
+  font-size: $caption;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+  h4 {
+    margin-bottom: $spaces_xs;
+  }
+}
+
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+
+  &>div {
+    margin: $spaces_xs $spaces_sm 0 0;
   }
 }

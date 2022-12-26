@@ -1,13 +1,19 @@
-import { Layout, MovieForm, Container, Spinner } from '@components';
-import type { IMovie } from '@common';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import {
+  Layout,
+  MovieForm,
+  Container,
+  Spinner,
+  ProtectedRoute,
+} from '@components';
+import type { IMovie } from '@common';
+import { SPARoutes, Role } from '@common';
 import { useTitle } from '@hooks';
-import { SPARoutes } from '@common';
 import { getMovie, updateMovie } from 'src/services';
 import styles from './styles.module.scss';
-import { useEffect, useState } from 'react';
 
-const MovieUpdatePage = () => {
+const Component = () => {
   useTitle(SPARoutes.UPDATE_MOVIE);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -27,7 +33,6 @@ const MovieUpdatePage = () => {
           navigate(SPARoutes.NOT_FOUND);
         }
         setMovie(data);
-        console.log(data);
       })
       .finally(() => setIsLoading(false));
   }, [id, navigate]);
@@ -55,4 +60,8 @@ const MovieUpdatePage = () => {
   );
 };
 
-export { MovieUpdatePage };
+export const MovieUpdatePage = () => (
+  <ProtectedRoute role={Role.MODERATOR}>
+    <Component />
+  </ProtectedRoute>
+);

@@ -1,0 +1,45 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  display: flex;
+  align-items: flex-start;
+  max-width: 600px;
+  min-width: 600px;
+}
+
+.form {
+  flex: 1;
+  margin-left: $spaces_md;
+
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: $spaces_sm;
+  font-weight: 400;
+
+}
+
+.releaseDate {
+  font-size: $caption;
+}
+
+.label {
+  display: block;
+  color: $text_primary;
+  font-size: $label;
+
+  span {
+    color: $danger;
+  }
+
+  margin-bottom: $spaces_xxs;
+}
+
+
+.controls {
+  display: flex;
+  gap: $spaces_md;
+  justify-content: center;
+}

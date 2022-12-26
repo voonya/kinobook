@@ -1,4 +1,5 @@
 import type { IMovie } from '@common';
+import { GenreTag } from '@components';
 import styles from './styles.module.scss';
 
 interface MovieInfoProps {
@@ -7,52 +8,116 @@ interface MovieInfoProps {
 
 const MovieInfo = ({ movie }: MovieInfoProps) => (
   <div className={styles.wrapper}>
-    <table className={styles.table}>
+    {movie.genres && (
+      <>
+        <div className={styles.genresTitle}>Genres</div>
+        <div className={styles.genres}>
+          {movie.genres.map((el) => (
+            <GenreTag key={el.id} genre={el} />
+          ))}
+        </div>
+      </>
+    )}
+    {movie.tagline && (
+      <>
+        <div>Tagline</div>
+        <div>{movie.tagline}</div>
+      </>
+    )}
+    {movie.averageRate && (
+      <>
+        <div>Rating</div>
+        <div>{movie.averageRate}</div>
+        <div>Count votes</div>
+        <div>{movie.countVotes}</div>
+      </>
+    )}
+
+    {movie.budget && (
+      <>
+        <div>Budget</div>
+        <div>{movie.budget}</div>
+      </>
+    )}
+    {movie.revenue && (
+      <>
+        <div>Revenue</div>
+        <div>{movie.revenue}</div>
+      </>
+    )}
+    {movie.runtime && (
+      <>
+        <div>Runtime</div>
+        <div>{movie.runtime}</div>
+      </>
+    )}
+    {movie.releaseDate && (
+      <>
+        <div>Release date</div>
+        <div>{new Date(movie.releaseDate).toLocaleDateString()}</div>
+      </>
+    )}
+    <>
+      <div>Description</div>
+      <div>{movie.description}</div>
+    </>
+    {/* <table className={styles.table}>
       <tbody>
-        {movie.tagline && (
-          <tr>
-            <td>Слоган</td>
-            <td>{movie.tagline}</td>
-          </tr>
+        {movie.genres && (
+          <>
+            <div>Genres</div>
+            <div className={styles.genres}>{movie.genres.map(el => <GenreTag genre={el} />)}</div>
+          </>
         )}
-        <tr>
-          <td>Рейтинг</td>
-          <td>{movie.averageRate}</td>
-        </tr>
-        <tr>
-          <td>Кількість голосів</td>
-          <td>{movie.countVotes}</td>
-        </tr>
+        {movie.tagline && (
+          <>
+            <div>Tagline</div>
+            <div>{movie.tagline}</div>
+          </>
+        )}
+        {movie.averageRate &&
+          <>
+            <>
+              <div>Rating</div>
+              <div>{movie.averageRate}</div>
+            </>
+            <>
+              <div>Count votes</div>
+              <div>{movie.countVotes}</div>
+            </>
+          </>
+        }
+
         {movie.budget && (
-          <tr>
-            <td>Бюджет</td>
-            <td>{movie.budget}</td>
-          </tr>
+          <>
+            <div>Budget</div>
+            <div>{movie.budget}</div>
+          </>
         )}
         {movie.revenue && (
-          <tr>
-            <td>Дохід</td>
-            <td>{movie.revenue}</td>
-          </tr>
+          <>
+            <div>Revenue</div>
+            <div>{movie.revenue}</div>
+          </>
         )}
         {movie.runtime && (
-          <tr>
-            <td>Тривалість</td>
-            <td>{movie.runtime}</td>
-          </tr>
+          <>
+            <div>Runtime</div>
+            <div>{movie.runtime}</div>
+          </>
         )}
         {movie.releaseDate && (
-          <tr>
-            <td>Дата виходу</td>
-            <td>{movie.releaseDate}</td>
-          </tr>
+          <>
+            <div>Release date</div>
+            <div>{movie.releaseDate}</div>
+          </>
         )}
-        <tr>
-          <td>Опис</td>
-          <td>{movie.description}</td>
-        </tr>
+        <>
+          <div>Description</div>
+          <div>{movie.description}</div>
+        </>
       </tbody>
-    </table>
+    </table> */}
   </div>
 );
 

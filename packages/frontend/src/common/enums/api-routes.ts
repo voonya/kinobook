@@ -9,6 +9,7 @@ enum ApiRoutes {
   ACTOR = '/actor',
   WRITER = '/writer',
   FILE = '/file',
+  VIEWED = '/viewed',
 }
 
 enum AuthRoutes {
@@ -21,6 +22,10 @@ enum AuthRoutes {
 
 enum UserRoutes {
   GET_BY_ID = '/:id',
+  GET_BOOKMARKS = '/bookmarks',
+  DELETE_BOOKMARK = '/bookmarks',
+  CREATE_BOOKMARK = '/bookmarks',
+  GET_BOOKMARK_IDS = '/bookmarks/ids',
 }
 
 enum MovieRoutes {
@@ -28,6 +33,7 @@ enum MovieRoutes {
   UPDATE_BY_ID = '/:id',
   DELETE_BY_ID = '/:id',
   GET_ALL = '/',
+  GET_VIEWES = '/:id/views',
 }
 
 enum GenreRoutes {
@@ -58,6 +64,15 @@ enum WritersRoutes {
   CREATE = '/',
 }
 
+enum ViewedRoutes {
+  GET_BY_ID = '/:id',
+  CREATE = '/',
+  UPDATE_BY_ID = '/:id',
+  GET_USER_VIEWED = '/',
+  DELETE_BY_MOVIE_ID = '/',
+  GET_IDS_IN_VIEWED = '/ids',
+}
+
 enum FileRoutes {
   GET_BY_ID = '/:id',
 }
@@ -73,4 +88,5 @@ export {
   ActorsRoutes,
   WritersRoutes,
   FileRoutes,
+  ViewedRoutes,
 };

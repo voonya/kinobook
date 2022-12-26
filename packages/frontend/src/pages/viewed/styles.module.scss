@@ -1,0 +1,44 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.innerWrapper {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  flex: 1;
+}
+
+.inputWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: $spaces_md;
+}
+
+.cardWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+
+.title {
+  margin-bottom: $spaces_md;
+  font-size: $h3;
+}
+
+.placeholder {
+  font-size: $h3;
+  color: $bg_lightdark;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}

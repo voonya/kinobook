@@ -1,11 +1,14 @@
 import { Genre } from '@domain/models';
 import type { IGenreService } from '@domain/services';
+import { Role } from '@domain/enums';
 import {
   CreateGenreDto,
   GenreRoutes,
   InterfacesTokens,
   Routes,
   UpdateGenreDto,
+  JwtAuthGuard,
+  RolesGuard,
 } from '@infrastructure/common';
 import { getPath } from '@infrastructure/helpers';
 import {
@@ -20,8 +23,12 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  SetMetadata,
+  UseGuards,
 } from '@nestjs/common';
 
+@SetMetadata('roles', [Role.ADMIN, Role.MODERATOR])
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller(getPath(Routes.GENRES))
 export class GenreController {
   constructor(

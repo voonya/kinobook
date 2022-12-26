@@ -9,13 +9,17 @@ $bg_lightpurple: #9c6cb5;
 $text_primary: #fff;
 $danger: #b31e1e;
 $orange: #FF7000;
+$success: #219c33;
+$modal_overlay: #3e3e3e75;
 
 
 
 $box_shadow: 0px 3px 8px 8px #222020;
 $box_shadow_light: 0px 2px 4px 4px #222020;
-
+$box_shadow_poster: 0px 1px 5px 1px #222020;
 $box_shadow_light_upper: 2px 0px 4px 4px #222020;
+
+$border_radius_poster: 3px;
 
 // SPACES
 $spaces_xxs: 2.5px;
@@ -99,4 +103,6 @@ $bp_xxl: 1400px;
   bgLightPrimary: $bg_lightprimary;
   danger: $danger;
   bgLightDark: $bg_lightdark;
+  bgDark: $bg_dark;
+  bgModalOverlay: $modal_overlay;
 }

@@ -1,10 +1,10 @@
-import { SPARoutes } from '@common';
-import { Container, Layout, MovieForm } from '@components';
+import { SPARoutes, Role } from '@common';
+import { Container, Layout, MovieForm, ProtectedRoute } from '@components';
 import { useNavigate } from 'react-router-dom';
 import { createMovie } from 'src/services';
 import styles from './styles.module.scss';
 
-const MovieCreatePage = () => {
+const Component = () => {
   const navigate = useNavigate();
 
   const onFormSubmit = (data: FormData) =>
@@ -24,4 +24,8 @@ const MovieCreatePage = () => {
   );
 };
 
-export { MovieCreatePage };
+export const MovieCreatePage = () => (
+  <ProtectedRoute role={Role.MODERATOR}>
+    <Component />
+  </ProtectedRoute>
+);

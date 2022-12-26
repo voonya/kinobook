@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UserService, AuthService } from '@application/services';
+import { AuthService } from '@application/services';
 import {
   JwtService,
   JwtModule,
@@ -13,9 +13,10 @@ import {
 } from '@infrastructure/repository';
 import { InterfacesTokens } from '@infrastructure/common';
 import { AuthController } from './auth.controller';
+import { UserServiceModule } from '@infrastructure/services';
 
 @Module({
-  imports: [RepositoriesModule, BcryptModule, JwtModule],
+  imports: [RepositoriesModule, BcryptModule, JwtModule, UserServiceModule],
   providers: [
     {
       inject: [BcryptService, JwtService, AuthRepository, UserRepository],
@@ -26,15 +27,6 @@ import { AuthController } from './auth.controller';
         authRep: AuthRepository,
         userRep: UserRepository,
       ) => new AuthService(authRep, userRep, bcrypt, jwt),
-    },
-    {
-      provide: InterfacesTokens.JWT_SERVICE,
-      useClass: JwtService,
-    },
-    {
-      inject: [UserRepository],
-      provide: InterfacesTokens.USER_SERVICE,
-      useFactory: (userRep: UserRepository) => new UserService(userRep),
     },
   ],
   controllers: [AuthController],

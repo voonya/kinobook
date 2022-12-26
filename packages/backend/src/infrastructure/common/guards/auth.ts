@@ -1,3 +1,5 @@
+import { UserService } from './../../../application/services/user';
+import { JwtService } from '@infrastructure/services';
 import type { CanActivate, ExecutionContext } from '@nestjs/common';
 import {
   BadRequestException,
@@ -5,20 +7,20 @@ import {
   UnauthorizedException,
   Inject,
 } from '@nestjs/common';
-import type { IJwtService, IUserService } from '@domain/services';
 import { InterfacesTokens } from '../enums';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
     @Inject(InterfacesTokens.JWT_SERVICE)
-    private tokenService: IJwtService,
+    private tokenService: JwtService,
     @Inject(InterfacesTokens.USER_SERVICE)
-    private userService: IUserService,
+    private userService: UserService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
+
     const authorization = req?.headers?.authorization?.split(' ');
 
     if (!authorization) {
@@ -28,6 +30,7 @@ export class JwtAuthGuard implements CanActivate {
     if (authorization[0] !== 'Bearer' || !authorization[1]) {
       throw new UnauthorizedException('Jwt malformed!');
     }
+
     const user = this.tokenService.parseToken(
       authorization[1],
       process.env.JWT_ACCESS_SECRET,

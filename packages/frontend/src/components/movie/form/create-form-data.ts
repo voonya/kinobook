@@ -14,7 +14,7 @@ export const createMovieFormData = (data: any) => {
           data[key].forEach((el: string) => formData.append(key, el));
         break;
       default:
-        data[key] && formData.append(key, data[key]);
+        data[key] && formData.append(key, data[key]); //: formData.append(key, "");
     }
   });
 

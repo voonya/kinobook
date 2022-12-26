@@ -6,7 +6,7 @@ import styles from './styles.module.scss';
 interface AvatarButtonProps {
   user: IUser;
   size?: AvatarSize;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const AvatarButton = ({ user, size, onClick }: AvatarButtonProps) => (

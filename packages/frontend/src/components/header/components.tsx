@@ -6,6 +6,7 @@ import {
   Container,
   IconButton,
   IconName,
+  Spinner,
 } from '@components';
 import { useAppDispatch, useAppSelector } from '@hooks';
 import { useState } from 'react';
@@ -19,6 +20,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const user = useAppSelector((state) => state.auth.user);
+  const loading = useAppSelector((state) => state.auth.loading);
   const dispatch = useAppDispatch();
 
   const logoutHandler = () => {
@@ -27,6 +29,47 @@ const Header = () => {
 
   const redirectToProfile = (id: string) => {
     navigate(SPARoutes.PROFILE.replace(':id', id));
+  };
+
+  const renderButtonsBurger = () => {
+    if (loading) {
+      return <Spinner />;
+    }
+
+    if (user) {
+      return (
+        <>
+          <li>
+            <NavLink to={SPARoutes.PROFILE.replace(':id', user.id)}>
+              Профіль
+            </NavLink>
+          </li>
+          <Button onClick={logoutHandler}>Вийти</Button>
+        </>
+      );
+    }
+
+    return <Button onClick={() => navigate(SPARoutes.LOGIN)}>Увійти</Button>;
+  };
+
+  const renderButtons = () => {
+    if (loading) {
+      return <Spinner />;
+    }
+
+    if (user) {
+      return (
+        <>
+          <AvatarButton
+            onClick={() => redirectToProfile(user.id)}
+            user={user}
+          />{' '}
+          <IconButton icon={IconName.EXIT} size="lg" onClick={logoutHandler} />
+        </>
+      );
+    }
+
+    return <Button onClick={() => navigate(SPARoutes.LOGIN)}>Увійти</Button>;
   };
 
   const renderBurgerMenu = () => (
@@ -48,31 +91,26 @@ const Header = () => {
       >
         <ul>
           <>
-            {navLinks.map((el) => (
-              <li key={el.name + el.link}>
-                <NavLink
-                  to={el.link}
-                  className={({ isActive }) =>
-                    isActive ? styles.current : undefined
-                  }
-                >
-                  {el.name}
-                </NavLink>
-              </li>
-            ))}
+            {navLinks.map((el) => {
+              if (el.roles && (!user || !el.roles.includes(user.role))) {
+                return;
+              }
 
-            {user ? (
-              <>
-                <li>
-                  <NavLink to={SPARoutes.PROFILE.replace(':id', user.id)}>
-                    Профіль
+              return (
+                <li key={el.name + el.link}>
+                  <NavLink
+                    to={el.link}
+                    className={({ isActive }) =>
+                      isActive ? styles.current : undefined
+                    }
+                  >
+                    {el.name}
                   </NavLink>
                 </li>
-                <Button onClick={logoutHandler}>Вийти</Button>
-              </>
-            ) : (
-              <Button onClick={() => navigate(SPARoutes.LOGIN)}>Увійти</Button>
-            )}
+              );
+            })}
+
+            {renderButtonsBurger()}
           </>
         </ul>
       </nav>
@@ -83,31 +121,27 @@ const Header = () => {
     <nav className={styles.menu}>
       <ul>
         <>
-          {navLinks.map((el) => (
-            <li key={el.name + el.link}>
-              <NavLink
-                to={el.link}
-                className={({ isActive }) =>
-                  isActive ? styles.current : undefined
-                }
-              >
-                {el.name}
-              </NavLink>
-            </li>
-          ))}
+          {navLinks.map((el) => {
+            if (el.roles && (!user || !el.roles.includes(user.role))) {
+              return;
+            }
+
+            return (
+              <li key={el.name + el.link}>
+                <NavLink
+                  to={el.link}
+                  className={({ isActive }) =>
+                    isActive ? styles.current : undefined
+                  }
+                >
+                  {el.name}
+                </NavLink>
+              </li>
+            );
+          })}
         </>
       </ul>
-      {user ? (
-        <>
-          <AvatarButton
-            onClick={() => redirectToProfile(user.id)}
-            user={user}
-          />{' '}
-          <IconButton icon={IconName.EXIT} size="lg" onClick={logoutHandler} />
-        </>
-      ) : (
-        <Button onClick={() => navigate(SPARoutes.LOGIN)}>Увійти</Button>
-      )}
+      {renderButtons()}
     </nav>
   );
 

@@ -1,9 +1,9 @@
-import { dashBoardLinks } from '@common';
-import { Container, Layout } from '@components';
 import { NavLink, Outlet } from 'react-router-dom';
+import { dashBoardLinks, Role } from '@common';
+import { Container, Layout, ProtectedRoute } from '@components';
 import styles from './styles.module.scss';
 
-const DashBoardLayout = () => (
+const Component = () => (
   <Layout>
     <Container style={{ width: '100%' }}>
       <div className={styles.wrapper}>
@@ -29,4 +29,8 @@ const DashBoardLayout = () => (
   </Layout>
 );
 
-export { DashBoardLayout };
+export const DashBoardLayout = () => (
+  <ProtectedRoute role={Role.MODERATOR}>
+    <Component />
+  </ProtectedRoute>
+);

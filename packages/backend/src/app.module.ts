@@ -4,6 +4,11 @@ import { ControllersModule } from '@infrastructure/controllers/controllers.modul
 @Module({
   imports: [ControllersModule],
   controllers: [],
-  providers: [],
+  providers: [
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: JwtAuthGuard,
+    // },
+  ],
 })
 export class AppModule {}

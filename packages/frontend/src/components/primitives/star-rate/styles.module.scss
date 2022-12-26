@@ -1,0 +1,21 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  background-color: $bg_primary;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  padding: $spaces_xxs $spaces_xs;
+  border-radius: 7px;
+
+  button {
+    background-color: transparent;
+    color: $bg_white;
+    border: none;
+  }
+}
+
+.editable {
+  cursor: pointer;
+}

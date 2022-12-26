@@ -1,11 +1,14 @@
 import { Writer } from '@domain/models';
 import type { IWriterService } from '@domain/services';
+import { Role } from '@domain/enums';
 import {
   CreateWriterDto,
   InterfacesTokens,
   Routes,
   UpdateWriterDto,
   WriterRoutes,
+  JwtAuthGuard,
+  RolesGuard,
 } from '@infrastructure/common';
 import { getPath } from '@infrastructure/helpers';
 import {
@@ -20,8 +23,12 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  SetMetadata,
+  UseGuards,
 } from '@nestjs/common';
 
+@SetMetadata('roles', [Role.ADMIN, Role.MODERATOR])
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller(getPath(Routes.WRITERS))
 export class WriterController {
   constructor(

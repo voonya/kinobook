@@ -3,6 +3,12 @@
 .infoWrapper {
   display: flex;
   margin-bottom: $spaces_xl5;
+
+}
+
+.comments {
+  font-size: $h4;
+  margin: $spaces_xl1 0 $spaces_md 0;
 }
 
 .posterWrapper {
@@ -10,24 +16,18 @@
 }
 
 .info {
-  width: 500px;
+  width: 800px;
 
   &>div:first-child {
     margin-bottom: $spaces_md;
   }
 }
 
-.controls {
+.controls,
+.adminControls {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: $spaces_md;
-
-  div {
-    margin-right: $spaces_md;
-
-    &:last-child {
-      margin-right: 0;
-    }
-  }
+  gap: $spaces_md;
 }

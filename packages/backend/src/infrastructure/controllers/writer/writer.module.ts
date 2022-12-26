@@ -1,14 +1,15 @@
-import { Module } from '@nestjs/common';
+import { WriterService } from '@application/services';
 import { InterfacesTokens } from '@infrastructure/common';
 import {
   RepositoriesModule,
   WriterRepository,
 } from '@infrastructure/repository';
 import { WriterController } from './writer.controller';
-import { WriterService } from '@application/services';
+import { UserServiceModule } from '@infrastructure/services';
+import { Module } from '@nestjs/common';
 
 @Module({
-  imports: [RepositoriesModule],
+  imports: [RepositoriesModule, UserServiceModule],
   providers: [
     {
       inject: [WriterRepository],

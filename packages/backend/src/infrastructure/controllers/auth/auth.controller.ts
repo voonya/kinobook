@@ -80,6 +80,7 @@ export class AuthController {
     @Res() res,
   ) {
     const userId = user.id;
+    console.log(cookies);
 
     await this.authService.logout(userId, cookies[CookieName.REFRESH_TOKEN]);
     res.clearCookie(CookieName.REFRESH_TOKEN);

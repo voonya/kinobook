@@ -22,6 +22,11 @@ class CountryRepository implements ICountryRepository {
 
   getAll(): Promise<Country[]> {
     return this.prisma.country.findMany({
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+      ],
       select: {
         id: true,
         name: true,

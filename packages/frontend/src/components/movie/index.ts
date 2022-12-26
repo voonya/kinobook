@@ -3,3 +3,7 @@ export * from './movie-card';
 export * from './form';
 export * from './tab-page';
 export * from './poster';
+export * from './matrix';
+export * from './filters';
+export * from './buttons';
+export * from './comments';

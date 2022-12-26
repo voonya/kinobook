@@ -9,8 +9,13 @@ interface ViewedButtonProps {
 }
 
 const ViewedButton = ({ viewed, size = 'lg', onClick }: ViewedButtonProps) => (
-  <div className={`${styles.wrapper} ${viewed ? styles.viewed : ''}`}>
-    <IconButton style={{}} onClick={onClick} size={size} icon={IconName.EYE} />
+  <div className={styles.wrapper}>
+    <IconButton
+      style={{}}
+      onClick={onClick}
+      size={size}
+      icon={viewed ? IconName.EYE_SLASHED : IconName.EYE}
+    />
   </div>
 );
 

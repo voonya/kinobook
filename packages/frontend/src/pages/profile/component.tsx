@@ -1,4 +1,4 @@
-import { Layout, Profile, Spinner } from '@components';
+import { Layout, Profile, Spinner, ProtectedRoute } from '@components';
 import type { IUser } from '@common';
 import { ApiRoutes, UserRoutes } from '@common';
 import { SPARoutes } from '@common';
@@ -6,10 +6,11 @@ import { useTitle } from '@hooks';
 import { useEffect, useState } from 'react';
 import { getApiRoute } from 'src/helpers';
 import { useParams, useNavigate } from 'react-router-dom';
+
 import { http } from 'src/helpers';
 import styles from './styles.module.scss';
 
-const ProfilePage = () => {
+const Component = () => {
   useTitle(SPARoutes.PROFILE);
 
   const { id } = useParams();
@@ -50,4 +51,8 @@ const ProfilePage = () => {
   );
 };
 
-export { ProfilePage };
+export const ProfilePage = () => (
+  <ProtectedRoute>
+    <Component />
+  </ProtectedRoute>
+);

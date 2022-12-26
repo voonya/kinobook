@@ -18,18 +18,21 @@ export interface IWriter extends BaseModel {
   surname: string;
 }
 
-export interface IMovie extends BaseModel {
+export interface IMovieDense extends BaseModel {
   title: string;
   description: string;
-  tagline?: string;
-  releaseDate?: string;
-  runtime?: number;
-  budget?: number;
-  revenue?: number;
-  averageRate: number;
-  countVotes: number;
-  poster?: string;
-  trailer?: string;
+  tagline?: string | null;
+  releaseDate?: string | null;
+  runtime?: number | null;
+  budget?: number | null;
+  revenue?: number | null;
+  averageRate?: number | null;
+  countVotes?: number | null;
+  poster?: string | null;
+  trailer?: string | null;
+}
+
+export interface IMovie extends IMovieDense {
   genres: IGenre[];
   countries: ICountry[];
   writers: IWriter[];

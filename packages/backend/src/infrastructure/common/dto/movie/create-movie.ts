@@ -1,5 +1,4 @@
 import {
-  IsDateString,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -28,7 +27,6 @@ export class CreateMovieDto {
   @IsOptional()
   tagline?: string;
 
-  @IsDateString()
   @IsOptional()
   releaseDate?: Date;
 
@@ -43,14 +41,6 @@ export class CreateMovieDto {
   @IsNumber()
   @IsOptional()
   revenue?: number;
-
-  @IsNumber()
-  @IsOptional()
-  averageRate?: number;
-
-  @IsNumber()
-  @IsOptional()
-  countVotes?: number;
 
   @IsString()
   @IsOptional()

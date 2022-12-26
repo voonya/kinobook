@@ -1,14 +1,15 @@
-import { Module } from '@nestjs/common';
+import { GenreController } from './genre.controller';
+import { GenreService } from '@application/services';
+import { UserServiceModule } from '@infrastructure/services';
 import { InterfacesTokens } from '@infrastructure/common';
 import {
   RepositoriesModule,
   GenreRepository,
 } from '@infrastructure/repository';
-import { GenreController } from './genre.controller';
-import { GenreService } from '@application/services';
+import { Module } from '@nestjs/common';
 
 @Module({
-  imports: [RepositoriesModule],
+  imports: [RepositoriesModule, UserServiceModule],
   providers: [
     {
       inject: [GenreRepository],

@@ -1,17 +1,17 @@
 import type { IGenre, IGenreForm } from '@common';
-import { genreSchema } from '@common';
-import { Button, Input, Spinner, Table } from '@components';
+import { genreSchema, ENTITY_PER_PAGE } from '@common';
+import { Button, Input, Spinner, Table, PaginationBar } from '@components';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useAppDispatch, useAppSelector, usePagination } from '@hooks';
 import {
-  createGenre,
-  deleteGenre,
-  getAllGenres,
-  updateGenre,
-} from 'src/services';
+  dispatchGetGenres,
+  dispatchCreateGenre,
+  dispatchUpdateGenre,
+  dispatchDeleteGenre,
+} from 'src/store';
 import { GENRE_COLUMNS } from './table/columns';
-
 import styles from '../styles.module.scss';
 
 const GenresTabPage = () => {
@@ -23,48 +23,44 @@ const GenresTabPage = () => {
     formState: { errors },
   } = useForm<IGenreForm>({ resolver: joiResolver(genreSchema) });
   const [formError, setFormError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [genres, setGenres] = useState<IGenre[]>([]);
+  const genres = useAppSelector((state) => state.genres);
+  const dispatch = useAppDispatch();
   const [genreEdit, setGenreEdit] = useState<IGenre | null>(null);
 
+  const genresCount = (genres.data || []).length;
+  const {
+    firstContentIndex,
+    lastContentIndex,
+    nextPage,
+    prevPage,
+    setPage,
+    page,
+    totalPages,
+  } = usePagination({ contentPerPage: ENTITY_PER_PAGE, count: genresCount });
+
+  const paginatedValues = useMemo(
+    () => genres.data?.slice(firstContentIndex, lastContentIndex),
+    [genres, firstContentIndex, lastContentIndex],
+  );
+
+  if (genresCount <= ENTITY_PER_PAGE && page !== 1) setPage(1);
+
   useEffect(() => {
-    setIsLoading(true);
-    getAllGenres()
-      .then((data) => {
-        if (!data.error) {
-          setGenres(data.genres);
-        }
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
+    if (!genres.data && !genres.loading) {
+      dispatch(dispatchGetGenres());
+    }
+  }, [genres, dispatch]);
 
   const onCreateHandler = (data: any) => {
     setFormError('');
-    setIsLoading(true);
 
-    let request;
     if (genreEdit) {
-      request = updateGenre(genreEdit.id, data.name);
-    } else {
-      request = createGenre(data.name);
+      dispatch(dispatchUpdateGenre({ id: genreEdit.id, name: data.name }));
+
+      return;
     }
 
-    request
-      .then((res) => {
-        if (res.error && res.statusCode === 400) {
-          setFormError(res.error[0]);
-
-          return;
-        }
-
-        return getAllGenres();
-      })
-      .then((data) => {
-        if (!data.error) {
-          setGenres(data.genres);
-        }
-      })
-      .finally(() => setIsLoading(false));
+    dispatch(dispatchCreateGenre(data.name));
   };
 
   const onEdit = (data: IGenre) => {
@@ -74,21 +70,7 @@ const GenresTabPage = () => {
   };
 
   const onDeleteHandler = (id: string) => {
-    setIsLoading(true);
-    deleteGenre(id)
-      .then((res) => {
-        if (res.error) {
-          return;
-        }
-
-        return getAllGenres();
-      })
-      .then((data) => {
-        if (!data.error) {
-          setGenres(data.genres);
-        }
-      })
-      .finally(() => setIsLoading(false));
+    dispatch(dispatchDeleteGenre(id));
   };
 
   const onCancelHandler = () => {
@@ -111,30 +93,39 @@ const GenresTabPage = () => {
         />
         {genreEdit ? (
           <div className={styles.formControls}>
-            <Button disabled={isLoading} type="submit">
-              {isLoading ? <Spinner size="xs" /> : 'Save'}
+            <Button disabled={genres.loading} type="submit">
+              {genres.loading ? <Spinner size="xs" /> : 'Save'}
             </Button>
-            <Button disabled={isLoading} onClick={onCancelHandler}>
+            <Button disabled={genres.loading} onClick={onCancelHandler}>
               Cancel
             </Button>
           </div>
         ) : (
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? <Spinner size="xs" /> : 'Create'}
+          <Button type="submit" disabled={genres.loading}>
+            {genres.loading ? <Spinner size="xs" /> : 'Create'}
           </Button>
         )}
       </form>
-      {isLoading ? (
+      {genres.loading ? (
         <div className={styles.spinnerWrapper}>
           <Spinner />
         </div>
       ) : (
         <Table
           disabled={!!genreEdit}
-          data={genres}
+          data={paginatedValues || []}
           columns={GENRE_COLUMNS}
           onEdit={(data) => onEdit(data as IGenre)}
           onDelete={onDeleteHandler}
+        />
+      )}
+      {genresCount > 0 && (
+        <PaginationBar
+          firstPage={1}
+          page={page}
+          lastPage={totalPages}
+          onPrevPage={prevPage}
+          onNextPage={nextPage}
         />
       )}
     </div>

@@ -1,55 +1,56 @@
 @import 'src/variables.scss';
 
 .current {
-    background-color: $bg_lightprimary;
-    color: $text_primary;
+  background-color: $bg_lightprimary;
+  color: $text_primary;
 }
 
 .wrapper {
-    display: flex;
-    flex: 1;
+  display: flex;
+  flex: 1;
 }
 
 .childrenWrapper {
-    flex: 1;
+  flex: 1;
 }
 
 
 .nav {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: $spaces_lg;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: $spaces_lg;
 
-    li {
-        width: 100%;
-        background-color: $bg_primary;
-        font-size: $h5;
-        transition: background-color ease 0.4s;
+  li {
+    width: 100%;
+    background-color: $bg_primary;
+    font-size: $h5;
+    transition: background-color ease 0.4s;
 
-        &:hover {
-            background-color: $bg_lightprimary;
-        }
-
-        a {
-
-            display: block;
-            width: 100%;
-            padding: $spaces_md $spaces_lg;
-
-
-        }
-
-        &:first-child {
-            border-top-left-radius: 3px;
-            border-top-right-radius: 3px;
-        }
-
-        &:last-child {
-            border-bottom-left-radius: 3px;
-            border-bottom-right-radius: 3px;
-        }
-
+    &:hover {
+      background-color: $bg_lightprimary;
     }
+
+    border-bottom: 1.5px solid $bg_dark;
+
+    a {
+
+      display: block;
+      width: 100%;
+      padding: $spaces_md $spaces_xl5 $spaces_md $spaces_lg;
+    }
+
+    &:first-child {
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 3px;
+      border-bottom: 0;
+    }
+
+  }
 }

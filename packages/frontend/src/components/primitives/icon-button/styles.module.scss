@@ -1,7 +1,6 @@
 @import 'src/variables.scss';
 
-button {
-  background-color: $bg_primary;
+.button {
   cursor: pointer;
   color: $text_primary;
   border-radius: 100%;
@@ -38,4 +37,17 @@ button {
     height: 45px;
     width: 45px;
   }
+
+  &[data-color='primary'] {
+    background-color: $bg_primary;
+  }
+
+  &[data-color='danger'] {
+    background-color: $danger;
+  }
+
+  &[data-color='success'] {
+    background-color: $success;
+  }
+
 }

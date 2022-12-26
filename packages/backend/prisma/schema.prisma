@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["interactiveTransactions"]
+  previewFeatures = ["interactiveTransactions", "orderByRelation", "fullTextSearch"]
 }
 
 datasource db {
@@ -24,7 +24,6 @@ model User {
   updatedAt DateTime    @default(now())
   auth      Auth[]
   bookmarks Bookmarks[]
-  review    Review[]
   viewed    Viewed[]
 }
 
@@ -46,8 +45,6 @@ model Movie {
   runtime     Int?
   budget      BigInt?
   revenue     BigInt?
-  averageRate Decimal?     @db.Decimal(2, 2)
-  countVotes  BigInt?
   poster      String?      @db.VarChar(1024)
   trailer     String?      @db.VarChar(1024)
   genres      Genre[]
@@ -57,7 +54,6 @@ model Movie {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
   Bookmarks   Bookmarks[]
-  Review      Review[]
   Viewed      Viewed[]
 }
 
@@ -67,8 +63,7 @@ model Actor {
   surname   String   @db.VarChar(256)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  movie     Movie?   @relation(fields: [movieId], references: [id])
-  movieId   String?  @db.Uuid
+  movies    Movie[]
 }
 
 model Writer {
@@ -77,8 +72,7 @@ model Writer {
   surname   String   @db.VarChar(256)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  movie     Movie?   @relation(fields: [movieId], references: [id])
-  movieId   String?  @db.Uuid
+  movies    Movie[]
 }
 
 model Genre {
@@ -86,8 +80,7 @@ model Genre {
   name      String   @db.VarChar(128)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  movie     Movie?   @relation(fields: [movieId], references: [id])
-  movieId   String?  @db.Uuid
+  movies    Movie[]
 }
 
 model Country {
@@ -95,13 +88,12 @@ model Country {
   name      String   @db.VarChar(128)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  movie     Movie?   @relation(fields: [movieId], references: [id])
-  movieId   String?  @db.Uuid
+  movies    Movie[]
 }
 
 model Bookmarks {
   id        String   @id @default(uuid()) @db.Uuid
-  movie     Movie    @relation(fields: [movieId], references: [id])
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   movieId   String   @db.Uuid
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @db.Uuid
@@ -109,28 +101,14 @@ model Bookmarks {
   updatedAt DateTime @updatedAt
 }
 
-model Review {
-  id        String   @id @default(uuid()) @db.Uuid
-  movie     Movie    @relation(fields: [movieId], references: [id])
-  movieId   String   @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @db.Uuid
-  rate      Decimal  @db.Decimal(2, 2)
-  private   Boolean
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  viewed    Viewed[]
-}
-
 model Viewed {
   id        String   @id @default(uuid()) @db.Uuid
-  movie     Movie    @relation(fields: [movieId], references: [id])
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   movieId   String   @db.Uuid
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @db.Uuid
-  review    Review?  @relation(fields: [reviewId], references: [id])
-  reviewId  String?  @db.Uuid
-  rate      Decimal  @db.Decimal(2, 2)
+  rate      Decimal?  @db.Decimal(3, 2)
+  description String? @db.VarChar(4096)
   private   Boolean
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

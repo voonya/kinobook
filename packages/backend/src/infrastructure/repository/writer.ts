@@ -23,6 +23,11 @@ class WriterRepository implements IWriterRepository {
 
   getAll(): Promise<Writer[]> {
     return this.prisma.writer.findMany({
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+      ],
       select: {
         id: true,
         name: true,

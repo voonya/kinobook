@@ -1,0 +1,7 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spaces_md;
+}

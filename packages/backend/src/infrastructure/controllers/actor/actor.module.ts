@@ -6,9 +6,10 @@ import {
 } from '@infrastructure/repository';
 import { ActorController } from './actor.controller';
 import { ActorService } from '@application/services';
+import { UserServiceModule } from '@infrastructure/services';
 
 @Module({
-  imports: [RepositoriesModule],
+  imports: [RepositoriesModule, UserServiceModule],
   providers: [
     {
       inject: [ActorRepository],
