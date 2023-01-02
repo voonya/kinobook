@@ -19,6 +19,7 @@ import { MoviePoster } from './poster';
 import styles from './styles.module.scss';
 import { MovieTitle } from './title';
 import { YouTubePlayer } from './yt-player';
+import { SimilarMovies } from './similar';
 
 interface MovieProps {
   movie: IMovie;
@@ -65,7 +66,8 @@ const Movie = ({ movie }: MovieProps) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
+        flex: '1',
       }}
     >
       <div className={styles.infoWrapper}>
@@ -95,7 +97,7 @@ const Movie = ({ movie }: MovieProps) => {
         </div>
       </div>
       {movie.trailer && <YouTubePlayer link={movie.trailer} />}
-      <h4 className={styles.comments}>Comments</h4>
+      <SimilarMovies movieId={movie.id} />
       <MovieComments movieId={movie.id} />
     </Container>
   );

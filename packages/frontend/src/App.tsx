@@ -4,7 +4,7 @@ import {
   CountriesTabPage,
   GenresTabPage,
   MoviesTabPage,
-  WritersTabPage,
+  DirectorsTabPage,
 } from '@components';
 import {
   HomePage,
@@ -18,6 +18,7 @@ import {
   CataloguePage,
   BookmarkPage,
   ViewedPage,
+  RecommendationsPage,
 } from '@pages';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.scss';
@@ -44,12 +45,16 @@ function App() {
           <Route path={SPARoutes.CATALOGUE} element={<CataloguePage />} />
           <Route path={SPARoutes.BOOKMARKS} element={<BookmarkPage />} />
           <Route path={SPARoutes.VIEWED} element={<ViewedPage />} />
+          <Route
+            path={SPARoutes.RECOMMENDATIONS}
+            element={<RecommendationsPage />}
+          />
           <Route path={SPARoutes.DASHBOARD} element={<DashBoardLayout />}>
             <Route index element={<Navigate to={DashboardRoutes.MOVIES} />} />
             <Route path={DashboardRoutes.ACTORS} element={<ActorsTabPage />} />
             <Route
-              path={DashboardRoutes.WRITERS}
-              element={<WritersTabPage />}
+              path={DashboardRoutes.DIRECTORS}
+              element={<DirectorsTabPage />}
             />
             <Route
               path={DashboardRoutes.COUNTRIES}

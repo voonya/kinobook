@@ -2,7 +2,7 @@ import { IMovieFilters } from '@domain/contracts';
 import {
   Movie as PrismaMovie,
   Genre as PrismaGenre,
-  Writer as PrismaWriter,
+  Director as PrismaDirector,
   Country as PrismaCountry,
   Actor as PrismaActor,
 } from '@prisma/client';
@@ -10,15 +10,21 @@ import {
 export type PrismaMovieIncluded = PrismaMovie & {
   genres?: Omit<PrismaGenre, 'movieId'>[];
   actors?: Omit<PrismaActor, 'movieId'>[];
-  writers?: Omit<PrismaWriter, 'movieId'>[];
+  directors?: Omit<PrismaDirector, 'movieId'>[];
   countries?: Omit<PrismaCountry, 'movieId'>[];
 };
 
-export const mapMovie = (movie: any) => ({
-  ...movie,
-  budget: movie.budget && Number(movie.budget),
-  revenue: movie.revenue && Number(movie.revenue),
-});
+export const mapMovie = (movie: any) => {
+  if (!movie) return null;
+
+  return {
+    ...movie,
+    budget: movie.budget >= 0 && Number(movie.budget),
+    revenue: movie.revenue >= 0 && Number(movie.revenue),
+    averageRate: movie.averageRate >= 0 && Number(movie.averageRate),
+    countVotes: movie.countVotes >= 0 && Number(movie.countVotes),
+  };
+};
 
 export const getMovieFilters = (filters: IMovieFilters) => ({
   title: {
@@ -39,10 +45,10 @@ export const getMovieFilters = (filters: IMovieFilters) => ({
       },
     },
   },
-  writers: filters.writersId && {
+  directors: filters.directorsId && {
     some: {
       id: {
-        in: filters.writersId,
+        in: filters.directorsId,
       },
     },
   },
@@ -62,3 +68,40 @@ export const getMovieFilters = (filters: IMovieFilters) => ({
     lte: filters.averageRate?.to,
   },
 });
+
+export const defaultIncludingMovie = {
+  genres: {
+    select: {
+      id: true,
+      name: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  },
+  directors: {
+    select: {
+      id: true,
+      name: true,
+      surname: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  },
+  countries: {
+    select: {
+      id: true,
+      name: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  },
+  actors: {
+    select: {
+      id: true,
+      name: true,
+      surname: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  },
+};

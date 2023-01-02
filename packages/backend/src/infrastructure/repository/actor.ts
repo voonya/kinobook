@@ -25,7 +25,7 @@ class ActorRepository implements IActorRepository {
     return this.prisma.actor.findMany({
       orderBy: [
         {
-          createdAt: 'desc',
+          name: 'asc',
         },
       ],
       select: {

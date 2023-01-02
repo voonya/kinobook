@@ -8,7 +8,7 @@ export * from './movie';
 export * from './genres';
 export * from './countries';
 export * from './actors';
-export * from './writers';
+export * from './directors';
 export * from './router';
 export * from './viewed';
 export * from './routes';

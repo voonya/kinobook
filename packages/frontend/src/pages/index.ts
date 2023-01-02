@@ -6,3 +6,4 @@ export * from './movie';
 export * from './catalogue';
 export * from './bookmarks';
 export * from './viewed';
+export * from './recommendations';

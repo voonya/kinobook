@@ -16,14 +16,32 @@ const MoviePoster = ({
   size = 'md',
   onClick,
 }: MoviePosterProps) => {
-  const posterSrc =
-    poster && !isBuffer
-      ? getApiRoute(ApiRoutes.FILE, FileRoutes.GET_BY_ID).replace(':id', poster)
-      : poster;
+  const getHttpRoute = (poster: string) => {
+    if (poster.startsWith('foreign:tmdb:')) {
+      return `https://image.tmdb.org/t/p/w200/${poster.replace(
+        'foreign:tmdb:',
+        '',
+      )}`;
+    }
+
+    return getApiRoute(ApiRoutes.FILE, FileRoutes.GET_BY_ID).replace(
+      ':id',
+      poster,
+    );
+  };
+
+  const posterSrc = poster && !isBuffer ? getHttpRoute(poster) : poster;
 
   return (
     <div className={`${styles.wrapper}`} data-size={size} onClick={onClick}>
-      <img src={posterSrc || defaultPoster} alt="movie poster" />
+      <img
+        src={posterSrc || defaultPoster}
+        onError={({ currentTarget }) => {
+          currentTarget.onerror = null; // prevents looping
+          currentTarget.src = defaultPoster;
+        }}
+        alt="movie poster"
+      />
     </div>
   );
 };

@@ -38,7 +38,7 @@ const MoviesTabPage = () => {
       .finally(() => setIsLoading(false));
   };
 
-  useEffect(fetchMovies, [page, titleValue, setPage]);
+  useEffect(fetchMovies, [page, titleValue]);
 
   const onEdit = (data: IMovie) => {
     navigate(SPARoutes.UPDATE_MOVIE.replace(':id', data.id));

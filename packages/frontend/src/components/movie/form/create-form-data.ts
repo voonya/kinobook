@@ -9,7 +9,7 @@ export const createMovieFormData = (data: any) => {
       case 'genres':
       case 'actors':
       case 'countries':
-      case 'writers':
+      case 'directors':
         data[key] &&
           data[key].forEach((el: string) => formData.append(key, el));
         break;

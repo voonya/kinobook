@@ -27,6 +27,7 @@ const Component = () => {
 
   useEffect(() => {
     setIsLoading(true);
+
     getMovie(id!)
       .then((data) => {
         if (data.error) {

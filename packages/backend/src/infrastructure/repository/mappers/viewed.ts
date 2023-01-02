@@ -1,9 +1,10 @@
 import { BaseUser } from '@domain/models';
 import { mapMovie } from './movie';
-import { Viewed as ViewedPrisma, Movie as MoviePrisma } from '@prisma/client';
+import { Viewed as ViewedPrisma } from '@prisma/client';
+import { PrismaMovieIncluded } from './movie';
 
 type ViewedPrismaIncluded = ViewedPrisma & {
-  movie: MoviePrisma;
+  movie: PrismaMovieIncluded;
   user: BaseUser;
 };
 

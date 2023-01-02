@@ -19,7 +19,7 @@ export class CreateMovie {
 
   countries?: string[];
 
-  writers?: string[];
+  directors?: string[];
 
   actors?: string[];
 }

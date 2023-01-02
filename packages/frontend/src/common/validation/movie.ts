@@ -16,7 +16,7 @@ interface IMovieForm {
   averageRate?: number;
   countVotes: number;
   genres: string[];
-  writers?: string[];
+  directors?: string[];
   countries?: string[];
   actors?: string[];
   poster?: string | File;
@@ -96,7 +96,7 @@ const movieSchema = Joi.object({
   genres: Joi.array()
     .required()
     .messages({ 'any.required': 'You should select some genre' }),
-  writers: Joi.array(),
+  directors: Joi.array(),
   countries: Joi.array(),
   actors: Joi.array(),
   poster: Joi.any(),

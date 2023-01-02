@@ -24,7 +24,7 @@ class GenreRepository implements IGenreRepository {
     return this.prisma.genre.findMany({
       orderBy: [
         {
-          createdAt: 'desc',
+          name: 'asc',
         },
       ],
       select: {

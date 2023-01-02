@@ -1,15 +1,15 @@
 import { BaseModel } from './base';
-import { MovieDense } from './movie';
+import { Movie } from './movie';
 import { BaseUser } from './user';
 
 export class Viewed extends BaseModel {
-  movie: MovieDense;
+  movie: Movie;
 
   user: BaseUser;
 
   private: boolean;
 
-  rate?: number;
+  rate: number;
 
   description?: string;
 }

@@ -3,7 +3,7 @@ import { IPagination } from './pagination';
 export interface IMovieFilters extends IPagination {
   title?: string;
   genresId?: string[];
-  writersId?: string[];
+  directorsId?: string[];
   actorsId?: string[];
   countriesId?: string[];
   releaseDate?: {

@@ -8,7 +8,15 @@ interface MovieInfoProps {
 
 const MovieInfo = ({ movie }: MovieInfoProps) => (
   <div className={styles.wrapper}>
-    {movie.genres && (
+    <>
+      <div>Rating</div>
+      <div>
+        {movie.averageRate
+          ? `${movie.averageRate} (${movie.countVotes})`
+          : 'No rate'}
+      </div>
+    </>
+    {movie?.genres.length > 0 && (
       <>
         <div className={styles.genresTitle}>Genres</div>
         <div className={styles.genres}>
@@ -22,14 +30,6 @@ const MovieInfo = ({ movie }: MovieInfoProps) => (
       <>
         <div>Tagline</div>
         <div>{movie.tagline}</div>
-      </>
-    )}
-    {movie.averageRate && (
-      <>
-        <div>Rating</div>
-        <div>{movie.averageRate}</div>
-        <div>Count votes</div>
-        <div>{movie.countVotes}</div>
       </>
     )}
 

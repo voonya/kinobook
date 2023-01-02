@@ -1,5 +1,5 @@
 import { MovieNotFoundError } from '@application/exeptions';
-import type { Viewed, MovieWithRating } from '@domain/models';
+import type { Viewed } from '@domain/models';
 import { Movie } from '@domain/models';
 import { File } from '@domain/models';
 import type {
@@ -7,10 +7,14 @@ import type {
   ICountryRepository,
   IGenreRepository,
   IMovieRepository,
-  IWriterRepository,
+  IDirectorRepository,
   IViewedRepository,
 } from '@domain/repository';
-import type { IFileService, IMovieService } from '@domain/services';
+import type {
+  IElasticService,
+  IFileService,
+  IMovieService,
+} from '@domain/services';
 import {
   CreateMovie,
   PaginatedEntity,
@@ -24,13 +28,14 @@ export class MovieService implements IMovieService {
     private movieRepository: IMovieRepository,
     private genreRepository: IGenreRepository,
     private actorRepository: IActorRepository,
-    private writerRepository: IWriterRepository,
+    private directorRepository: IDirectorRepository,
     private countryRepository: ICountryRepository,
     private viewRepository: IViewedRepository,
     private fileService: IFileService,
+    private elasticService: IElasticService,
   ) {}
 
-  async getById(id: string): Promise<MovieWithRating> {
+  async getById(id: string): Promise<Movie> {
     const movie = await this.movieRepository.getById(id);
 
     if (!movie) {
@@ -41,12 +46,12 @@ export class MovieService implements IMovieService {
   }
 
   async createMovie(data: CreateMovie, poster?: File): Promise<Movie> {
-    const { genres, actors, writers, countries } = data;
+    const { genres, actors, directors, countries } = data;
 
     const mappedEntities = await this.mapRelatedEntities(
       genres,
       actors,
-      writers,
+      directors,
       countries,
     );
 
@@ -55,7 +60,18 @@ export class MovieService implements IMovieService {
       data.poster = fileLink;
     }
 
-    return this.movieRepository.create({ ...data, ...mappedEntities });
+    const created = await this.movieRepository.create({
+      ...data,
+      ...mappedEntities,
+    });
+
+    if (created) {
+      const { poster: posterDb, ...movieWithoutPoster } = created;
+
+      this.elasticService.createMovie(movieWithoutPoster);
+    }
+
+    return created;
   }
 
   async updateById(
@@ -68,12 +84,12 @@ export class MovieService implements IMovieService {
     delete movie.averageRate;
     delete movie.countVotes;
 
-    const { genres, actors, writers, countries } = data;
+    const { genres, actors, directors, countries } = data;
 
     const mappedEntities = await this.mapRelatedEntities(
       genres,
       actors,
-      writers,
+      directors,
       countries,
     );
 
@@ -96,7 +112,15 @@ export class MovieService implements IMovieService {
     };
     console.log('new movie', newMovie);
 
-    return this.movieRepository.updateById(id, newMovie);
+    const updated = await this.movieRepository.updateById(id, newMovie);
+
+    if (updated) {
+      const { poster: posterDb, ...movieWithoutPoster } = updated;
+
+      this.elasticService.updateMovie(id, movieWithoutPoster);
+    }
+
+    return updated;
   }
 
   async deleteById(id: string): Promise<Movie> {
@@ -106,7 +130,13 @@ export class MovieService implements IMovieService {
       await this.fileService.deleteFile(movie.poster);
     }
 
-    return this.movieRepository.deleteById(id);
+    const deleted = await this.movieRepository.deleteById(id);
+
+    if (deleted) {
+      this.elasticService.deleteMovie(id);
+    }
+
+    return deleted;
   }
 
   async getAll(): Promise<Movie[]> {
@@ -120,13 +150,13 @@ export class MovieService implements IMovieService {
   private async mapRelatedEntities(
     genresId: string[],
     actorsId: string[],
-    writersId: string[],
+    directorsId: string[],
     countriesId: string[],
   ) {
     const mappedEntities = {
       genres: null,
       actors: null,
-      writers: null,
+      directors: null,
       countries: null,
     };
 
@@ -154,15 +184,17 @@ export class MovieService implements IMovieService {
         )
       : null;
 
-    mappedEntities.writers = writersId
+    mappedEntities.directors = directorsId
       ? await Promise.all(
-          writersId.map(async (writer) => {
-            const writerInDb = await this.writerRepository.getById(writer);
-            if (!writerInDb) {
-              throw new BaseNotFoundError(`Writer ${writer} not found!`);
+          directorsId.map(async (director) => {
+            const directorInDb = await this.directorRepository.getById(
+              director,
+            );
+            if (!directorInDb) {
+              throw new BaseNotFoundError(`Director ${director} not found!`);
             }
 
-            return writerInDb;
+            return directorInDb;
           }),
         )
       : null;
@@ -188,5 +220,62 @@ export class MovieService implements IMovieService {
     pagination: IPagination,
   ): Promise<PaginatedEntity<Viewed[]>> {
     return this.viewRepository.getMovieReview(movieId, pagination);
+  }
+
+  async addRateToAverageRating(
+    movieId: string,
+    rate: number,
+    oldRate?: number,
+  ): Promise<Movie> {
+    const movie = await this.getById(movieId);
+
+    const averageRate = movie.averageRate ?? 0;
+    const countVotes = movie.countVotes ?? 0;
+
+    let newCountVotes;
+    let newSumRatings;
+
+    if (!averageRate && !countVotes) {
+      newSumRatings = rate;
+      newCountVotes = 1;
+    } else {
+      newCountVotes = oldRate ? movie.countVotes : movie.countVotes + 1;
+      newSumRatings =
+        movie.averageRate * movie.countVotes + rate - (oldRate ?? 0);
+    }
+
+    movie.averageRate = newSumRatings / newCountVotes;
+    movie.countVotes = newCountVotes;
+
+    const updated = await this.movieRepository.updateById(movieId, movie);
+
+    this.elasticService.updateMovie(movieId, updated);
+
+    return updated;
+  }
+
+  async deleteRateFromAverageRating(
+    movieId: string,
+    rate: number,
+  ): Promise<Movie> {
+    const movie = await this.getById(movieId);
+
+    const averageRate = movie.averageRate ?? 0;
+    const countVotes = movie.countVotes ?? 0;
+
+    if (!averageRate && !countVotes) {
+      return movie;
+    }
+
+    movie.averageRate =
+      (movie.averageRate * movie.countVotes - rate) /
+      (movie.countVotes - 1 || 1);
+    movie.countVotes -= 1;
+
+    const updated = await this.movieRepository.updateById(movieId, movie);
+
+    this.elasticService.updateMovie(movieId, updated);
+
+    return updated;
   }
 }

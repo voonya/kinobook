@@ -109,7 +109,7 @@ const CountriesTabPage = () => {
       ) : (
         <Table
           disabled={!!countryEdit}
-          data={countries.data || []}
+          data={paginatedValues || []}
           columns={COUNTRIES_COLUMNS}
           onEdit={(data) => onEdit(data as ICountry)}
           onDelete={onDeleteHandler}

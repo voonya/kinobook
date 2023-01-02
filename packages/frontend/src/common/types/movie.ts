@@ -13,7 +13,7 @@ export interface IActor extends BaseModel {
   surname: string;
 }
 
-export interface IWriter extends BaseModel {
+export interface IDirector extends BaseModel {
   name: string;
   surname: string;
 }
@@ -35,6 +35,6 @@ export interface IMovieDense extends BaseModel {
 export interface IMovie extends IMovieDense {
   genres: IGenre[];
   countries: ICountry[];
-  writers: IWriter[];
+  directors: IDirector[];
   actors: IActor[];
 }

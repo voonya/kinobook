@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authReducer } from './auth';
 import { genreReducer } from './genres';
 import { actorsReducer } from './actors/reducers';
-import { writerReducer } from './writers';
+import { directorReducer } from './directors';
 import { countriesReducer } from './countries';
 import { bookmarksReducer } from './bookmarks';
 import { viewedReducer } from './viewed';
@@ -13,7 +13,7 @@ export const store = configureStore({
     auth: authReducer,
     genres: genreReducer,
     actors: actorsReducer,
-    writers: writerReducer,
+    directors: directorReducer,
     countries: countriesReducer,
     bookmarks: bookmarksReducer,
     viewed: viewedReducer,

@@ -1,11 +1,11 @@
 import { IMovieFilters } from '@domain/contracts';
 import { PaginatedEntity } from '@domain/contracts';
-import type { Movie, MovieWithRating } from '@domain/models';
+import type { Movie } from '@domain/models';
 
 export interface IMovieRepository {
   getAll(): Promise<Movie[]>;
 
-  getById(id: string): Promise<MovieWithRating>;
+  getById(id: string): Promise<Movie>;
 
   create(data: Movie): Promise<Movie>;
 

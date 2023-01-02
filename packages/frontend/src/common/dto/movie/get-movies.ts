@@ -11,7 +11,7 @@ export interface IMovieFilterAverageRate {
 export interface IMoviesFiltes {
   title?: string;
   genresId?: string[];
-  writersId?: string[];
+  directorsId?: string[];
   actorsId?: string[];
   countriesId?: string[];
   releaseDate?: IMovieFilterReleaseDate;

@@ -18,6 +18,11 @@ const navLinks: NavLink[] = [
     roles: [Role.USER, Role.MODERATOR, Role.ADMIN],
   },
   {
+    name: 'Recommendations',
+    link: SPARoutes.RECOMMENDATIONS,
+    roles: [Role.USER, Role.MODERATOR, Role.ADMIN],
+  },
+  {
     name: 'Viewed',
     link: SPARoutes.VIEWED,
     roles: [Role.USER, Role.MODERATOR, Role.ADMIN],

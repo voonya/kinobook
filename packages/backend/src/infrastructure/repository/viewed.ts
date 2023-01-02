@@ -6,6 +6,7 @@ import { getMovieFilters } from './mappers';
 import { IPagination, PaginatedEntity, IMovieFilters } from '@domain/contracts';
 import { Viewed } from '@domain/models';
 import { mapViewed } from './mappers';
+import { defaultIncludingMovie } from './mappers';
 
 export class ViewedRepository implements IViewedRepository {
   constructor(
@@ -108,7 +109,11 @@ export class ViewedRepository implements IViewedRepository {
               username: true,
             },
           },
-          movie: true,
+          movie: {
+            include: {
+              ...defaultIncludingMovie,
+            },
+          },
         },
       }),
       this.prisma.viewed.count({
@@ -122,6 +127,30 @@ export class ViewedRepository implements IViewedRepository {
     ]);
 
     return { data: views.map(mapViewed), count };
+  }
+
+  async getAllUserViewed(userId: string): Promise<Viewed[]> {
+    const views = await this.prisma.viewed.findMany({
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+      ],
+      where: {
+        userId,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        movie: true,
+      },
+    });
+
+    return views.map(mapViewed);
   }
 
   async deleteById(id: string): Promise<Viewed> {

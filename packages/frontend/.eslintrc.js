@@ -17,6 +17,7 @@ module.exports = {
     '@typescript-eslint/ban-types': 'off',
     'no-useless-escape': 'off',
     "@typescript-eslint/no-unused-vars": "off",
+    "react-hooks/exhaustive-deps": "warn",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "warn",

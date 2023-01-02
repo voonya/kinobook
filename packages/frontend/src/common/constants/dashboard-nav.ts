@@ -15,8 +15,8 @@ const dashBoardLinks: NavLink[] = [
     link: DashboardRoutes.ACTORS,
   },
   {
-    name: 'Writers',
-    link: DashboardRoutes.WRITERS,
+    name: 'Directors',
+    link: DashboardRoutes.DIRECTORS,
   },
   {
     name: 'Countries',

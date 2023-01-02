@@ -19,6 +19,7 @@ interface IViewedFormProps {
 
 export const ViewedForm = ({ movie, viewed }: IViewedFormProps) => {
   const { register, setValue, handleSubmit } = useForm<ICreateViewed>();
+
   const [rate, setRate] = useState(viewed?.rate || 1);
   const isLoading = useAppSelector((state) => state.viewed.loading);
 
@@ -26,7 +27,6 @@ export const ViewedForm = ({ movie, viewed }: IViewedFormProps) => {
 
   const onSubmit = (data: any) => {
     const newData = { ...data, rate, movieId: movie.id };
-    console.log(newData);
 
     if (viewed) {
       dispatch(dispatchUpdateViewed({ id: viewed.id, data: newData }));
@@ -71,11 +71,13 @@ export const ViewedForm = ({ movie, viewed }: IViewedFormProps) => {
             <div className={styles.title}>
               <span>{movie.title}</span>
               <span className={styles.releaseDate}>
-                {movie.releaseDate ?? 'No release'}
+                {movie.releaseDate
+                  ? new Date(movie.releaseDate).toLocaleDateString()
+                  : 'No release'}
               </span>
             </div>
             <RateInput
-              value={1}
+              value={rate}
               onChange={setRate}
               label={'Rate'}
               labelRequiredMark

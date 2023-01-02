@@ -1,4 +1,4 @@
-import type { IMovie, IGenre, ICountry, IWriter, IActor } from '@common';
+import type { IMovie, IGenre, ICountry, IDirector, IActor } from '@common';
 import {
   Input,
   Button,
@@ -19,7 +19,7 @@ import {
   GenreSelect,
   ActorSelect,
   CountrySelect,
-  WriterSelect,
+  DirectorSelect,
 } from '../selects';
 import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
@@ -61,10 +61,10 @@ const MovieForm = ({ movie, onFormSubmit }: MovieFormProps) => {
             );
             break;
           }
-          case 'writers': {
+          case 'directors': {
             setValue(
-              'writers',
-              movie[item].map((g: IWriter) => g.id),
+              'directors',
+              movie[item].map((g: IDirector) => g.id),
             );
             break;
           }
@@ -179,12 +179,12 @@ const MovieForm = ({ movie, onFormSubmit }: MovieFormProps) => {
           />
           <Controller
             control={control}
-            name="writers"
+            name="directors"
             render={({ field: { onChange, value, ref } }) => (
-              <WriterSelect
+              <DirectorSelect
                 value={value || []}
                 ref={ref}
-                error={errors.writers?.message}
+                error={errors.directors?.message}
                 onChange={onChange}
               />
             )}

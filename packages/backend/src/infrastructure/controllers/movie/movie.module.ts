@@ -4,6 +4,7 @@ import {
   UserServiceModule,
   MovieServiceModule,
   FileModule,
+  RecommendationServiceModule,
 } from '@infrastructure/services';
 import { Module } from '@nestjs/common';
 
@@ -13,6 +14,7 @@ import { Module } from '@nestjs/common';
     FileModule,
     MovieServiceModule,
     UserServiceModule,
+    RecommendationServiceModule,
   ],
   providers: [],
   controllers: [MovieController],

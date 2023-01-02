@@ -50,7 +50,7 @@ export class MoviesFiltersDto {
   @IsUUID('4', { each: true })
   @Transform(({ value }) => value.split(','))
   @IsOptional()
-  writersId?: string[];
+  directorsId?: string[];
 
   @IsUUID('4', { each: true })
   @Transform(({ value }) => value.split(','))

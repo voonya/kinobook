@@ -5,7 +5,7 @@ import { MovieRepository } from './movie';
 import { PrismaService } from './prisma/prisma';
 import { ActorRepository } from './actor';
 import { GenreRepository } from './genre';
-import { WriterRepository } from './writer';
+import { DirectorRepository } from './director';
 import { CountryRepository } from './country';
 import { BookmarkRepository } from './bookmark';
 import { ViewedRepository } from './viewed';
@@ -18,7 +18,7 @@ import { ViewedRepository } from './viewed';
     PrismaService,
     ActorRepository,
     GenreRepository,
-    WriterRepository,
+    DirectorRepository,
     CountryRepository,
     BookmarkRepository,
     ViewedRepository,
@@ -30,7 +30,7 @@ import { ViewedRepository } from './viewed';
     PrismaService,
     ActorRepository,
     GenreRepository,
-    WriterRepository,
+    DirectorRepository,
     CountryRepository,
     BookmarkRepository,
     ViewedRepository,

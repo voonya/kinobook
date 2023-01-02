@@ -16,11 +16,15 @@
     "db:generate": "prisma generate",
     "db:migrate:create": "prisma migrate dev --create-only",
     "db:migrate:undo": "npx prisma migrate diff --from-schema-datamodel prisma/schema.prisma --to-schema-datasource prisma/schema.prisma --script > down.sql",
-    "db:migrate": "prisma migrate dev"
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "ts-node ./prisma/seeds/seed.ts",
+    "db:seed:delete": "ts-node ./prisma/seeds/delete.ts"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^8.5.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
+    "@nestjs/elasticsearch": "^9.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "@prisma/client": "^4.6.1",
     "@types/bcrypt": "^5.0.0",

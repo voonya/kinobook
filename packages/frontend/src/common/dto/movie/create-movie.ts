@@ -11,6 +11,6 @@ export interface ICreateMovieDto {
   poster?: string;
   genresId: string[];
   countriesId?: string[];
-  writersId?: string[];
+  directorsId?: string[];
   actorsId?: string[];
 }

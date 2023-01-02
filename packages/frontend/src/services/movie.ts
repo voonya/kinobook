@@ -99,3 +99,22 @@ export function getMovieViews(movieId: string, filters: IPaginationFilter) {
 
   return http.get(route);
 }
+
+export function getUserRecommendation(filters?: IMoviesFiltes) {
+  let route = getApiRoute(ApiRoutes.MOVIE, MovieRoutes.USER_RECOMMENDATIONS);
+
+  route += filters ? convertMovieFiltersToQuery(filters) : '';
+
+  return http.get(route);
+}
+
+export function getSimilarMovies(movieId: string, count: number) {
+  let route = getApiRoute(ApiRoutes.MOVIE, MovieRoutes.SIMILAR_MOVIES).replace(
+    ':id',
+    movieId,
+  );
+
+  route += `?count=${count}`;
+
+  return http.get(route);
+}

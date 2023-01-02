@@ -53,7 +53,7 @@ const Component = () => {
 
   useEffect(() => {
     if (!viewed.loading && !isLoading) fetchViews();
-  }, [page, filters, viewsCount, viewed, fetchViews, isLoading]);
+  }, [page, filters, viewsCount, viewed, fetchViews]);
 
   const onTitleInputChange = (e: any) => {
     setTitleValue(e.target.value);
@@ -81,7 +81,7 @@ const Component = () => {
                 views.map((el) => <ViewedCard key={el.id} viewed={el} />)
               )}
             </div>
-            {!views.length && (
+            {!views.length && !isLoading && (
               <div className={styles.placeholder}>No movies</div>
             )}
             <MovieFilter onFiltersApply={onFiltersApply} />

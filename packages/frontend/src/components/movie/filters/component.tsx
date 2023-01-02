@@ -2,7 +2,7 @@ import { useForm, Controller } from 'react-hook-form';
 import {
   GenreSelect,
   CountrySelect,
-  WriterSelect,
+  DirectorSelect,
   ActorSelect,
 } from '../selects';
 import { Button, Spinner, Input } from '@components';
@@ -17,14 +17,7 @@ interface MovieFilterProps {
 }
 
 const MovieFilter = ({ onFiltersApply }: MovieFilterProps) => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, control, reset } = useForm();
 
   const [showFilters, setShowFilters] = useState(false);
   const [startDate, setStartDate] = useState('');
@@ -37,7 +30,7 @@ const MovieFilter = ({ onFiltersApply }: MovieFilterProps) => {
     Object.keys(form).forEach((key) => {
       switch (key) {
         case 'genresId':
-        case 'writersId':
+        case 'directorsId':
         case 'actorsId':
         case 'countriesId':
           data[key] =
@@ -68,11 +61,11 @@ const MovieFilter = ({ onFiltersApply }: MovieFilterProps) => {
     onFiltersApply?.(data);
   };
 
-  const onChange = (dates: any) => {
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
-  };
+  // const onChange = (dates: any) => {
+  //   const [start, end] = dates;
+  //   setStartDate(start);
+  //   setEndDate(end);
+  // };
 
   const onReset = () => {
     reset();
@@ -113,9 +106,9 @@ const MovieFilter = ({ onFiltersApply }: MovieFilterProps) => {
             />
             <Controller
               control={control}
-              name="writersId"
+              name="directorsId"
               render={({ field: { onChange, value, ref } }) => (
-                <WriterSelect value={value} ref={ref} onChange={onChange} />
+                <DirectorSelect value={value} ref={ref} onChange={onChange} />
               )}
             />
             <div className={styles.averageRate}>

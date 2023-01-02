@@ -1,7 +1,7 @@
 import { BaseModel } from '../base';
 import { Genre } from '../genre';
 import { Country } from '../country';
-import { Writer } from '../writer';
+import { Director } from '../director';
 import { Actor } from '../actor';
 
 export class MovieDense extends BaseModel {
@@ -22,6 +22,10 @@ export class MovieDense extends BaseModel {
   poster?: string;
 
   trailer?: string;
+
+  averageRate?: number;
+
+  countVotes?: number;
 }
 
 export class Movie extends MovieDense {
@@ -29,13 +33,13 @@ export class Movie extends MovieDense {
 
   countries?: Country[];
 
-  writers?: Writer[];
+  directors?: Director[];
 
   actors?: Actor[];
 }
 
-export class MovieWithRating extends Movie {
-  averageRate: number;
+// export class MovieWithRating extends Movie {
+//   averageRate: number;
 
-  countVotes: number;
-}
+//   countVotes: number;
+// }

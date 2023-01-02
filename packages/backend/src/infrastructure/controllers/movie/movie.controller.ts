@@ -18,8 +18,8 @@ import {
 } from '@nestjs/common';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
-import type { IMovieService } from '@domain/services';
-import { File } from '@domain/models';
+import type { IMovieService, IRecommendationService } from '@domain/services';
+import { File, User } from '@domain/models';
 import {
   InterfacesTokens,
   CreateMovieDto,
@@ -31,12 +31,37 @@ import { getPath } from '@infrastructure/helpers';
 import { Role } from '@domain/enums';
 import { CreateMovie } from '@domain/contracts';
 import { RolesGuard, JwtAuthGuard } from '@infrastructure/common';
+import { UserReq } from '@infrastructure/common';
 
 @Controller(getPath(Routes.MOVIES))
 export class MovieController {
   constructor(
     @Inject(InterfacesTokens.MOVIE_SERVICE) private movieService: IMovieService,
+    @Inject(InterfacesTokens.RECOMMENDATION_SERVICE)
+    private recommendationService: IRecommendationService,
   ) {}
+
+  @HttpCode(HttpStatus.OK)
+  @Get(MovieRoutes.SIMILAR_MOVIES)
+  async getSimilar(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Query('count') count: number,
+  ) {
+    return this.recommendationService.getSimilarMovies(id, 5);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  // @UseGuards(JwtAuthGuard)
+  @Get(MovieRoutes.USER_RECOMMENDATIONS)
+  async getUserRecommendations(
+    @UserReq() user: User,
+    @Query() filters: MoviesFiltersDto,
+  ) {
+    return this.recommendationService.getUserRecommendations(
+      'fa258b4a-4b02-4053-824c-f8a945c3ae1c',
+      filters,
+    );
+  }
 
   @HttpCode(HttpStatus.OK)
   @Get(MovieRoutes.GET_BY_ID)
@@ -62,7 +87,7 @@ export class MovieController {
       ...data,
       genres: [].concat(data.genres),
       countries: data.countries && [].concat(data.countries),
-      writers: data.writers && [].concat(data.writers),
+      directors: data.directors && [].concat(data.directors),
       actors: data.actors && [].concat(data.actors),
     };
 
@@ -96,7 +121,7 @@ export class MovieController {
       ...data,
       genres: [].concat(data.genres),
       countries: data.countries && [].concat(data.countries),
-      writers: data.writers && [].concat(data.writers),
+      directors: data.directors && [].concat(data.directors),
       actors: data.actors && [].concat(data.actors),
     };
 
@@ -154,7 +179,7 @@ const optionalFieldsMovie: CreateMovie = {
   poster: null,
   releaseDate: null,
   genres: null,
-  writers: null,
+  directors: null,
   countries: null,
   actors: null,
 };

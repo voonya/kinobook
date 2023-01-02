@@ -10,14 +10,14 @@ export enum SPARoutes {
   CATALOGUE = '/catalogue',
   VIEWED = '/viewed',
   DASHBOARD = '/dashboard',
-
+  RECOMMENDATIONS = '/recommendations',
   NOT_FOUND = '/404',
 }
 
 export enum DashboardRoutes {
   MOVIES = 'movies',
   ACTORS = 'actors',
-  WRITERS = 'writers',
+  DIRECTORS = 'directors',
   COUNTRIES = 'countries',
   GENRES = 'genres',
 }

@@ -7,7 +7,7 @@ enum Routes {
   FILE = '/file',
   GENRES = '/genre',
   ACTORS = '/actor',
-  WRITERS = '/writer',
+  DIRECTORS = '/director',
   COUNTRIES = '/country',
   VIEWED = '/viewed',
 }
@@ -27,6 +27,8 @@ enum MovieRoutes {
   DELETE_BY_ID = '/:id',
   GET_ALL = '/',
   GET_VIEWES = '/:id/views',
+  USER_RECOMMENDATIONS = '/recommendations',
+  SIMILAR_MOVIES = '/:id/similar',
 }
 
 enum UserRoutes {
@@ -55,7 +57,7 @@ enum ActorRoutes {
   DELETE_BY_ID = '/:id',
 }
 
-enum WriterRoutes {
+enum DirectorRoutes {
   GET_ALL = '/',
   CREATE = '/',
   UPDATE_BY_ID = '/:id',
@@ -86,7 +88,7 @@ export {
   FileRoutes,
   GenreRoutes,
   ActorRoutes,
-  WriterRoutes,
+  DirectorRoutes,
   CountryRoutes,
   ViewedRoutes,
 };

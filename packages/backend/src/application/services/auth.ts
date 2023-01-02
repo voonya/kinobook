@@ -101,7 +101,6 @@ class AuthService implements IAuthService {
       row.refreshToken,
       process.env.JWT_REFRESH_SECRET,
     );
-
     // if expired
     if (!decoded) {
       await this.authRepository.deleteById(row.id);

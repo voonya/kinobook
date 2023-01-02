@@ -61,7 +61,7 @@ const MoviesPage = memo(
 
     useEffect(() => {
       if (!loading) getMovies();
-    }, [filters, page, loading, getMovies]);
+    }, [filters, page]);
 
     const onTitleInputChange = (e: any) => {
       setTitleValue(e.target.value);

@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["interactiveTransactions", "orderByRelation", "fullTextSearch"]
+  previewFeatures = ["interactiveTransactions", "orderByRelation", "fullTextSearch", "orderByNulls"]
 }
 
 datasource db {
@@ -29,7 +29,7 @@ model User {
 
 model Auth {
   id           String   @id @default(uuid()) @db.Uuid
-  user         User     @relation(fields: [userId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId       String   @db.Uuid
   refreshToken String   @db.VarChar(2048)
   createdAt    DateTime @default(now())
@@ -47,9 +47,11 @@ model Movie {
   revenue     BigInt?
   poster      String?      @db.VarChar(1024)
   trailer     String?      @db.VarChar(1024)
+  averageRate Decimal?     @db.Decimal(3, 2)
+  countVotes  BigInt?
   genres      Genre[]
   countries   Country[]
-  writers     Writer[]
+  directors     Director[]
   actors      Actor[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
@@ -66,7 +68,7 @@ model Actor {
   movies    Movie[]
 }
 
-model Writer {
+model Director {
   id        String   @id @default(uuid()) @db.Uuid
   name      String   @db.VarChar(256)
   surname   String   @db.VarChar(256)
@@ -95,7 +97,7 @@ model Bookmarks {
   id        String   @id @default(uuid()) @db.Uuid
   movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   movieId   String   @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId    String   @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -105,7 +107,7 @@ model Viewed {
   id        String   @id @default(uuid()) @db.Uuid
   movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   movieId   String   @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId    String   @db.Uuid
   rate      Decimal?  @db.Decimal(3, 2)
   description String? @db.VarChar(4096)

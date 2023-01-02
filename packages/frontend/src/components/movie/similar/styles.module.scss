@@ -1,0 +1,21 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  margin-top: $spaces_xl2;
+
+  h3 {
+    font-size: $h4;
+    margin-bottom: $spaces_md;
+  }
+
+  .recommendations {
+    display: flex;
+    gap: $spaces_md;
+    margin-bottom: $spaces_md;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+  }
+}

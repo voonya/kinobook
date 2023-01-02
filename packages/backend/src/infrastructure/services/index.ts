@@ -5,3 +5,4 @@ export * from './file';
 export * from './user';
 export * from './viewed';
 export * from './movie';
+export * from './recommendation';

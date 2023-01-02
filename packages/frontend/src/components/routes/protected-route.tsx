@@ -1,6 +1,6 @@
 import { SPARoutes, Role } from '@common';
 import { Navigate } from 'react-router-dom';
-import { useAppSelector } from '@hooks';
+import { useAuth } from '@hooks';
 
 interface ProtectedRouteProps {
   children: JSX.Element;
@@ -13,12 +13,15 @@ export const ProtectedRoute = ({
   redirectLink,
   role,
 }: ProtectedRouteProps) => {
-  const user = useAppSelector((state) => state.auth.user);
   const roles = [Role.USER, Role.MODERATOR, Role.ADMIN];
+  const { user, hasToken } = useAuth();
 
   if (
-    !user ||
-    (role && user.role && roles.indexOf(user.role) < roles.indexOf(role))
+    (!user && !hasToken) ||
+    (user &&
+      role &&
+      user.role &&
+      roles.indexOf(user.role) < roles.indexOf(role))
   ) {
     return <Navigate to={redirectLink || SPARoutes.HOME} replace />;
   }

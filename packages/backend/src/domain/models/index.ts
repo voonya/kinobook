@@ -5,6 +5,6 @@ export * from './file';
 export * from './actor';
 export * from './genre';
 export * from './country';
-export * from './writer';
+export * from './director';
 export * from './bookmark';
 export * from './viewed';

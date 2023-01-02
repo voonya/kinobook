@@ -4,7 +4,7 @@ import { MovieModule } from './movie/movie.module';
 import { UserModule } from './user/user.module';
 import { FileControllerModule } from './file/file.module';
 import { ActorModule } from './actor/actor.module';
-import { WriterModule } from './writer/writer.module';
+import { DirectorModule } from './director/director.module';
 import { GenreModule } from './genre/genre.module';
 import { CountryModule } from './country/country.module';
 import { BookmarkModule } from './bookmarks/bookmark.module';
@@ -18,10 +18,11 @@ import { ViewedModule } from './viewed/viewed.module';
     UserModule,
     FileControllerModule,
     ActorModule,
-    WriterModule,
+    DirectorModule,
     GenreModule,
     CountryModule,
     ViewedModule,
+    // SearchModule
   ],
   providers: [],
 })

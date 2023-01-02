@@ -7,18 +7,21 @@ import { FileModule } from '../file';
 import { FileServiceLocal } from '../file';
 import {
   MovieRepository,
-  WriterRepository,
+  DirectorRepository,
   ActorRepository,
   CountryRepository,
   GenreRepository,
 } from '@infrastructure/repository';
 import { ViewedServiceModule } from '../viewed';
+import { ElasticServiceModule } from '../elastic/elastic.module';
+import { ElasticService } from '../elastic/elastic.service';
 
 @Module({
   imports: [
     RepositoriesModule,
     FileModule,
     forwardRef(() => ViewedServiceModule),
+    ElasticServiceModule,
   ],
   providers: [
     {
@@ -26,29 +29,32 @@ import { ViewedServiceModule } from '../viewed';
         MovieRepository,
         GenreRepository,
         ActorRepository,
-        WriterRepository,
+        DirectorRepository,
         CountryRepository,
         ViewedRepository,
         FileServiceLocal,
+        ElasticService,
       ],
       provide: InterfacesTokens.MOVIE_SERVICE,
       useFactory: (
         movieRep: MovieRepository,
         genreRep: GenreRepository,
         actorRep: ActorRepository,
-        writerRep: WriterRepository,
+        directorRep: DirectorRepository,
         countryRep: CountryRepository,
         viewRep: ViewedRepository,
         fileService: FileServiceLocal,
+        elasticService: ElasticService,
       ) =>
         new MovieService(
           movieRep,
           genreRep,
           actorRep,
-          writerRep,
+          directorRep,
           countryRep,
           viewRep,
           fileService,
+          elasticService,
         ),
     },
   ],

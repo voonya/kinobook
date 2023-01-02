@@ -1,8 +1,8 @@
-import type { Movie, MovieWithRating } from '@domain/models';
+import type { Movie } from '@domain/models';
 import type { IMovieRepository } from '@domain/repository';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma';
-import { mapMovie, getMovieFilters } from './mappers';
+import { mapMovie, getMovieFilters, defaultIncludingMovie } from './mappers';
 import { MOVIE_LIMIT, MOVIE_OFFSET } from '@domain/constants';
 import { PaginatedEntity, IMovieFilters } from '@domain/contracts';
 
@@ -14,43 +14,41 @@ export class MovieRepository implements IMovieRepository {
 
   async getAll(): Promise<Movie[]> {
     const movies = await this.prisma.movie.findMany({
-      include: defaultIncluding,
+      include: defaultIncludingMovie,
     });
 
     return movies.map(mapMovie);
   }
 
-  async getById(id: string): Promise<MovieWithRating> {
-    const [movie, aggr] = await this.prisma.$transaction([
-      this.prisma.movie.findFirst({
-        where: { id },
-        include: defaultIncluding,
-      }),
-      this.prisma.viewed.aggregate({
-        _avg: {
-          rate: true,
-        },
-        _count: {
-          rate: true,
-        },
-        where: {
-          movieId: id,
-          private: false,
-        },
-      }),
-    ]);
-
-    if (!movie) return null;
-
-    return mapMovie({
-      ...movie,
-      averageRate: aggr._avg.rate,
-      countVotes: aggr._count.rate,
+  async getById(id: string): Promise<Movie> {
+    const movie = await this.prisma.movie.findFirst({
+      where: { id },
+      include: defaultIncludingMovie,
     });
+    // const [movie, aggr] = await this.prisma.$transaction([
+    //   this.prisma.movie.findFirst({
+    //     where: { id },
+    //     include: defaultIncluding,
+    //   }),
+    //   this.prisma.viewed.aggregate({
+    //     _avg: {
+    //       rate: true,
+    //     },
+    //     _count: {
+    //       rate: true,
+    //     },
+    //     where: {
+    //       movieId: id,
+    //       private: false,
+    //     },
+    //   }),
+    // ]);
+
+    return mapMovie(movie);
   }
 
   async create(data: Movie): Promise<Movie> {
-    const { genres, countries, writers, actors, ...dataWithoutIds } = data;
+    const { genres, countries, directors, actors, ...dataWithoutIds } = data;
     const movie = await this.prisma.movie.create({
       data: {
         ...dataWithoutIds,
@@ -60,23 +58,21 @@ export class MovieRepository implements IMovieRepository {
         countries: {
           connect: countries?.map((country) => ({ id: country.id })) ?? [],
         },
-        writers: {
-          connect: writers?.map((writer) => ({ id: writer.id })) ?? [],
+        directors: {
+          connect: directors?.map((director) => ({ id: director.id })) ?? [],
         },
         actors: {
           connect: actors?.map((actor) => ({ id: actor.id })) ?? [],
         },
       },
-      include: defaultIncluding,
+      include: defaultIncludingMovie,
     });
-
-    if (!movie) return null;
 
     return mapMovie(movie);
   }
 
   async updateById(id: string, data: Movie): Promise<Movie> {
-    const { genres, countries, writers, actors, ...dataWithoutIds } = data;
+    const { genres, countries, directors, actors, ...dataWithoutIds } = data;
     const movie = await this.prisma.movie.update({
       where: { id },
       data: {
@@ -89,19 +85,17 @@ export class MovieRepository implements IMovieRepository {
           set: countries ? undefined : [],
           connect: countries?.map((country) => ({ id: country.id })),
         },
-        writers: {
-          set: writers ? undefined : [],
-          connect: writers?.map((writer) => ({ id: writer.id })),
+        directors: {
+          set: directors ? undefined : [],
+          connect: directors?.map((director) => ({ id: director.id })),
         },
         actors: {
           set: actors ? undefined : [],
           connect: actors?.map((actor) => ({ id: actor.id })),
         },
       },
-      include: defaultIncluding,
+      include: defaultIncludingMovie,
     });
-
-    if (!movie) return null;
 
     return mapMovie(movie);
   }
@@ -109,10 +103,8 @@ export class MovieRepository implements IMovieRepository {
   async deleteById(id: string): Promise<Movie> {
     const movie = await this.prisma.movie.delete({
       where: { id },
-      include: defaultIncluding,
+      include: defaultIncludingMovie,
     });
-
-    if (!movie) return null;
 
     return mapMovie(movie);
   }
@@ -122,13 +114,16 @@ export class MovieRepository implements IMovieRepository {
       this.prisma.movie.findMany({
         orderBy: [
           {
-            createdAt: 'desc',
+            averageRate: { sort: 'desc', nulls: 'last' },
+          },
+          {
+            releaseDate: { sort: 'desc', nulls: 'last' },
           },
         ],
         skip: filters.offset || MOVIE_OFFSET,
         take: filters.limit || MOVIE_LIMIT,
         where: getMovieFilters(filters),
-        include: defaultIncluding,
+        include: defaultIncludingMovie,
       }),
       this.prisma.movie.count({ where: getMovieFilters(filters) }),
     ]);
@@ -175,40 +170,3 @@ export class MovieRepository implements IMovieRepository {
     return { data: movies.map((el) => mapMovie(el.movie)), count };
   }
 }
-
-const defaultIncluding = {
-  genres: {
-    select: {
-      id: true,
-      name: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  },
-  writers: {
-    select: {
-      id: true,
-      name: true,
-      surname: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  },
-  countries: {
-    select: {
-      id: true,
-      name: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  },
-  actors: {
-    select: {
-      id: true,
-      name: true,
-      surname: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  },
-};

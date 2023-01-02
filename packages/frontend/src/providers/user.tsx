@@ -16,11 +16,11 @@ const UserProvider = ({ children }: UserProviderProps) => {
 
   useEffect(() => {
     if (!hasUser && !loading) {
-      dispatch(getAuthUser());
-      dispatch(dispatchMoviesIdBookmarks());
-      dispatch(dispatchMoviesIdViewed());
+      dispatch(getAuthUser())
+        .then(() => dispatch(dispatchMoviesIdBookmarks()))
+        .then(() => dispatch(dispatchMoviesIdViewed()));
     }
-  }, [dispatch, hasToken, hasUser, loading]);
+  }, [dispatch, hasToken, hasUser]);
 
   return <>{children}</>;
 };

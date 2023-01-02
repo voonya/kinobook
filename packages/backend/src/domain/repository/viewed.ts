@@ -14,6 +14,8 @@ export interface IViewedRepository {
     pagination: IMovieFilters,
   ): Promise<PaginatedEntity<Viewed[]>>;
 
+  getAllUserViewed(userId: string): Promise<Viewed[]>;
+
   deleteById(id: string): Promise<Viewed>;
 
   getMovieReview(

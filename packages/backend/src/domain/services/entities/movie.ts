@@ -1,4 +1,4 @@
-import type { File, Movie, Viewed, MovieWithRating } from '@domain/models';
+import type { File, Movie, Viewed } from '@domain/models';
 import {
   CreateMovie,
   PaginatedEntity,
@@ -7,13 +7,21 @@ import {
 } from '@domain/contracts';
 
 export interface IMovieService {
-  getById(id: string): Promise<MovieWithRating>;
+  getById(id: string): Promise<Movie>;
 
   createMovie(data: CreateMovie, poster?: File): Promise<Movie>;
 
   getAll(): Promise<Movie[]>;
 
   updateById(id: string, data: CreateMovie, poster?: File): Promise<Movie>;
+
+  addRateToAverageRating(
+    movieId: string,
+    rate: number,
+    oldRate?: number,
+  ): Promise<Movie>;
+
+  deleteRateFromAverageRating(movieId: string, rate: number): Promise<Movie>;
 
   deleteById(id: string): Promise<Movie>;
 

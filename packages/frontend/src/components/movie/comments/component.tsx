@@ -15,7 +15,7 @@ export const MovieComments = ({ movieId }: IMovieCommentsProps) => {
   const [comments, setComments] = useState<IViewed[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [commentsCount, setCommentsCount] = useState(0);
-  const { nextPage, prevPage, setPage, page, totalPages } = usePagination({
+  const { nextPage, prevPage, page, totalPages } = usePagination({
     contentPerPage: ENTITY_PER_PAGE,
     count: commentsCount,
   });
@@ -33,28 +33,30 @@ export const MovieComments = ({ movieId }: IMovieCommentsProps) => {
       .finally(() => setIsLoading(false));
   }, [movieId, commentsCount, page]);
 
-  const renderComments = () => {
-    if (!comments.length) {
-      return <div>No comments</div>;
-    }
+  const renderComments = () => (
+    <div>
+      <h4 className={styles.comments}>Comments</h4>
+      {comments.length > 0 ? (
+        <div>
+          {comments.map((el) => (
+            <Comment viewed={el} key={el.id} />
+          ))}
+        </div>
+      ) : (
+        <div>No comments</div>
+      )}
 
-    return (
-      <div>
-        {comments.map((el) => (
-          <Comment viewed={el} key={el.id} />
-        ))}
-        {commentsCount > 0 && (
-          <PaginationBar
-            firstPage={1}
-            page={page}
-            lastPage={totalPages}
-            onPrevPage={prevPage}
-            onNextPage={nextPage}
-          />
-        )}
-      </div>
-    );
-  };
+      {commentsCount > 0 && (
+        <PaginationBar
+          firstPage={1}
+          page={page}
+          lastPage={totalPages}
+          onPrevPage={prevPage}
+          onNextPage={nextPage}
+        />
+      )}
+    </div>
+  );
 
   return <div className={styles.wrapper}>{!isLoading && renderComments()}</div>;
 };
