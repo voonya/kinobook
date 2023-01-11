@@ -1,15 +1,15 @@
-import { Director } from '@domain/models';
-import { IDirectorRepository } from '@domain/repository';
+import { IActorRepository } from '@domain/repository';
+import { Actor } from '@domain/models';
 import { Inject, forwardRef } from '@nestjs/common';
-import { PrismaService } from './prisma/prisma';
+import { PrismaService } from '../prisma/prisma';
 
-class DirectorRepository implements IDirectorRepository {
+class ActorRepository implements IActorRepository {
   constructor(
     @Inject(forwardRef(() => PrismaService)) private prisma: PrismaService,
   ) {}
 
-  getById(id: string): Promise<Director> {
-    return this.prisma.director.findFirst({
+  getById(id: string): Promise<Actor> {
+    return this.prisma.actor.findFirst({
       where: { id },
       select: {
         id: true,
@@ -21,8 +21,8 @@ class DirectorRepository implements IDirectorRepository {
     });
   }
 
-  getAll(): Promise<Director[]> {
-    return this.prisma.director.findMany({
+  getAll(): Promise<Actor[]> {
+    return this.prisma.actor.findMany({
       orderBy: [
         {
           name: 'asc',
@@ -38,8 +38,8 @@ class DirectorRepository implements IDirectorRepository {
     });
   }
 
-  updateById(id: string, data: Director): Promise<Director> {
-    return this.prisma.director.update({
+  updateById(id: string, data: Actor): Promise<Actor> {
+    return this.prisma.actor.update({
       where: { id },
       data,
       select: {
@@ -52,8 +52,8 @@ class DirectorRepository implements IDirectorRepository {
     });
   }
 
-  deleteById(id: string): Promise<Director> {
-    return this.prisma.director.delete({
+  deleteById(id: string): Promise<Actor> {
+    return this.prisma.actor.delete({
       where: { id },
       select: {
         id: true,
@@ -65,8 +65,8 @@ class DirectorRepository implements IDirectorRepository {
     });
   }
 
-  create(data: Director): Promise<Director> {
-    return this.prisma.director.create({
+  create(data: Actor): Promise<Actor> {
+    return this.prisma.actor.create({
       data,
       select: {
         id: true,
@@ -78,8 +78,8 @@ class DirectorRepository implements IDirectorRepository {
     });
   }
 
-  getByNameAndSurname(name: string, surname: string): Promise<Director> {
-    return this.prisma.director.findFirst({
+  getByNameAndSurname(name: string, surname: string): Promise<Actor> {
+    return this.prisma.actor.findFirst({
       where: { name, surname },
       select: {
         id: true,
@@ -92,4 +92,4 @@ class DirectorRepository implements IDirectorRepository {
   }
 }
 
-export { DirectorRepository };
+export { ActorRepository };

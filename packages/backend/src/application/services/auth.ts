@@ -1,11 +1,3 @@
-import {
-  AlreadyLogoutError,
-  EmailTakenError,
-  IncorrectUsernameOrPasswordError,
-  NotLoginedError,
-  TokenExpiredError,
-  UsernameTakenError,
-} from '@application/exeptions';
 import type {
   ILoginDto,
   IRegisterDto,
@@ -19,6 +11,14 @@ import type {
   IBcryptService,
   IJwtService,
 } from '@domain/services';
+import {
+  AlreadyLogoutError,
+  EmailTakenError,
+  IncorrectUsernameOrPasswordError,
+  NotLoginedError,
+  TokenExpiredError,
+  UsernameTakenError,
+} from '@application/exeptions';
 
 class AuthService implements IAuthService {
   constructor(

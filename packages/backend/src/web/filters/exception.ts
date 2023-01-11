@@ -24,7 +24,6 @@ export class AllExceptionFilter implements ExceptionFilter {
     // validator error
     if (exception instanceof HttpException) {
       messageObj = <IError>exception.getResponse();
-      console.log(messageObj);
     } else if (exception instanceof HttpError) {
       messageObj = { message: [exception.message], statusCode: status };
     } else {

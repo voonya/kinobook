@@ -1,4 +1,3 @@
-import { Director } from '@domain/models';
 import type { IDirectorService } from '@domain/services';
 import { Role } from '@domain/enums';
 import { InterfacesTokens } from '@infrastructure/common';
@@ -39,9 +38,10 @@ export class DirectorController {
   @HttpCode(HttpStatus.OK)
   @Post(DirectorRoutes.CREATE)
   async create(@Body() data: CreateDirectorDto) {
-    const newDirector = new Director(data.name, data.surname);
-
-    return this.directorService.create(newDirector);
+    return this.directorService.create({
+      name: data.name,
+      surname: data.surname,
+    });
   }
 
   @HttpCode(HttpStatus.OK)
@@ -58,9 +58,10 @@ export class DirectorController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() data: UpdateDirectorDto,
   ) {
-    const newDirector = new Director(data.name, data.surname);
-
-    return this.directorService.updateById(id, newDirector);
+    return this.directorService.updateById(id, {
+      name: data.name,
+      surname: data.surname,
+    });
   }
 
   @HttpCode(HttpStatus.OK)

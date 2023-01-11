@@ -1,8 +1,8 @@
 import type { Movie } from '@domain/models';
 import type { IMovieRepository } from '@domain/repository';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { PrismaService } from './prisma/prisma';
-import { mapMovie, getMovieFilters, defaultIncludingMovie } from './mappers';
+import { PrismaService } from '../prisma/prisma';
+import { mapMovie, getMovieFilters, defaultIncludingMovie } from '../mappers';
 import { MOVIE_LIMIT, MOVIE_OFFSET } from '@domain/constants';
 import { PaginatedEntity, IMovieFilters } from '@domain/contracts';
 

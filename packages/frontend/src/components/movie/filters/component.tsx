@@ -58,8 +58,6 @@ const MovieFilter = ({ onFiltersApply }: MovieFilterProps) => {
       }
     });
 
-    console.log('filters', data);
-
     onFiltersApply?.(data);
   };
 

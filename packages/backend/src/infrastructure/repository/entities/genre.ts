@@ -1,15 +1,15 @@
-import { Country } from '@domain/models';
-import { ICountryRepository } from '@domain/repository';
+import { Genre } from '@domain/models';
+import { IGenreRepository } from '@domain/repository';
 import { Inject, forwardRef } from '@nestjs/common';
-import { PrismaService } from './prisma/prisma';
+import { PrismaService } from '../prisma/prisma';
 
-class CountryRepository implements ICountryRepository {
+class GenreRepository implements IGenreRepository {
   constructor(
     @Inject(forwardRef(() => PrismaService)) private prisma: PrismaService,
   ) {}
 
-  getById(id: string): Promise<Country> {
-    return this.prisma.country.findFirst({
+  getById(id: string): Promise<Genre> {
+    return this.prisma.genre.findFirst({
       where: { id },
       select: {
         id: true,
@@ -20,8 +20,8 @@ class CountryRepository implements ICountryRepository {
     });
   }
 
-  getAll(): Promise<Country[]> {
-    return this.prisma.country.findMany({
+  getAll(): Promise<Genre[]> {
+    return this.prisma.genre.findMany({
       orderBy: [
         {
           name: 'asc',
@@ -36,8 +36,8 @@ class CountryRepository implements ICountryRepository {
     });
   }
 
-  updateById(id: string, data: Country): Promise<Country> {
-    return this.prisma.country.update({
+  updateById(id: string, data: Genre): Promise<Genre> {
+    return this.prisma.genre.update({
       where: { id },
       data,
       select: {
@@ -49,8 +49,8 @@ class CountryRepository implements ICountryRepository {
     });
   }
 
-  deleteById(id: string): Promise<Country> {
-    return this.prisma.country.delete({
+  deleteById(id: string): Promise<Genre> {
+    return this.prisma.genre.delete({
       where: { id },
       select: {
         id: true,
@@ -61,8 +61,8 @@ class CountryRepository implements ICountryRepository {
     });
   }
 
-  create(data: Country): Promise<Country> {
-    return this.prisma.country.create({
+  create(data: Genre): Promise<Genre> {
+    return this.prisma.genre.create({
       data,
       select: {
         id: true,
@@ -73,8 +73,8 @@ class CountryRepository implements ICountryRepository {
     });
   }
 
-  getByName(name: string): Promise<Country> {
-    return this.prisma.country.findFirst({
+  getByName(name: string): Promise<Genre> {
+    return this.prisma.genre.findFirst({
       where: { name },
       select: {
         id: true,
@@ -86,4 +86,4 @@ class CountryRepository implements ICountryRepository {
   }
 }
 
-export { CountryRepository };
+export { GenreRepository };

@@ -83,8 +83,6 @@ export function deleteMovie(id: string) {
 export function getAllMovies(filters?: IMoviesFiltes) {
   let route = getApiRoute(ApiRoutes.MOVIE, MovieRoutes.GET_ALL);
 
-  console.log(filters);
-
   route += filters ? convertMovieFiltersToQuery(filters) : '';
 
   return http.get(route);

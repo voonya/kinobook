@@ -38,8 +38,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post(AuthRoutes.LOGIN)
   async login(@Body() data: LoginDto, @Res() res: Response) {
-    console.log('Login data: ', data);
-
     const result = await this.authService.login(data);
 
     return this.setTokensCookie(res, result.tokens).send(result.user);
@@ -79,7 +77,6 @@ export class AuthController {
     @Res() res,
   ) {
     const userId = user.id;
-    console.log(cookies);
 
     await this.authService.logout(userId, cookies[CookieName.REFRESH_TOKEN]);
     res.clearCookie(CookieName.REFRESH_TOKEN);

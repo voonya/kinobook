@@ -11,8 +11,6 @@ export interface IMovieService {
 
   createMovie(data: CreateMovie, poster?: File): Promise<Movie>;
 
-  // getAll(): Promise<Movie[]>;
-
   updateById(id: string, data: CreateMovie, poster?: File): Promise<Movie>;
 
   addRateToAverageRating(

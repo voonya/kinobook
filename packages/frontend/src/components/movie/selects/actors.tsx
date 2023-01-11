@@ -29,8 +29,6 @@ const ActorSelect = ({
     if (!actors.data && !actors.loading) {
       dispatch(dispatchGetActors());
     } else if (actors.data) {
-      console.log(actors.data);
-
       setActorsOptions(
         actors.data.map((el: IActor) => ({
           value: el.id,

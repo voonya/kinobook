@@ -23,7 +23,6 @@ export const StarRate = ({
     setRateStar(index + 1);
     onChange?.(index + 1);
   };
-  console.log(roundedRate);
 
   return (
     <div className={styles.wrapper}>

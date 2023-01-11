@@ -1,11 +1,11 @@
 import { Bookmark, Movie } from '@domain/models';
 import { IBookmarkRepository, IMovieRepository } from '@domain/repository';
 import { IBookmarkService } from '@domain/services';
+import { PaginatedEntity, IMovieFilters } from '@domain/contracts';
 import {
   EntityAlreadyExistError,
   EntityNotFoundError,
 } from '@application/exeptions';
-import { PaginatedEntity, IMovieFilters } from '@domain/contracts';
 
 class BookmarkService implements IBookmarkService {
   constructor(

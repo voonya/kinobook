@@ -2,12 +2,12 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { MoviePricing, PricingPlatform, PricingType } from '@domain/models';
 
+const MEGOGO_SEARCH = `https://megogo.net/en/search-extended?q=`;
+
 export async function getPrice(megogoId: string): Promise<MoviePricing[]> {
   const prices = [];
 
   const megogoPricing = await getMegogoPrice(megogoId);
-  console.log(megogoPricing);
-
   if (megogoPricing) {
     prices.push(megogoPricing);
   }
@@ -24,8 +24,6 @@ export async function getMegogoPrice(megogoLink?: string) {
     const $ = cheerio.load(page);
 
     const priceType = $('meta[property="ya:ovs:price"]').attr('content');
-
-    console.log(priceType);
 
     if (priceType === 'purchase') {
       const purchasePrice = $(
@@ -68,8 +66,7 @@ export async function getMegogoPrice(megogoLink?: string) {
 
 export async function getMegogoLink(title: string, releaseDate?: string) {
   const releaseYear = releaseDate ? new Date(releaseDate).getFullYear() : null;
-  const queryTitle =
-    `https://megogo.net/en/search-extended?q=` + title.replace(' ', '+');
+  const queryTitle = MEGOGO_SEARCH + title.replace(' ', '+');
   const page = await getPage(queryTitle);
   const $ = cheerio.load(page);
 
@@ -89,38 +86,16 @@ export async function getMegogoLink(title: string, releaseDate?: string) {
       ) {
         return titleEl.attr('href');
       }
-      // console.log(deleteSymbols(title.text()));
     }
   }
 
   return null;
 }
 
-function getMegogoPage(megogoId: string) {
-  return axios
-    .get(`https://megogo.net/en/view/${megogoId}`)
-    .then(
-      (res) =>
-        //console.log("[Success] Get megogo page", res)
-
-        res.data,
-    )
-    .catch((err) => {
-      console.log('[Error] Get megogo page', err);
-
-      return null;
-    });
-}
-
 function getPage(url: string) {
   return axios
     .get(url)
-    .then(
-      (res) =>
-        //console.log("[Success] Get megogo page", res)
-
-        res.data,
-    )
+    .then((res) => res.data)
     .catch((err) => {
       console.log('[Error] Get page', err);
 

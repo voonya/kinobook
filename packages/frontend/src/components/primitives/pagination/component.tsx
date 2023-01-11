@@ -11,13 +11,7 @@ interface PaginationBarProps {
 }
 
 export const PaginationBar = memo(
-  ({
-    page,
-    firstPage,
-    lastPage,
-    onPrevPage,
-    onNextPage,
-  }: PaginationBarProps) => (
+  ({ page, lastPage, onPrevPage, onNextPage }: PaginationBarProps) => (
     <div className={styles.wrapper}>
       <IconButton onClick={onPrevPage} icon={IconName.ARROW_LEFT} />
       <span>

@@ -19,7 +19,5 @@ export interface IViewedService {
     filters: IMovieFilters,
   ): Promise<PaginatedEntity<Viewed[]>>;
 
-  //getMovieViews(movieId: string, pagination: IPagination): Promise<PaginatedEntity<Viewed[]>>;
-
   getMovieIdsInViewed(userId: string): Promise<string[]>;
 }

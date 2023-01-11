@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthRepository } from './auth';
 import { UserRepository } from './user';
 import { MovieRepository } from './movie';
-import { PrismaService } from './prisma/prisma';
+import { PrismaService } from '../prisma/prisma';
 import { ActorRepository } from './actor';
 import { GenreRepository } from './genre';
 import { DirectorRepository } from './director';

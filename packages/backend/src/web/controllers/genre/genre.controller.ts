@@ -1,4 +1,3 @@
-import { Genre } from '@domain/models';
 import type { IGenreService } from '@domain/services';
 import { Role } from '@domain/enums';
 import { InterfacesTokens } from '@infrastructure/common';
@@ -38,9 +37,7 @@ export class GenreController {
   @HttpCode(HttpStatus.OK)
   @Post(GenreRoutes.CREATE)
   async create(@Body() data: CreateGenreDto) {
-    const newGenre = new Genre(data.name);
-
-    return this.genreService.create(newGenre);
+    return this.genreService.create({ name: data.name });
   }
 
   @HttpCode(HttpStatus.OK)
@@ -57,9 +54,7 @@ export class GenreController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() data: UpdateGenreDto,
   ) {
-    const newGenre = new Genre(data.name);
-
-    return this.genreService.updateById(id, newGenre);
+    return this.genreService.updateById(id, { name: data.name });
   }
 
   @HttpCode(HttpStatus.OK)

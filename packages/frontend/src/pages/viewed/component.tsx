@@ -30,8 +30,6 @@ const Component = () => {
     count: viewsCount,
   });
 
-  console.log('Render viewed Page', page);
-
   const fetchViews = useCallback(async () => {
     setIsLoading(true);
     getUserViews({
@@ -43,8 +41,6 @@ const Component = () => {
       .then((data) => {
         if (!data.error) {
           setViews(data.data);
-          console.log('count', data.count);
-
           viewsCount !== data.count && setViewsCount(data.count);
         }
       })

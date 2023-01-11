@@ -1,7 +1,5 @@
-import { MovieNotFoundError } from '@application/exeptions';
 import type { MoviePricing, Viewed } from '@domain/models';
-import { Movie } from '@domain/models';
-import { File } from '@domain/models';
+import { Movie, File } from '@domain/models';
 import type {
   IActorRepository,
   ICountryRepository,
@@ -21,7 +19,7 @@ import {
   IMovieFilters,
   IPagination,
 } from '@domain/contracts';
-import { BaseNotFoundError } from '@application/exeptions/base';
+import { MovieNotFoundError, BaseNotFoundError } from '@application/exeptions';
 import { getMegogoPrice, getMegogoLink } from '@application/helpers';
 
 export class MovieService implements IMovieService {
@@ -119,7 +117,6 @@ export class MovieService implements IMovieService {
       megogoLink,
       updatedAt: new Date(),
     };
-    //console.log('new movie', newMovie);
 
     const updated = await this.movieRepository.updateById(id, newMovie);
 
@@ -298,8 +295,6 @@ export class MovieService implements IMovieService {
     if (megogoPrice) {
       pricing.push(megogoPrice);
     }
-
-    console.log(pricing);
 
     return pricing;
   }

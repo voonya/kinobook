@@ -1,12 +1,10 @@
-import { Inject, forwardRef } from '@nestjs/common';
-import { PrismaService } from './prisma/prisma';
 import { IViewedRepository } from '@domain/repository';
 import { MOVIE_OFFSET, MOVIE_LIMIT } from '@domain/constants';
-import { getMovieFilters } from './mappers';
 import { IPagination, PaginatedEntity, IMovieFilters } from '@domain/contracts';
 import { Viewed } from '@domain/models';
-import { mapViewed } from './mappers';
-import { defaultIncludingMovie } from './mappers';
+import { getMovieFilters, mapViewed, defaultIncludingMovie } from '../mappers';
+import { PrismaService } from '../prisma/prisma';
+import { Inject, forwardRef } from '@nestjs/common';
 
 export class ViewedRepository implements IViewedRepository {
   constructor(

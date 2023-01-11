@@ -23,44 +23,23 @@ export class ElasticService implements IElasticService {
     await this.checkIfExistIndex();
   }
 
-  // async getMovie(movie: Movie): Promise<void> {
-  //   const genres = movie.genres.map(el => el.name);
-  //   const countries = movie.countries.map(el => el.name);
-  //   const directors = movie.directors.map(el => `${el.name} ${el.surname}`);
-  //   const actors = movie.actors.map(el => `${el.name} ${el.surname}`);
-
-  //   await this.client.index({
-  //     index: "movies",
-  //     id: movie.id,
-  //     document: {
-  //       ...movie,
-  //       genres,
-  //       countries,
-  //       directors,
-  //       actors
-  //     },
-  //   }).then(console.log);
-  // }
-
   async createMovie(movie: Movie): Promise<void> {
     const genres = movie.genres.map((el) => el.name);
     const countries = movie.countries.map((el) => el.name);
     const directors = movie.directors.map((el) => `${el.name} ${el.surname}`);
     const actors = movie.actors.map((el) => `${el.name} ${el.surname}`);
 
-    await this.client
-      .index({
-        index: 'movies',
-        id: movie.id,
-        document: {
-          ...movie,
-          genres,
-          countries,
-          directors,
-          actors,
-        },
-      })
-      .then(console.log);
+    await this.client.index({
+      index: 'movies',
+      id: movie.id,
+      document: {
+        ...movie,
+        genres,
+        countries,
+        directors,
+        actors,
+      },
+    });
   }
 
   async deleteMovie(id: string): Promise<void> {
@@ -76,19 +55,17 @@ export class ElasticService implements IElasticService {
     const directors = movie.directors.map((el) => `${el.name} ${el.surname}`);
     const actors = movie.actors.map((el) => `${el.name} ${el.surname}`);
 
-    await this.client
-      .index({
-        index: 'movies',
-        id: movie.id,
-        document: {
-          ...movie,
-          genres,
-          countries,
-          directors,
-          actors,
-        },
-      })
-      .then(console.log);
+    await this.client.index({
+      index: 'movies',
+      id: movie.id,
+      document: {
+        ...movie,
+        genres,
+        countries,
+        directors,
+        actors,
+      },
+    });
   }
 
   async getMoviesFunctionScore(
@@ -143,21 +120,15 @@ export class ElasticService implements IElasticService {
       }
     });
 
-    //console.log(query);
-
     const res = await this.client.search({
       index: 'movies',
       ...query,
     });
 
-    //console.log(res.hits.hits);
-
     return {
       data: res.hits.hits.map((el) => el._id),
       count: (res.hits.total as SearchTotalHits).value,
     };
-
-    //return res
   }
 
   async getMoviesColdstart(
@@ -224,21 +195,6 @@ export class ElasticService implements IElasticService {
       ...query,
     });
 
-    // const exp = await this.client.explain({
-    //   id: "5b25cb8d-8b27-4a94-b056-5bf244bb8b80",
-    //   index: 'movies',
-    //   query: {
-    //     bool: { must: [{ terms: { [`genres.keyword`]: ['Drama'] } }] }
-    //   }
-    // });
-
-    //console.log(JSON.stringify(exp));
-
-    //console.log(JSON.stringify(res));
-    //console.log(res);
-
-    //console.log(JSON.stringify(res.hits.hits[0]._explanation));
-
     return {
       data: res.hits.hits.map((el) => el._id),
       count: (res.hits.total as SearchTotalHits).value,
@@ -266,8 +222,6 @@ export class ElasticService implements IElasticService {
       index: 'movies',
       ...query,
     });
-
-    console.log(res);
 
     return res.hits.hits.map((el) => el._id);
   }

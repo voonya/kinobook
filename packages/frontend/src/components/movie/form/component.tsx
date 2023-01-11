@@ -112,9 +112,6 @@ const MovieForm = ({ movie, onFormSubmit }: MovieFormProps) => {
       formData.append('poster', posterRef.current?.files?.[0]);
     }
 
-    // for (const value of formData.values()) {
-    //   console.log(value);
-    // }
     setIsLoading(true);
     onFormSubmit(formData).finally(() => setIsLoading(false));
   };

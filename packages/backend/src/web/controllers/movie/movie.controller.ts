@@ -65,8 +65,6 @@ export class MovieController {
   @HttpCode(HttpStatus.OK)
   @Get(MovieRoutes.GET_BY_ID)
   async getById(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    console.log(id);
-
     const movie = await this.movieService.getById(id);
 
     return movie;
@@ -90,7 +88,6 @@ export class MovieController {
       actors: data.actors && [].concat(data.actors),
     };
 
-    console.log(newMovie);
     let posterObj: File;
     if (poster) {
       posterObj = {
@@ -113,8 +110,6 @@ export class MovieController {
     @Body() data: CreateMovieDto,
     @UploadedFile() poster?: Express.Multer.File,
   ) {
-    //console.log(data);
-
     const newMovie = {
       ...optionalFieldsMovie,
       ...data,
@@ -123,10 +118,6 @@ export class MovieController {
       directors: data.directors && [].concat(data.directors),
       actors: data.actors && [].concat(data.actors),
     };
-
-    //console.log(newMovie);
-
-    //console.log(poster);
 
     let posterObj: File;
     if (poster) {
@@ -153,8 +144,6 @@ export class MovieController {
   @HttpCode(HttpStatus.OK)
   @Get(MovieRoutes.GET_ALL)
   async getAll(@Query() filters: MoviesFiltersDto) {
-    console.log(filters);
-
     return this.movieService.getFiltered(filters);
   }
 

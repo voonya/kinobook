@@ -32,7 +32,7 @@ const usePagination = ({ contentPerPage, count }: UsePaginationProps) => {
     });
   };
 
-  const setPageSAFE = (num: number) => {
+  const setPageSafe = (num: number) => {
     if (num > pageCount) {
       setPage(pageCount);
 
@@ -52,7 +52,7 @@ const usePagination = ({ contentPerPage, count }: UsePaginationProps) => {
     totalPages: pageCount,
     nextPage: () => changePage(true),
     prevPage: () => changePage(false),
-    setPage: setPageSAFE,
+    setPage: setPageSafe,
     firstContentIndex,
     lastContentIndex,
     page,

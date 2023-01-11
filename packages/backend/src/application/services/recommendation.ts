@@ -111,12 +111,8 @@ export class RecommendationService implements IRecommendationService {
     views: Viewed[],
     filters?: IRecommendationFilters,
   ) {
-    console.log(userId);
-
     const moviesIdsInBookmarks =
       await this.bookmarkRepository.getMoviesIdInUserBookmarks(userId);
-
-    console.log('bookmarks', moviesIdsInBookmarks);
 
     const recommendIds = await this.elasticService.getMoviesColdstart(
       moviesIdsInBookmarks,
@@ -143,8 +139,6 @@ export class RecommendationService implements IRecommendationService {
     for (const viewed of views) {
       this.processViewed(viewed, weights);
     }
-
-    //console.log(weights);
 
     const mappedWeights = Object.keys(weights).map((el) => [
       el,

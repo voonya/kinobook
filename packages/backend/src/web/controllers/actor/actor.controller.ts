@@ -1,4 +1,3 @@
-import { Actor } from '@domain/models';
 import { Role } from '@domain/enums';
 import type { IActorService } from '@domain/services';
 import { InterfacesTokens } from '@infrastructure/common';
@@ -38,9 +37,7 @@ export class ActorController {
   @HttpCode(HttpStatus.OK)
   @Post(ActorRoutes.CREATE)
   async create(@Body() data: CreateActorDto) {
-    const newActor = new Actor(data.name, data.surname);
-
-    return this.actorService.create(newActor);
+    return this.actorService.create({ name: data.name, surname: data.surname });
   }
 
   @HttpCode(HttpStatus.OK)
@@ -57,9 +54,10 @@ export class ActorController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() data: UpdateActorDto,
   ) {
-    const newActor = new Actor(data.name, data.surname);
-
-    return this.actorService.updateById(id, newActor);
+    return this.actorService.updateById(id, {
+      name: data.name,
+      surname: data.surname,
+    });
   }
 
   @HttpCode(HttpStatus.OK)

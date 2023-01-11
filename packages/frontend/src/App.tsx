@@ -26,12 +26,8 @@ import { DashBoardLayout } from './components/layouts';
 import { UserProvider } from './providers';
 import { history } from './helpers';
 import { BrowserRouter, ViewedModal } from '@components';
-import { useState } from 'react';
 
 function App() {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-  console.log('isonlibne', isOnline);
-
   return (
     <UserProvider>
       <BrowserRouter history={history}>

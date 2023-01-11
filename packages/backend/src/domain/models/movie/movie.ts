@@ -4,7 +4,7 @@ import { Country } from '../country';
 import { Director } from '../director';
 import { Actor } from '../actor';
 
-export class MovieDense extends BaseModel {
+export class Movie extends BaseModel {
   title: string;
 
   description: string;
@@ -28,9 +28,7 @@ export class MovieDense extends BaseModel {
   countVotes?: number;
 
   megogoLink?: string;
-}
 
-export class Movie extends MovieDense {
   genres: Genre[];
 
   countries?: Country[];
@@ -39,9 +37,3 @@ export class Movie extends MovieDense {
 
   actors?: Actor[];
 }
-
-// export class MovieWithRating extends Movie {
-//   averageRate: number;
-
-//   countVotes: number;
-// }

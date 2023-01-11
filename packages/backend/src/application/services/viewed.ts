@@ -1,12 +1,12 @@
 import { IViewedService, IMovieService, IUserService } from '@domain/services';
 import { IViewedRepository } from '@domain/repository';
-import { Viewed } from '@domain/models';
-import { BaseNotFoundError } from '@application/exeptions/base';
 import {
   CreateViewed,
   IMovieFilters,
   PaginatedEntity,
 } from '@domain/contracts';
+import { Viewed } from '@domain/models';
+import { BaseNotFoundError } from '@application/exeptions/base';
 import { EntityAlreadyExistError } from '@application/exeptions';
 
 export class ViewedService implements IViewedService {

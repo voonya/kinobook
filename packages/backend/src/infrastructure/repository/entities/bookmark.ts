@@ -1,6 +1,6 @@
 import { Bookmark } from '@domain/models';
 import { IBookmarkRepository } from '@domain/repository';
-import { PrismaService } from './prisma/prisma';
+import { PrismaService } from '../prisma/prisma';
 import { Inject, forwardRef } from '@nestjs/common';
 
 export class BookmarkRepository implements IBookmarkRepository {

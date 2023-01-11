@@ -14,7 +14,7 @@ export class CreateViewedDto {
   @IsUUID('4')
   movieId: string;
 
-  @Min(0)
+  @Min(1)
   @Max(5)
   rate: number;
 

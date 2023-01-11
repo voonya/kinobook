@@ -1,7 +1,7 @@
 import type { User } from '@domain/models';
 import type { IUserRepository } from '@domain/repository';
 import type { IRegisterDto } from '@domain/contracts';
-import { PrismaService } from './prisma/prisma';
+import { PrismaService } from '../prisma/prisma';
 import { Injectable, Inject, forwardRef } from '@nestjs/common';
 
 @Injectable()

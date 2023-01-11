@@ -8,10 +8,7 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
       node: process.env.ELASTIC_LINK,
     }),
   ],
-  providers: [
-    ElasticService,
-    // { provide: InterfacesTokens.ELASTIC_SERVICE, useClass: ElasticService },
-  ],
-  exports: [ElasticService], //InterfacesTokens.ELASTIC_SERVICE
+  providers: [ElasticService],
+  exports: [ElasticService],
 })
 export class ElasticServiceModule {}

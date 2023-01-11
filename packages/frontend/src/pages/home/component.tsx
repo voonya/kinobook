@@ -39,8 +39,6 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const redirectToCatalogueBySearch = () => {
-    console.log(searchInputRef.current?.value);
-
     if (!searchInputRef.current?.value) return;
 
     navigate({

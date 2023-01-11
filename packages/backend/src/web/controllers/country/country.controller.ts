@@ -1,4 +1,3 @@
-import { Country } from '@domain/models';
 import type { ICountryService } from '@domain/services';
 import { Role } from '@domain/enums';
 import { InterfacesTokens } from '@infrastructure/common';
@@ -39,9 +38,7 @@ export class CountryController {
   @HttpCode(HttpStatus.OK)
   @Post(CountryRoutes.CREATE)
   async create(@Body() data: CreateCountryDto) {
-    const newCountry = new Country(data.name);
-
-    return this.countryService.create(newCountry);
+    return this.countryService.create({ name: data.name });
   }
 
   @HttpCode(HttpStatus.OK)
@@ -58,9 +55,7 @@ export class CountryController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() data: UpdateCountryDto,
   ) {
-    const newCountry = new Country(data.name);
-
-    return this.countryService.updateById(id, newCountry);
+    return this.countryService.updateById(id, { name: data.name });
   }
 
   @HttpCode(HttpStatus.OK)

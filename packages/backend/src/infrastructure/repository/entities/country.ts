@@ -1,28 +1,27 @@
-import { IActorRepository } from '@domain/repository';
-import { Actor } from '@domain/models';
+import { Country } from '@domain/models';
+import { ICountryRepository } from '@domain/repository';
 import { Inject, forwardRef } from '@nestjs/common';
-import { PrismaService } from './prisma/prisma';
+import { PrismaService } from '../prisma/prisma';
 
-class ActorRepository implements IActorRepository {
+class CountryRepository implements ICountryRepository {
   constructor(
     @Inject(forwardRef(() => PrismaService)) private prisma: PrismaService,
   ) {}
 
-  getById(id: string): Promise<Actor> {
-    return this.prisma.actor.findFirst({
+  getById(id: string): Promise<Country> {
+    return this.prisma.country.findFirst({
       where: { id },
       select: {
         id: true,
         name: true,
-        surname: true,
         createdAt: true,
         updatedAt: true,
       },
     });
   }
 
-  getAll(): Promise<Actor[]> {
-    return this.prisma.actor.findMany({
+  getAll(): Promise<Country[]> {
+    return this.prisma.country.findMany({
       orderBy: [
         {
           name: 'asc',
@@ -31,60 +30,55 @@ class ActorRepository implements IActorRepository {
       select: {
         id: true,
         name: true,
-        surname: true,
         createdAt: true,
         updatedAt: true,
       },
     });
   }
 
-  updateById(id: string, data: Actor): Promise<Actor> {
-    return this.prisma.actor.update({
+  updateById(id: string, data: Country): Promise<Country> {
+    return this.prisma.country.update({
       where: { id },
       data,
       select: {
         id: true,
         name: true,
-        surname: true,
         createdAt: true,
         updatedAt: true,
       },
     });
   }
 
-  deleteById(id: string): Promise<Actor> {
-    return this.prisma.actor.delete({
+  deleteById(id: string): Promise<Country> {
+    return this.prisma.country.delete({
       where: { id },
       select: {
         id: true,
         name: true,
-        surname: true,
         createdAt: true,
         updatedAt: true,
       },
     });
   }
 
-  create(data: Actor): Promise<Actor> {
-    return this.prisma.actor.create({
+  create(data: Country): Promise<Country> {
+    return this.prisma.country.create({
       data,
       select: {
         id: true,
         name: true,
-        surname: true,
         createdAt: true,
         updatedAt: true,
       },
     });
   }
 
-  getByNameAndSurname(name: string, surname: string): Promise<Actor> {
-    return this.prisma.actor.findFirst({
-      where: { name, surname },
+  getByName(name: string): Promise<Country> {
+    return this.prisma.country.findFirst({
+      where: { name },
       select: {
         id: true,
         name: true,
-        surname: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -92,4 +86,4 @@ class ActorRepository implements IActorRepository {
   }
 }
 
-export { ActorRepository };
+export { CountryRepository };
