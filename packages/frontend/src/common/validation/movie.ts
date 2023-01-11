@@ -5,6 +5,9 @@ export const maxLengthMsg = (len: number) => `Max length is ${len}`;
 const YOUTUBE_LINK_REGEX =
   /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
 
+const MEGOGO_LINK_REGEX =
+  /^(https:\/\/megogo.net\/)(en|ru|ua)\/(view\/).+(\.html)$/;
+
 interface IMovieForm {
   title: string;
   description: string;
@@ -21,6 +24,7 @@ interface IMovieForm {
   actors?: string[];
   poster?: string | File;
   trailer?: string;
+  megogoLink?: string;
 }
 
 const movieSchema = Joi.object({
@@ -29,12 +33,12 @@ const movieSchema = Joi.object({
     .required()
     .min(2)
     .message(minLengthMsg(2))
-    .max(100)
-    .message(maxLengthMsg(100))
+    .max(250)
+    .message(maxLengthMsg(250))
     .messages({
       'string.empty': 'Title is required',
       'string.min': minLengthMsg(2),
-      'string.max': maxLengthMsg(100),
+      'string.max': maxLengthMsg(250),
     }),
   tagline: Joi.string()
     .allow(null)
@@ -42,22 +46,22 @@ const movieSchema = Joi.object({
     .trim()
     .min(2)
     .message(minLengthMsg(2))
-    .max(100)
-    .message(maxLengthMsg(100))
+    .max(250)
+    .message(maxLengthMsg(250))
     .messages({
-      'string.min': minLengthMsg(8),
-      'string.max': maxLengthMsg(1000),
+      'string.min': minLengthMsg(2),
+      'string.max': maxLengthMsg(250),
     }),
   description: Joi.string()
     .required()
     .trim()
     .min(8)
     .message(minLengthMsg(8))
-    .max(1000)
+    .max(2000)
     .messages({
       'string.empty': 'Description is required',
       'string.min': minLengthMsg(8),
-      'string.max': maxLengthMsg(1000),
+      'string.max': maxLengthMsg(2000),
     }),
   releaseDate: Joi.any().allow(null).allow(''),
   runtime: Joi.number()
@@ -104,6 +108,12 @@ const movieSchema = Joi.object({
     .allow(null)
     .allow('')
     .regex(YOUTUBE_LINK_REGEX)
+    .messages({ 'string.pattern.base': 'Link should be valid' }),
+
+  megogoLink: Joi.string()
+    .allow(null)
+    .allow('')
+    .regex(MEGOGO_LINK_REGEX)
     .messages({ 'string.pattern.base': 'Link should be valid' }),
 });
 

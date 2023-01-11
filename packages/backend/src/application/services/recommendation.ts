@@ -111,8 +111,12 @@ export class RecommendationService implements IRecommendationService {
     views: Viewed[],
     filters?: IRecommendationFilters,
   ) {
+    console.log(userId);
+
     const moviesIdsInBookmarks =
       await this.bookmarkRepository.getMoviesIdInUserBookmarks(userId);
+
+    console.log('bookmarks', moviesIdsInBookmarks);
 
     const recommendIds = await this.elasticService.getMoviesColdstart(
       moviesIdsInBookmarks,
@@ -140,7 +144,7 @@ export class RecommendationService implements IRecommendationService {
       this.processViewed(viewed, weights);
     }
 
-    console.log(weights);
+    //console.log(weights);
 
     const mappedWeights = Object.keys(weights).map((el) => [
       el,
@@ -228,7 +232,9 @@ export class RecommendationService implements IRecommendationService {
     actuallityDate.setDate(actuallityDate.getDate() - ACTUALLITY_DAYS);
 
     const additionalMultiplier =
-      actuallityDate < viewed.createdAt ? ACTOR_MULTIPLIER : DEFAULT_MULTIPLIER;
+      actuallityDate < viewed.createdAt
+        ? ACTUALLITY_MULTIPLIER
+        : DEFAULT_MULTIPLIER;
 
     Object.keys(weights).forEach((key) => {
       weights[key] *= additionalMultiplier;

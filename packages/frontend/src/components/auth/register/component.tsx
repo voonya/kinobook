@@ -28,11 +28,15 @@ export const RegisterForm = () => {
 
   return (
     <div className={styles.wrapper}>
-      <h3>Зареєструватись</h3>
-      <form className={styles.formWrapper} onSubmit={handleSubmit(onSubmit)}>
+      <h3>Register</h3>
+      <form
+        className={styles.formWrapper}
+        onSubmit={handleSubmit(onSubmit)}
+        autoComplete="off"
+      >
         <div className={styles.inputWrapper}>
           <Input
-            label="Електронна пошта"
+            label="Email"
             labelRequiredMark
             error={errors.email && 'email'}
             {...register('email', { required: true })}
@@ -40,7 +44,7 @@ export const RegisterForm = () => {
         </div>
         <div className={styles.inputWrapper}>
           <Input
-            label="Ім'я користувача"
+            label="Username"
             labelRequiredMark
             error={errors.username && 'username'}
             {...register('username', { required: true })}
@@ -48,21 +52,17 @@ export const RegisterForm = () => {
         </div>
         <div className={styles.inputWrapper}>
           <PasswordInput
-            label="Пароль"
+            label="Password"
             labelRequiredMark
             error={(errors.password?.message as string) || authError}
             {...register('password', { required: true })}
           />
         </div>
         <Button type="submit">
-          {isLoading ? (
-            <Spinner size="sm" color={'white'} />
-          ) : (
-            'Зареєструватись'
-          )}
+          {isLoading ? <Spinner size="sm" color={'white'} /> : 'Register'}
         </Button>
         <div className={styles.loginCaption}>
-          Вже маєте акаунт? <Link to={SPARoutes.LOGIN}>Увійдіть</Link>
+          Have an account? <Link to={SPARoutes.LOGIN}>Login</Link>
         </div>
       </form>
     </div>

@@ -52,7 +52,7 @@ const Component = () => {
           <Spinner size="lg" />
         ) : (
           <>
-            <h1 className={styles.title}>Редагувати фільм:</h1>
+            <h1 className={styles.title}>Update movie:</h1>
             <MovieForm movie={movie!} onFormSubmit={onFormSubmit} />
           </>
         )}

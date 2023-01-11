@@ -1,6 +1,6 @@
-import { Module, Global } from '@nestjs/common';
 import { InterfacesTokens } from '@infrastructure/common';
 import { JwtService } from './jwt.service';
+import { Module, Global } from '@nestjs/common';
 
 @Global()
 @Module({

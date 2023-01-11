@@ -54,6 +54,11 @@
     &[type="checkbox"] {
       width: fit-content;
     }
+
+    &::-ms-reveal,
+    &::-ms-clear {
+      display: none;
+    }
   }
 
   i {

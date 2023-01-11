@@ -133,7 +133,7 @@ export class ViewedRepository implements IViewedRepository {
     const views = await this.prisma.viewed.findMany({
       orderBy: [
         {
-          createdAt: 'desc',
+          updatedAt: 'desc',
         },
       ],
       where: {

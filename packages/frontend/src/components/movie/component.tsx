@@ -20,6 +20,7 @@ import styles from './styles.module.scss';
 import { MovieTitle } from './title';
 import { YouTubePlayer } from './yt-player';
 import { SimilarMovies } from './similar';
+import { MoviePricing } from './pricing';
 
 interface MovieProps {
   movie: IMovie;
@@ -92,8 +93,9 @@ const Movie = ({ movie }: MovieProps) => {
           )}
         </div>
         <div className={styles.info}>
-          <MovieTitle title={movie.title} />
+          <MovieTitle title={movie.title} tagline={movie.tagline} />
           <MovieInfo movie={movie} />
+          <MoviePricing movie={movie} />
         </div>
       </div>
       {movie.trailer && <YouTubePlayer link={movie.trailer} />}

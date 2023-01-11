@@ -1,13 +1,13 @@
-import { movieMapping } from '../../../../src/infrastructure/services/elastic/mappings';
 import { Client } from '@elastic/elasticsearch';
 import { PrismaClient } from '@prisma/client';
 import { Movie } from '@domain/models';
 import {
   mapMovie,
   defaultIncludingMovie,
-} from '../../../../src/infrastructure/repository/mappers';
+} from '@infrastructure/repository/mappers';
+import { movieMapping } from '@infrastructure/services/elastic/mappings';
 
-const client = new Client({ node: 'http://localhost:9200' });
+const client = new Client({ node: 'http://localhost:9200/' });
 
 export async function seedElasticMovies(prisma: PrismaClient) {
   await checkIfExistIndex();
@@ -17,7 +17,7 @@ export async function seedElasticMovies(prisma: PrismaClient) {
   ).map(mapMovie);
 
   for (const movie of movies) {
-    createMovie(movie);
+    await createMovie(movie);
   }
 }
 
@@ -38,19 +38,17 @@ async function createMovie(movie: Movie) {
   const directors = movie.directors.map((el) => `${el.name} ${el.surname}`);
   const actors = movie.actors.map((el) => `${el.name} ${el.surname}`);
 
-  await client
-    .index({
-      index: 'movies',
-      id: movie.id,
-      document: {
-        ...movie,
-        genres,
-        countries,
-        directors,
-        actors,
-      },
-    })
-    .then(console.log);
+  await client.index({
+    index: 'movies',
+    id: movie.id,
+    document: {
+      ...movie,
+      genres,
+      countries,
+      directors,
+      actors,
+    },
+  });
 }
 
 async function checkIfExistIndex() {

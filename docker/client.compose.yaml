@@ -1,0 +1,6 @@
+services:
+  kinobook-client:
+    container_name: kinobook-client
+    image: voonya/kinobook-client
+    ports:
+      - 3000:80

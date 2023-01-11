@@ -61,7 +61,7 @@ const MoviesPage = memo(
 
     useEffect(() => {
       if (!loading) getMovies();
-    }, [filters, page]);
+    }, [filters, page, loading]);
 
     const onTitleInputChange = (e: any) => {
       setTitleValue(e.target.value);
@@ -78,7 +78,11 @@ const MoviesPage = memo(
           <div className={styles.wrapper}>
             <h2 className={styles.title}>{title}</h2>
             <div className={styles.inputWrapper}>
-              <Input onChange={onTitleInputChange} value={titleValue} />
+              <Input
+                onChange={onTitleInputChange}
+                value={titleValue}
+                errorBlock={false}
+              />
               <Button onClick={getMovies}>Search</Button>
             </div>
             <div className={styles.innerWrapper}>

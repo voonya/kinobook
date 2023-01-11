@@ -29,9 +29,9 @@ export const StarRate = ({
     <div className={styles.wrapper}>
       {[...Array(5)].map((el, i) => (
         <button
-          key={el + i}
+          key={`${el}` + `${i}`}
           type={'button'}
-          className={editable && styles.editable}
+          className={editable ? styles.editable : ''}
           onClick={() => onStarClick(i)}
         >
           <Icon

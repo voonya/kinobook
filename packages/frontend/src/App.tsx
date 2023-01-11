@@ -26,10 +26,11 @@ import { DashBoardLayout } from './components/layouts';
 import { UserProvider } from './providers';
 import { history } from './helpers';
 import { BrowserRouter, ViewedModal } from '@components';
-import { useAppSelector } from './hooks/store';
+import { useState } from 'react';
 
 function App() {
-  const modalOpen = useAppSelector((state) => state.viewedModal.isOpen);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  console.log('isonlibne', isOnline);
 
   return (
     <UserProvider>
@@ -68,7 +69,7 @@ function App() {
           <Route path={'*'} element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
-      <ViewedModal open={modalOpen} />
+      <ViewedModal />
     </UserProvider>
   );
 }

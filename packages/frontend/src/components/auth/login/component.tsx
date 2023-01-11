@@ -28,7 +28,7 @@ export const LoginForm = () => {
 
   return (
     <div className={styles.wrapper}>
-      <h3>Увійти</h3>
+      <h3>Login</h3>
       <form
         className={styles.formWrapper}
         onSubmit={handleSubmit(onSubmit)}
@@ -36,7 +36,7 @@ export const LoginForm = () => {
       >
         <div className={styles.inputWrapper}>
           <Input
-            label="Електронна пошта"
+            label="Email"
             labelRequiredMark
             error={errors.email && 'email'}
             {...register('email', { required: true })}
@@ -44,7 +44,7 @@ export const LoginForm = () => {
         </div>
         <div className={styles.inputWrapper}>
           <PasswordInput
-            label="Пароль"
+            label="Password"
             labelRequiredMark
             error={(errors.password?.message as string) || authError}
             {...register('password', { required: true })}
@@ -52,10 +52,10 @@ export const LoginForm = () => {
         </div>
         {/* {authError && <div className={styles.backendError}>{authError}</div>} */}
         <Button type="submit">
-          {isLoading ? <Spinner size="sm" color={'white'} /> : 'Увійти'}
+          {isLoading ? <Spinner size="sm" color={'white'} /> : 'Login'}
         </Button>
         <div className={styles.registerCaption}>
-          Не маєте акаунту? <Link to={SPARoutes.REGISTER}>Зареєструйтесь</Link>
+          Don`t have an account? <Link to={SPARoutes.REGISTER}>Register</Link>
         </div>
       </form>
     </div>

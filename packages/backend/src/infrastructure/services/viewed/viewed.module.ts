@@ -1,12 +1,14 @@
-import { Module } from '@nestjs/common';
 import { UserService } from '@application/services';
-import { InterfacesTokens } from '@infrastructure/common';
-import { RepositoriesModule } from '@infrastructure/repository';
-import { ViewedRepository } from '@infrastructure/repository';
-import { UserServiceModule } from '../user';
 import { ViewedService } from '@application/services';
-import { MovieServiceModule } from '../movie';
 import { MovieService } from '@application/services';
+import { InterfacesTokens } from '@infrastructure/common';
+import {
+  RepositoriesModule,
+  ViewedRepository,
+} from '@infrastructure/repository';
+import { UserServiceModule } from '../user';
+import { MovieServiceModule } from '../movie';
+import { Module } from '@nestjs/common';
 
 @Module({
   imports: [RepositoriesModule, MovieServiceModule, UserServiceModule],

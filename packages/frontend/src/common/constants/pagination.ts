@@ -1,1 +1,1 @@
-export const ENTITY_PER_PAGE = 10;
+export const ENTITY_PER_PAGE = 12;

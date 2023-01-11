@@ -1,5 +1,6 @@
 import movies from './data.json';
 import { PrismaClient } from '@prisma/client';
+import { getMegogoLink } from '@application/helpers';
 
 interface MovieJson {
   title: string;
@@ -46,9 +47,12 @@ export async function seedMovies(prisma: PrismaClient) {
 
     mockMovie.poster = 'foreign:tmdb:' + mockMovie.poster;
 
+    const megogoLink = await getMegogoLink(mockMovie.title);
+
     await prisma.movie.create({
       data: {
         ...mockMovie,
+        megogoLink,
         genres: {
           connect: genres.map((genre) => ({ id: genre })),
         },

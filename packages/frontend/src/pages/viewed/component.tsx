@@ -30,7 +30,7 @@ const Component = () => {
     count: viewsCount,
   });
 
-  console.log('rerender', page);
+  console.log('Render viewed Page', page);
 
   const fetchViews = useCallback(async () => {
     setIsLoading(true);
@@ -49,11 +49,11 @@ const Component = () => {
         }
       })
       .finally(() => setIsLoading(false));
-  }, [filters, page, titleValue, viewsCount]);
+  }, [filters, page, titleValue]);
 
   useEffect(() => {
     if (!viewed.loading && !isLoading) fetchViews();
-  }, [page, filters, viewsCount, viewed, fetchViews]);
+  }, [page, filters, viewed.loading, fetchViews]);
 
   const onTitleInputChange = (e: any) => {
     setTitleValue(e.target.value);

@@ -1,0 +1,6 @@
+FROM node:16.3.0-alpine
+WORKDIR /usr
+COPY prisma ./prisma
+RUN npm install prisma
+
+CMD ["npx", "prisma", "migrate", "deploy"]

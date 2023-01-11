@@ -1,4 +1,4 @@
-import type { File, Movie, Viewed } from '@domain/models';
+import type { File, Movie, Viewed, MoviePricing } from '@domain/models';
 import {
   CreateMovie,
   PaginatedEntity,
@@ -11,7 +11,7 @@ export interface IMovieService {
 
   createMovie(data: CreateMovie, poster?: File): Promise<Movie>;
 
-  getAll(): Promise<Movie[]>;
+  // getAll(): Promise<Movie[]>;
 
   updateById(id: string, data: CreateMovie, poster?: File): Promise<Movie>;
 
@@ -31,4 +31,6 @@ export interface IMovieService {
     movieId: string,
     pagination: IPagination,
   ): Promise<PaginatedEntity<Viewed[]>>;
+
+  getPricing(movieId: string): Promise<MoviePricing[]>;
 }

@@ -1,10 +1,10 @@
+import { LoggerService } from '@infrastructure/services';
+import { RequestLoggingInterceptor } from '@web/interceptors';
+import { AllExceptionFilter } from '@web/filters';
+import { AppModule } from './app.module';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { AppModule } from './app.module';
-import { RequestLoggingInterceptor } from '@infrastructure/interceptors';
-import { LoggerService } from '@infrastructure/services';
-import { AllExceptionFilter } from '@infrastructure/filters';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);

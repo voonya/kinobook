@@ -41,15 +41,15 @@ const Header = () => {
         <>
           <li>
             <NavLink to={SPARoutes.PROFILE.replace(':id', user.id)}>
-              Профіль
+              Profile
             </NavLink>
           </li>
-          <Button onClick={logoutHandler}>Вийти</Button>
+          <Button onClick={logoutHandler}>Logout</Button>
         </>
       );
     }
 
-    return <Button onClick={() => navigate(SPARoutes.LOGIN)}>Увійти</Button>;
+    return <Button onClick={() => navigate(SPARoutes.LOGIN)}>Login</Button>;
   };
 
   const renderButtons = () => {
@@ -69,7 +69,7 @@ const Header = () => {
       );
     }
 
-    return <Button onClick={() => navigate(SPARoutes.LOGIN)}>Увійти</Button>;
+    return <Button onClick={() => navigate(SPARoutes.LOGIN)}>Login</Button>;
   };
 
   const renderBurgerMenu = () => (

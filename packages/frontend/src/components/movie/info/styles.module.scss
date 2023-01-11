@@ -5,20 +5,21 @@
   display: grid;
   grid-template-columns: 100px 1fr;
   gap: $spaces_md;
+  font-size: $body2;
 }
 
-.genresTitle {
+.entityTitle {
   display: flex;
   align-items: center;
 }
 
-.genres {
+.entities {
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
 
   &>div {
-    margin-left: 0;
+    margin: 0 $spaces_sm 0 0;
   }
 }
 

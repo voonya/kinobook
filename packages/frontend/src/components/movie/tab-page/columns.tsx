@@ -1,5 +1,5 @@
 import type { IGenre } from '@common';
-import { GenreTag, MoviePoster } from '@components';
+import { EntityTag, MoviePoster } from '@components';
 import type { CellProps } from 'react-table';
 
 export const MOVIE_COLUMNS = [
@@ -29,7 +29,7 @@ export const MOVIE_COLUMNS = [
       return (
         <>
           {props.value.map((e: IGenre) => (
-            <GenreTag key={e.id} genre={e} />
+            <EntityTag key={e.id} value={e.name} />
           ))}
         </>
       );

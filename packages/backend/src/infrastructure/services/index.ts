@@ -6,3 +6,4 @@ export * from './user';
 export * from './viewed';
 export * from './movie';
 export * from './recommendation';
+export * from './elastic';

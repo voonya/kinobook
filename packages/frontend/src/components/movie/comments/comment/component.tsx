@@ -16,8 +16,9 @@ export const Comment = ({ viewed }: ICommentProps) => (
     <div className={styles.innerWrapper}>
       <div className={styles.username}>
         <span>{viewed.user.username}</span>
-
-        <span>{viewed.createdAt?.slice(0, 10)}</span>
+        {viewed.createdAt && (
+          <span>{new Date(viewed.createdAt).toLocaleDateString()}</span>
+        )}
       </div>
 
       <div className={styles.description}>

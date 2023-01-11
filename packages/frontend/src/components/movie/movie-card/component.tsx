@@ -7,7 +7,7 @@ import { useInBookmarks } from '@hooks';
 import { useAppDispatch, useAppSelector } from '@hooks';
 import { dispatchCreateBookmark, dispatchDeleteBookmark } from 'src/store';
 import { useNavigate } from 'react-router-dom';
-import { GenreTag } from '@components';
+import { EntityTag } from '@components';
 
 interface MovieCardProps {
   movie: IMovie;
@@ -50,7 +50,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
         )}
         <div className={styles.genres}>
           {movie.genres.map((genre) => (
-            <GenreTag key={genre.id} genre={genre} />
+            <EntityTag key={genre.id} value={genre.name} />
           ))}
         </div>
       </div>

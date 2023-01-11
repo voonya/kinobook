@@ -1,5 +1,5 @@
 import { Role as PrismaRole } from '@prisma/client';
-import { Role } from '../../../../src/domain/enums';
+import { Role } from '@domain/enums';
 import { randomUUID } from 'crypto';
 import { hashSync } from 'bcrypt';
 

@@ -1,6 +1,6 @@
 import type { IViewed } from '@common';
 import { SPARoutes } from '@common';
-import { MoviePoster, StarRate, Icon, IconName } from '@components';
+import { MoviePoster, StarRate, Icon, IconName, EntityTag } from '@components';
 import { IconButton, BookmarkButton } from '@components';
 import { useInBookmarks } from '@hooks';
 import { useAppDispatch } from '@hooks';
@@ -16,8 +16,14 @@ interface ViewedCardProps {
 export const ViewedCard = ({ viewed }: ViewedCardProps) => {
   const inBookmarks = useInBookmarks(viewed.movie.id);
   const releaseYear = viewed.movie.releaseDate
-    ? new Date(viewed.movie.releaseDate).getFullYear()
+    ? `(${new Date(viewed.movie.releaseDate).getFullYear()})`
     : 'No release';
+
+  const updatedDate =
+    viewed.updatedAt &&
+    `${new Date(viewed.updatedAt).toLocaleTimeString()} ${new Date(
+      viewed.updatedAt,
+    ).toLocaleDateString()} `;
 
   const navigate = useNavigate();
 
@@ -66,12 +72,27 @@ export const ViewedCard = ({ viewed }: ViewedCardProps) => {
 
       <div className={styles.innerWrapper}>
         <div className={styles.title}>
-          <h4>{viewed.movie.title}</h4>
-          <StarRate value={viewed.rate} />
+          <h4>
+            {viewed.movie.title}
+            {viewed.movie.releaseDate && (
+              <span className={styles.releaseDate}>{releaseYear}</span>
+            )}
+          </h4>
+          <span className={styles.updatedDate}>
+            {updatedDate}
+            <Icon name={viewed.private ? IconName.LOCK : IconName.LOCK_OPEN} />
+          </span>
         </div>
-        <div className={styles.releaseDate}>
-          <span>{releaseYear}</span>{' '}
-          <Icon name={viewed.private ? IconName.LOCK : IconName.LOCK_OPEN} />{' '}
+
+        <div className={styles.infoWrapper}>
+          <div className={styles.genresWrapper}>
+            {viewed.movie.genres.map((genre) => (
+              <EntityTag value={genre.name} key={genre.id} />
+            ))}
+          </div>
+          <div className={styles.ratingWrapper}>
+            <StarRate value={viewed.rate} size="xs" />
+          </div>
         </div>
 
         <div className={styles.description}>

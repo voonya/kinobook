@@ -38,7 +38,7 @@ const HomePage = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  const redirectToCatalogue = () => {
+  const redirectToCatalogueBySearch = () => {
     console.log(searchInputRef.current?.value);
 
     if (!searchInputRef.current?.value) return;
@@ -49,6 +49,14 @@ const HomePage = () => {
         title: searchInputRef.current?.value,
       }).toString(),
     });
+  };
+
+  const redirectToCatalogue = () => {
+    navigate(SPARoutes.CATALOGUE);
+  };
+
+  const redirectToRecommendations = () => {
+    navigate(SPARoutes.RECOMMENDATIONS);
   };
 
   return (
@@ -64,11 +72,11 @@ const HomePage = () => {
                 color={'dark'}
                 ref={searchInputRef}
                 icon={IconName.GLASS}
-                onIconClick={redirectToCatalogue}
+                onIconClick={redirectToCatalogueBySearch}
               />
             </div>
           </div>
-          {!isLoading && (
+          {!isLoading && movies.length > 0 && (
             <div className={styles.recommendationsWrapper}>
               <h3>You might like</h3>
               <div className={styles.recommendations}>
@@ -77,7 +85,13 @@ const HomePage = () => {
                 ))}
               </div>
               <div className={styles.controls}>
-                <Button>More</Button>
+                <Button
+                  onClick={
+                    user ? redirectToRecommendations : redirectToCatalogue
+                  }
+                >
+                  More
+                </Button>
               </div>
             </div>
           )}

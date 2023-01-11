@@ -1,0 +1,18 @@
+services:
+  kinobook_server:
+    container_name: kinobook-server
+    image: voonya/kinobook-server
+    ports:
+      - 8080:8080
+    environment:
+      - PORT=8080
+      - FILE_PATH=/files
+      - DB_URL=postgresql://postgres:postgres@kinobook-db:5432/kinobook-db
+      - JWT_ACCESS_SECRET=secret
+      - JWT_ACCESS_EXPIRES=1m
+      - JWT_REFRESH_SECRET=secret
+      - JWT_REFRESH_EXPIRES=24h
+      - TIME_LIVE_JWT_REFRESH_COOKIE_M=720
+      - TIME_LIVE_JWT_ACCESS_COOKIE_M=20
+      - HASH_SALT=13
+      - ELASTIC_LINK=http://kinobook-elastic:9200/

@@ -26,6 +26,8 @@ export class MovieDense extends BaseModel {
   averageRate?: number;
 
   countVotes?: number;
+
+  megogoLink?: string;
 }
 
 export class Movie extends MovieDense {

@@ -1,0 +1,27 @@
+@import 'src/variables.scss';
+
+.wrapper {
+  display: flex;
+  margin: $spaces_md 0;
+}
+
+.pricingWrapper {
+  cursor: pointer;
+  font-size: $body3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spaces_xxs;
+  background-color: $turquoise;
+  padding: $spaces_sm $spaces_sm;
+  border-radius: 10px;
+  transition: all ease 0.4s;
+
+  &:hover {
+    background-color: $light_turquoise;
+  }
+}
+
+.price {
+  font-size: $body2;
+}

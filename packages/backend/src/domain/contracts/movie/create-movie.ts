@@ -15,6 +15,8 @@ export class CreateMovie {
 
   poster?: string;
 
+  megogoLink?: string;
+
   genres: string[];
 
   countries?: string[];

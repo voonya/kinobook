@@ -1,17 +1,17 @@
 import { IElasticService } from '@domain/services';
-import { Injectable } from '@nestjs/common';
-import { ElasticsearchService } from '@nestjs/elasticsearch';
-import { movieMapping } from './mappings';
 import { Movie } from '@domain/models';
 import {
   IMovieParamsWeights,
   IRecommendationFilters,
   PaginatedEntity,
 } from '@domain/contracts';
+import { movieMapping } from './mappings';
+import { Injectable } from '@nestjs/common';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { SearchTotalHits } from '@elastic/elasticsearch/lib/api/types';
 
-const LIMIT = 5;
-const OFFSET = 5;
+const LIMIT = 10;
+const OFFSET = 0;
 
 @Injectable()
 export class ElasticService implements IElasticService {
@@ -96,16 +96,21 @@ export class ElasticService implements IElasticService {
     viewedMovieIds: string[],
     filters?: IRecommendationFilters,
   ): Promise<PaginatedEntity<string[]>> {
+    const limitations = this.getFiltersLimitations(filters);
+
     const query = {
       query: {
         function_score: {
           query: {
             bool: {
-              must_not: {
-                ids: {
-                  values: viewedMovieIds,
+              must: [...limitations],
+              must_not: [
+                {
+                  ids: {
+                    values: viewedMovieIds,
+                  },
                 },
-              },
+              ],
             },
           },
           functions: [],
@@ -138,14 +143,14 @@ export class ElasticService implements IElasticService {
       }
     });
 
-    console.log(query);
+    //console.log(query);
 
     const res = await this.client.search({
       index: 'movies',
       ...query,
     });
 
-    console.log(res.hits.hits);
+    //console.log(res.hits.hits);
 
     return {
       data: res.hits.hits.map((el) => el._id),
@@ -160,92 +165,19 @@ export class ElasticService implements IElasticService {
     viewedMovieIds: string[],
     filters?: IRecommendationFilters,
   ): Promise<PaginatedEntity<string[]>> {
-    const limitations = [];
-
-    console.log(filters);
-
-    if (filters?.title) {
-      limitations.push({
-        'match_phrase_prefix': {
-          'title': filters?.title,
-        },
-      });
-    }
-
-    if (filters.genres && filters.genres.length) {
-      limitations.push({
-        'terms': {
-          'genres': filters.genres,
-        },
-      });
-    }
-
-    if (filters.countries && filters.countries.length) {
-      limitations.push({
-        'terms': {
-          'countries': filters.countries,
-        },
-      });
-    }
-
-    if (filters.actors && filters.actors.length) {
-      limitations.push({
-        'terms': {
-          'actors': filters.actors,
-        },
-      });
-    }
-
-    if (filters.directors && filters.directors.length) {
-      limitations.push({
-        'terms': {
-          'directors': filters.directors,
-        },
-      });
-    }
-
-    console.log(limitations);
+    const limitations = this.getFiltersLimitations(filters);
 
     const query = {
       explain: 'true',
       query: {
         function_score: {
-          'query': {
+          query: {
             bool: {
-              must: [
+              must: [...limitations],
+              must_not: [
                 {
-                  'bool': {
-                    'must': [
-                      ...limitations,
-                      // {
-                      //   "terms": {
-                      //     "genres": ["Comedy", "Drama"]
-                      //   }
-                      // },
-                      // {
-                      //   "fuzzy": {
-                      //     'title': {
-                      //       "value": "rev",
-                      //       "fuzziness": "AUTO"
-                      //     }
-
-                      //   }
-                      // },
-                      // {
-                      //   "match_phrase_prefix": {
-                      //     "title": "ant"
-                      //   }
-                      // }
-                    ],
-                  },
-                },
-                {
-                  'bool': {
-                    must_not: {
-                      ids: {
-                        values: viewedMovieIds,
-                      },
-                    },
+                  ids: {
+                    values: viewedMovieIds,
                   },
                 },
               ],
@@ -258,17 +190,16 @@ export class ElasticService implements IElasticService {
                   values: bookmarkIds,
                 },
               },
-              weight: 1.4,
+              weight: 2,
             },
             {
               gauss: {
                 releaseDate: {
                   origin: 'now',
                   scale: '1825d',
-                  decay: '0.9',
+                  decay: '0.99',
                 },
               },
-              weight: 1.4,
             },
             {
               field_value_factor: {
@@ -279,7 +210,7 @@ export class ElasticService implements IElasticService {
               },
             },
           ],
-          score_mode: 'multiply',
+          score_mode: 'sum',
           boost_mode: 'sum',
           min_score: 1,
         },
@@ -293,7 +224,18 @@ export class ElasticService implements IElasticService {
       ...query,
     });
 
-    console.log(res);
+    // const exp = await this.client.explain({
+    //   id: "5b25cb8d-8b27-4a94-b056-5bf244bb8b80",
+    //   index: 'movies',
+    //   query: {
+    //     bool: { must: [{ terms: { [`genres.keyword`]: ['Drama'] } }] }
+    //   }
+    // });
+
+    //console.log(JSON.stringify(exp));
+
+    //console.log(JSON.stringify(res));
+    //console.log(res);
 
     //console.log(JSON.stringify(res.hits.hits[0]._explanation));
 
@@ -393,7 +335,7 @@ export class ElasticService implements IElasticService {
         body: {
           settings: {
             index: {
-              number_of_replicas: 0, // for local development
+              number_of_replicas: 0,
             },
           },
         },
@@ -406,5 +348,94 @@ export class ElasticService implements IElasticService {
       index: 'movies',
       ...movieMapping,
     });
+  }
+
+  private getFiltersLimitations(filters: IRecommendationFilters) {
+    const limitations = [];
+
+    limitations.push({
+      query_string: {
+        default_field: 'title',
+        'query': `*${filters.title || ''}*`,
+      },
+    });
+
+    if (filters.genres && filters.genres.length) {
+      limitations.push({
+        'terms': {
+          'genres.keyword': filters.genres,
+        },
+      });
+    }
+
+    if (filters.countries && filters.countries.length) {
+      limitations.push({
+        'terms': {
+          'countries.keyword': filters.countries,
+        },
+      });
+    }
+
+    if (filters.actors && filters.actors.length) {
+      limitations.push({
+        'terms': {
+          'actors.keyword': filters.actors,
+        },
+      });
+    }
+
+    if (filters.directors && filters.directors.length) {
+      limitations.push({
+        'terms': {
+          'directors.keyword': filters.directors,
+        },
+      });
+    }
+
+    if (filters.averageRate) {
+      if (filters.averageRate.from >= 0) {
+        limitations.push({
+          range: {
+            averageRate: {
+              gte: filters.averageRate.from,
+            },
+          },
+        });
+      }
+
+      if (filters.averageRate.to <= 5) {
+        limitations.push({
+          range: {
+            averageRate: {
+              lte: filters.averageRate.to,
+            },
+          },
+        });
+      }
+    }
+
+    if (filters.releaseDate) {
+      if (filters.releaseDate.from) {
+        limitations.push({
+          range: {
+            releaseDate: {
+              gte: filters.releaseDate.from,
+            },
+          },
+        });
+      }
+
+      if (filters.releaseDate.to) {
+        limitations.push({
+          range: {
+            releaseDate: {
+              lte: filters.releaseDate.to,
+            },
+          },
+        });
+      }
+    }
+
+    return limitations;
   }
 }

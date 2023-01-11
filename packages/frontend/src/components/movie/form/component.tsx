@@ -106,7 +106,7 @@ const MovieForm = ({ movie, onFormSubmit }: MovieFormProps) => {
   }, [movie, entitiesLoading, dispatch, setValue]);
 
   const onSubmit = async (data: any) => {
-    const formData = createMovieFormData(data);
+    const formData = createMovieFormData({ ...data, poster });
 
     if (posterRef.current?.files?.[0]) {
       formData.append('poster', posterRef.current?.files?.[0]);
@@ -242,10 +242,17 @@ const MovieForm = ({ movie, onFormSubmit }: MovieFormProps) => {
             error={errors.trailer?.message}
             {...register('trailer')}
           />
+          <Input
+            label="Megogo (link)"
+            error={errors.megogoLink?.message}
+            {...register('megogoLink')}
+          />
           <div className={styles.posterWrapper}>
             <MoviePoster poster={poster} isBuffer={isPosterFile} />
             {(poster || movie?.poster) && (
-              <IconButton icon={IconName.XMARK} onClick={onPosterClear} />
+              <div className={styles.clearPosterBtn}>
+                <IconButton icon={IconName.XMARK} onClick={onPosterClear} />
+              </div>
             )}
           </div>
 

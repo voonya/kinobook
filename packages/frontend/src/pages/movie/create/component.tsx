@@ -17,7 +17,7 @@ const Component = () => {
   return (
     <Layout>
       <Container>
-        <h1 className={styles.title}>Створити фільм:</h1>
+        <h1 className={styles.title}>Create movie:</h1>
         <MovieForm onFormSubmit={onFormSubmit} />
       </Container>
     </Layout>

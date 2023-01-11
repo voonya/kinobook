@@ -1,5 +1,5 @@
 import { MovieNotFoundError } from '@application/exeptions';
-import type { Viewed } from '@domain/models';
+import type { MoviePricing, Viewed } from '@domain/models';
 import { Movie } from '@domain/models';
 import { File } from '@domain/models';
 import type {
@@ -22,6 +22,7 @@ import {
   IPagination,
 } from '@domain/contracts';
 import { BaseNotFoundError } from '@application/exeptions/base';
+import { getMegogoPrice, getMegogoLink } from '@application/helpers';
 
 export class MovieService implements IMovieService {
   constructor(
@@ -60,9 +61,12 @@ export class MovieService implements IMovieService {
       data.poster = fileLink;
     }
 
+    const megogoLink = data.megogoLink ?? (await getMegogoLink(data.title));
+
     const created = await this.movieRepository.create({
       ...data,
       ...mappedEntities,
+      megogoLink,
     });
 
     if (created) {
@@ -93,24 +97,29 @@ export class MovieService implements IMovieService {
       countries,
     );
 
-    if (!data.poster) {
-      if (poster) {
-        const fileLink = await this.fileService.saveFile(poster);
-        data.poster = fileLink;
-      }
-
-      if (movie.poster) {
-        await this.fileService.deleteFile(movie.poster);
-      }
+    if (
+      (!data.poster || (data.poster && poster)) &&
+      movie.poster &&
+      !movie.poster.startsWith('foreign')
+    ) {
+      await this.fileService.deleteFile(movie.poster);
     }
+
+    if (data.poster && poster) {
+      const fileLink = await this.fileService.saveFile(poster);
+      data.poster = fileLink;
+    }
+
+    const megogoLink = data.megogoLink ?? (await getMegogoLink(data.title));
 
     const newMovie = {
       ...movie,
       ...data,
       ...mappedEntities,
+      megogoLink,
       updatedAt: new Date(),
     };
-    console.log('new movie', newMovie);
+    //console.log('new movie', newMovie);
 
     const updated = await this.movieRepository.updateById(id, newMovie);
 
@@ -277,5 +286,21 @@ export class MovieService implements IMovieService {
     this.elasticService.updateMovie(movieId, updated);
 
     return updated;
+  }
+
+  async getPricing(movieId: string): Promise<MoviePricing[]> {
+    const pricing = [];
+
+    const movie = await this.getById(movieId);
+
+    const megogoPrice = await getMegogoPrice(movie.megogoLink);
+
+    if (megogoPrice) {
+      pricing.push(megogoPrice);
+    }
+
+    console.log(pricing);
+
+    return pricing;
   }
 }

@@ -3,6 +3,9 @@ export const createMovieFormData = (data: any) => {
 
   Object.keys(data).forEach((key) => {
     switch (key) {
+      case 'averageRate':
+      case 'countVotes':
+        break;
       case 'releaseDate':
         data[key] && formData.append(key, new Date(data[key]).toISOString());
         break;

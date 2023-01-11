@@ -1,0 +1,66 @@
+# docker-compose -f kinobook.compose.yaml up -d
+version: "3.9"
+services:
+  kinobook-db:
+    container_name: kinobook-db
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=kinobook-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5555:5432"
+    volumes:
+      - .:/var/lib/kinobook_db/data
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 2G
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root"]
+      interval: 20s
+  kinobook-db-migrations:
+    container_name: kinobook-db-migrations
+    image: voonya/kinobook-migrations
+    environment:
+      - DB_URL=postgresql://postgres:postgres@kinobook-db:5432/kinobook-db
+    depends_on:
+      kinobook-db:
+        condition: service_healthy
+  kinobook-elastic:
+    container_name: kinobook-elastic
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.5.3
+    environment:
+      - xpack.security.enabled=false
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xmx512m -Xms512m"
+    ports:
+      - 9200:9200
+  kinobook-server:
+    container_name: kinobook-server
+    image: voonya/kinobook-server
+    ports:
+      - 8080:8080
+    environment:
+      - PORT=8080
+      - FILE_PATH=/files
+      - DB_URL=postgresql://postgres:postgres@kinobook-db:5432/kinobook-db
+      - JWT_ACCESS_SECRET=secret
+      - JWT_ACCESS_EXPIRES=1m
+      - JWT_REFRESH_SECRET=secret
+      - JWT_REFRESH_EXPIRES=24h
+      - TIME_LIVE_JWT_REFRESH_COOKIE_M=720
+      - TIME_LIVE_JWT_ACCESS_COOKIE_M=20
+      - HASH_SALT=13
+      - ELASTIC_LINK=http://kinobook-elastic:9200/
+    depends_on:
+      - kinobook-db-migrations
+      - kinobook-elastic
+  kinobook-client:
+    container_name: kinobook-client
+    image: voonya/kinobook-client
+    ports:
+      - 3000:8080
+    depends_on:
+      - kinobook-server

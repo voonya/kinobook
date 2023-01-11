@@ -18,7 +18,7 @@
     "db:migrate:undo": "npx prisma migrate diff --from-schema-datamodel prisma/schema.prisma --to-schema-datasource prisma/schema.prisma --script > down.sql",
     "db:migrate": "prisma migrate dev",
     "db:seed": "ts-node ./prisma/seeds/seed.ts",
-    "db:seed:delete": "ts-node ./prisma/seeds/delete.ts"
+    "db:seed:delete": "ts-node --files ./prisma/seeds/delete.ts"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.5.0",
@@ -26,15 +26,17 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/elasticsearch": "^9.0.0",
     "@nestjs/platform-express": "^8.0.0",
-    "@prisma/client": "^4.6.1",
+    "@prisma/client": "^4.5.0",
     "@types/bcrypt": "^5.0.0",
     "@types/jsonwebtoken": "^8.5.9",
+    "axios": "^1.2.2",
     "bcrypt": "^5.1.0",
+    "cheerio": "^1.0.0-rc.12",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "cookie-parser": "^1.4.6",
     "jsonwebtoken": "^8.5.1",
-    "prisma": "^4.6.1",
+    "prisma": "^4.5.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"

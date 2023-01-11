@@ -1,1 +1,8 @@
 @import 'src/variables.scss';
+
+.wrapper {
+  span {
+    font-style: italic;
+    font-size: $body2;
+  }
+}

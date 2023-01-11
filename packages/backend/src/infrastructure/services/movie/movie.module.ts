@@ -1,20 +1,22 @@
-import { ViewedRepository } from './../../repository/viewed';
-import { Module, forwardRef } from '@nestjs/common';
-import { InterfacesTokens } from '@infrastructure/common';
-import { RepositoriesModule } from '@infrastructure/repository';
 import { MovieService } from '@application/services';
-import { FileModule } from '../file';
-import { FileServiceLocal } from '../file';
 import {
   MovieRepository,
   DirectorRepository,
   ActorRepository,
   CountryRepository,
   GenreRepository,
+  RepositoriesModule,
+  ViewedRepository,
 } from '@infrastructure/repository';
-import { ViewedServiceModule } from '../viewed';
-import { ElasticServiceModule } from '../elastic/elastic.module';
-import { ElasticService } from '../elastic/elastic.service';
+import { InterfacesTokens } from '@infrastructure/common';
+import {
+  ViewedServiceModule,
+  FileModule,
+  FileServiceLocal,
+} from '@infrastructure/services';
+import { ElasticServiceModule } from './../elastic/elastic.module';
+import { ElasticService } from './../elastic/elastic.service';
+import { Module, forwardRef } from '@nestjs/common';
 
 @Module({
   imports: [

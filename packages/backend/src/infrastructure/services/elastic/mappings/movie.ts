@@ -5,7 +5,6 @@ export const movieMapping = {
     },
     title: {
       type: 'text',
-      fuzziness: 'AUTO',
     },
     tagline: {
       type: 'text',

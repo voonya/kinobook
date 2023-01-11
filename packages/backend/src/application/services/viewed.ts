@@ -73,6 +73,7 @@ export class ViewedService implements IViewedService {
       ...data,
       movie,
       user,
+      updatedAt: new Date(),
     });
 
     if (viewed.private && !viewedUpdated.private) {

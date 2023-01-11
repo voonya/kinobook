@@ -1,4 +1,5 @@
-const API_BASE_ROUTE = 'http://localhost:8080/api';
+const API_BASE_ROUTE =
+  process.env.REACT_APP_API_ROUTE || 'http://localhost:8080/api';
 
 enum ApiRoutes {
   AUTH = '/auth',
@@ -36,6 +37,7 @@ enum MovieRoutes {
   GET_VIEWES = '/:id/views',
   USER_RECOMMENDATIONS = '/recommendations',
   SIMILAR_MOVIES = '/:id/similar',
+  PRICING = '/:id/pricing',
 }
 
 enum GenreRoutes {

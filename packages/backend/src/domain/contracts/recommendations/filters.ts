@@ -7,4 +7,14 @@ export interface IRecommendationFilters {
   countries?: string[];
   actors?: string[];
   directors?: string[];
+
+  releaseDate?: {
+    from?: Date;
+    to?: Date;
+  };
+
+  averageRate?: {
+    from?: number;
+    to?: number;
+  };
 }

@@ -7,7 +7,7 @@ const dashBoardLinks: NavLink[] = [
     link: DashboardRoutes.MOVIES,
   },
   {
-    name: 'Genre',
+    name: 'Genres',
     link: DashboardRoutes.GENRES,
   },
   {

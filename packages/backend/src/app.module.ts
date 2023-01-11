@@ -1,14 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ControllersModule } from '@infrastructure/controllers/controllers.module';
+import { WebModule } from '@web/controllers/controllers.module';
 
 @Module({
-  imports: [ControllersModule],
+  imports: [WebModule],
   controllers: [],
-  providers: [
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: JwtAuthGuard,
-    // },
-  ],
 })
 export class AppModule {}

@@ -45,15 +45,6 @@ const Table = ({ columns, data, onEdit, onDelete, disabled }: ITableProps) => {
                     {cell.render('Cell')}
                   </td>
                 ))}
-                <td>
-                  <Button
-                    onClick={() => onEdit(row.values)}
-                    disabled={disabled}
-                    size="xs"
-                  >
-                    Edit
-                  </Button>
-                </td>
 
                 <td>
                   <Button
@@ -63,6 +54,16 @@ const Table = ({ columns, data, onEdit, onDelete, disabled }: ITableProps) => {
                     color="danger"
                   >
                     Delete
+                  </Button>
+                </td>
+
+                <td>
+                  <Button
+                    onClick={() => onEdit(row.values)}
+                    disabled={disabled}
+                    size="xs"
+                  >
+                    Edit
                   </Button>
                 </td>
               </tr>

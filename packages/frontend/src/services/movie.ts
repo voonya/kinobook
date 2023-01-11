@@ -9,9 +9,10 @@ const convertObjectToQueryParam = (
   let param = '';
 
   Object.keys(data).forEach((key) => {
-    if (data[key]) {
-      param += `${keyObj}[${key}]=${data[key]}&`;
-    }
+    // if (data[key]) {
+    //   param += `${keyObj}[${key}]=${data[key]}&`;
+    // }
+    param += `${keyObj}[${key}]=${data[key]}&`;
   });
 
   return param.slice(0, -1);
@@ -115,6 +116,15 @@ export function getSimilarMovies(movieId: string, count: number) {
   );
 
   route += `?count=${count}`;
+
+  return http.get(route);
+}
+
+export function getPricing(movieId: string) {
+  const route = getApiRoute(ApiRoutes.MOVIE, MovieRoutes.PRICING).replace(
+    ':id',
+    movieId,
+  );
 
   return http.get(route);
 }

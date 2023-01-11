@@ -30,6 +30,7 @@ export interface IMovieDense extends BaseModel {
   countVotes?: number | null;
   poster?: string | null;
   trailer?: string | null;
+  megogoLink?: string | null;
 }
 
 export interface IMovie extends IMovieDense {
@@ -37,4 +38,20 @@ export interface IMovie extends IMovieDense {
   countries: ICountry[];
   directors: IDirector[];
   actors: IActor[];
+}
+
+export enum PricingPlatform {
+  MEGOGO = 'MEGOGO',
+}
+
+export enum PricingType {
+  PURCHASE = 'PURCHASE',
+  SUBSCRIPTION = 'SUBSCRIPTION',
+}
+
+export interface IMoviePricing {
+  platform: PricingPlatform;
+  type: PricingType;
+  subscriptionType?: string;
+  price?: string;
 }
