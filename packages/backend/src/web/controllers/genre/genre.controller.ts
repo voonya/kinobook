@@ -27,13 +27,13 @@ import {
 } from '@nestjs/common';
 
 @SetMetadata('roles', [Role.ADMIN, Role.MODERATOR])
-@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller(getPath(Routes.GENRES))
 export class GenreController {
   constructor(
     @Inject(InterfacesTokens.GENRE_SERVICE) private genreService: IGenreService,
   ) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.OK)
   @Post(GenreRoutes.CREATE)
   async create(@Body() data: CreateGenreDto) {
@@ -48,6 +48,7 @@ export class GenreController {
     return { genres };
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.OK)
   @Put(GenreRoutes.UPDATE_BY_ID)
   async updateById(
@@ -57,6 +58,7 @@ export class GenreController {
     return this.genreService.updateById(id, { name: data.name });
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.OK)
   @Delete(GenreRoutes.DELETE_BY_ID)
   async delteById(

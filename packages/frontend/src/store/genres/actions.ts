@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import {
   getAllGenres,
   createGenre,
@@ -11,6 +11,7 @@ export enum GenresActions {
   CREATE = 'CREATE_GENRES',
   UPDATE = 'UPDATE_GENRES',
   DELETE = 'DELETE_GENRES',
+  CLEAR_ERRORS = 'CLEAR_ERRORS_GENRES',
 }
 
 interface ICreateGenre {
@@ -89,9 +90,12 @@ const dispatchDeleteGenre = createAsyncThunk(
       }),
 );
 
+const clearGenresErrors = createAction(GenresActions.CLEAR_ERRORS);
+
 export {
   dispatchGetGenres,
   dispatchCreateGenre,
   dispatchUpdateGenre,
   dispatchDeleteGenre,
+  clearGenresErrors,
 };

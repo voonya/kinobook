@@ -246,7 +246,7 @@ const MovieForm = ({ movie, onFormSubmit }: MovieFormProps) => {
           />
           <div className={styles.posterWrapper}>
             <MoviePoster poster={poster} isBuffer={isPosterFile} />
-            {(poster || movie?.poster) && (
+            {poster && (
               <div className={styles.clearPosterBtn}>
                 <IconButton icon={IconName.XMARK} onClick={onPosterClear} />
               </div>

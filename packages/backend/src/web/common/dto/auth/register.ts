@@ -14,7 +14,7 @@ export class RegisterDto implements IRegisterDto {
   email: string;
 
   @MaxLength(32)
-  @MinLength(8)
+  @MinLength(2)
   @IsString()
   @IsNotEmpty()
   username: string;

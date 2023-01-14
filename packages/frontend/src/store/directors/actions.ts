@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import {
   getAllDirectors,
   createDirector,
@@ -11,6 +11,7 @@ export enum DirectorsActions {
   CREATE = 'CREATE_DIRECTORS',
   UPDATE = 'UPDATE_DIRECTORS',
   DELETE = 'DELETE_DIRECTORS',
+  CLEAR_ERRORS = 'CLEAR_ERRORS_DIRECTORS',
 }
 
 interface ICreateDirector {
@@ -94,9 +95,13 @@ const dispatchDeleteDirector = createAsyncThunk(
         return rejectWithValue(e);
       }),
 );
+
+const clearDirectorsErrors = createAction(DirectorsActions.CLEAR_ERRORS);
+
 export {
   dispatchGetDirectors,
   dispatchCreateDirector,
   dispatchUpdateDirector,
   dispatchDeleteDirector,
+  clearDirectorsErrors,
 };

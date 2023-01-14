@@ -6,6 +6,7 @@ import {
   dispatchCreateActor,
   dispatchDeleteActor,
   dispatchUpdateActor,
+  clearActorErrors,
 } from './actions';
 
 export interface ActorsState {
@@ -77,6 +78,11 @@ const loading = createReducer(false, {
 const error = createReducer('', {
   [dispatchGetActors.pending.type]: () => '',
   [dispatchGetActors.rejected.type]: (_, { payload }) => payload,
+  [dispatchCreateActor.pending.type]: () => '',
+  [dispatchCreateActor.rejected.type]: (_, { payload }) => payload,
+  [dispatchUpdateActor.pending.type]: () => '',
+  [dispatchUpdateActor.rejected.type]: (_, { payload }) => payload,
+  [clearActorErrors.type]: () => '',
 });
 
 export const actorsReducer = combineReducers({

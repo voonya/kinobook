@@ -33,7 +33,7 @@ const MovieInfo = ({ movie }: MovieInfoProps) => (
       </>
     )}
 
-    {movie.runtime && (
+    {!!movie.runtime && (
       <>
         <div>Runtime (min)</div>
         <div>{movie.runtime}</div>
@@ -52,13 +52,13 @@ const MovieInfo = ({ movie }: MovieInfoProps) => (
         </div>
       </>
     )}
-    {movie.budget && (
+    {!!movie.budget && (
       <>
         <div>Budget ($)</div>
         <div>{movie.budget}</div>
       </>
     )}
-    {movie.revenue && (
+    {!!movie.revenue && (
       <>
         <div>Revenue ($)</div>
         <div>{movie.revenue}</div>
@@ -94,63 +94,6 @@ const MovieInfo = ({ movie }: MovieInfoProps) => (
       <div>Description</div>
       <div>{movie.description}</div>
     </>
-    {/* <table className={styles.table}>
-      <tbody>
-        {movie.genres && (
-          <>
-            <div>Genres</div>
-            <div className={styles.genres}>{movie.genres.map(el => <EntityTag genre={el} />)}</div>
-          </>
-        )}
-        {movie.tagline && (
-          <>
-            <div>Tagline</div>
-            <div>{movie.tagline}</div>
-          </>
-        )}
-        {movie.averageRate &&
-          <>
-            <>
-              <div>Rating</div>
-              <div>{movie.averageRate}</div>
-            </>
-            <>
-              <div>Count votes</div>
-              <div>{movie.countVotes}</div>
-            </>
-          </>
-        }
-
-        {movie.budget && (
-          <>
-            <div>Budget</div>
-            <div>{movie.budget}</div>
-          </>
-        )}
-        {movie.revenue && (
-          <>
-            <div>Revenue</div>
-            <div>{movie.revenue}</div>
-          </>
-        )}
-        {movie.runtime && (
-          <>
-            <div>Runtime</div>
-            <div>{movie.runtime}</div>
-          </>
-        )}
-        {movie.releaseDate && (
-          <>
-            <div>Release date</div>
-            <div>{movie.releaseDate}</div>
-          </>
-        )}
-        <>
-          <div>Description</div>
-          <div>{movie.description}</div>
-        </>
-      </tbody>
-    </table> */}
   </div>
 );
 

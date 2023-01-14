@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
-import { openViewModal, closeViewModal } from './actions';
+import { openViewModal, closeViewModal, clearViewModal } from './actions';
 
 type ViewModalData = { movieId: string; viewedId?: string };
 
@@ -12,6 +12,7 @@ export interface ViewModalState {
 const data = createReducer<ViewModalData | null>(null, {
   [openViewModal.type]: (_, { payload }) => payload,
   [closeViewModal.type]: () => null,
+  [clearViewModal.type]: () => null,
 });
 
 const isOpen = createReducer(false, {

@@ -9,6 +9,7 @@ import {
   dispatchGetActors,
   dispatchUpdateActor,
   dispatchDeleteActor,
+  clearActorErrors,
 } from 'src/store';
 import styles from '../styles.module.scss';
 import { ACTOR_COLUMNS } from './table/columns';
@@ -52,6 +53,7 @@ const ActorsTabPage = () => {
   }, [actors.data, actors.loading, dispatch]);
 
   const onCreateHandler = (data: any) => {
+    dispatch(clearActorErrors());
     if (actorEdit) {
       dispatch(
         dispatchUpdateActor({
@@ -63,11 +65,11 @@ const ActorsTabPage = () => {
 
       return;
     }
-
     dispatch(dispatchCreateActor({ name: data.name, surname: data.surname }));
   };
 
   const onEdit = (data: IActor) => {
+    dispatch(clearActorErrors());
     setActorEdit(data);
 
     setValue('name', data.name);
@@ -79,6 +81,7 @@ const ActorsTabPage = () => {
   };
 
   const onCancelHandler = () => {
+    dispatch(clearActorErrors());
     setActorEdit(null);
     reset();
   };
@@ -98,7 +101,7 @@ const ActorsTabPage = () => {
         <Input
           label="Surname"
           {...register('surname')}
-          error={errors.surname?.message}
+          error={errors.surname?.message || actors.error}
         />
         {actorEdit ? (
           <div className={styles.formControls}>

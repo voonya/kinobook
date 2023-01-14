@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { SPARoutes } from '@common';
+import { Role, SPARoutes } from '@common';
 import type { IMovie } from '@common';
 import { Container, IconButton, MovieComments, IconName } from '@components';
 import {
@@ -73,12 +73,14 @@ const Movie = ({ movie }: MovieProps) => {
                   onClick={onBookmarkToggle}
                 />
                 <ViewedButton viewed={inViewed} onClick={inViewedClick} />
-                <IconButton
-                  icon={IconName.PENCIL}
-                  color="success"
-                  size={'lg'}
-                  onClick={onEdit}
-                />
+                {user.role === Role.ADMIN && (
+                  <IconButton
+                    icon={IconName.PENCIL}
+                    color="success"
+                    size={'lg'}
+                    onClick={onEdit}
+                  />
+                )}
               </div>
             </>
           )}

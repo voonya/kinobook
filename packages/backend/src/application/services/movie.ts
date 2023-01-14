@@ -132,7 +132,7 @@ export class MovieService implements IMovieService {
   async deleteById(id: string): Promise<Movie> {
     const movie = await this.getById(id);
 
-    if (movie.poster) {
+    if (movie.poster && !movie.poster.startsWith('foreign')) {
       await this.fileService.deleteFile(movie.poster);
     }
 

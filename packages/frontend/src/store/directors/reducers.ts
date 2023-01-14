@@ -6,6 +6,7 @@ import {
   dispatchCreateDirector,
   dispatchDeleteDirector,
   dispatchUpdateDirector,
+  clearDirectorsErrors,
 } from './actions';
 
 export interface DirectorsState {
@@ -77,6 +78,12 @@ const loading = createReducer(false, {
 const error = createReducer('', {
   [dispatchGetDirectors.pending.type]: () => '',
   [dispatchGetDirectors.rejected.type]: (_, { payload }) => payload,
+
+  [dispatchCreateDirector.pending.type]: () => '',
+  [dispatchCreateDirector.rejected.type]: (_, { payload }) => payload,
+  [dispatchUpdateDirector.pending.type]: () => '',
+  [dispatchUpdateDirector.rejected.type]: (_, { payload }) => payload,
+  [clearDirectorsErrors.type]: () => '',
 });
 
 export const directorReducer = combineReducers({

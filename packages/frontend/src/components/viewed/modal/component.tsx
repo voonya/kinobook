@@ -5,7 +5,7 @@ import type { IMovie, IViewed } from '@common';
 import Modal from 'react-modal';
 import { Spinner } from '@components';
 import { useAppSelector, useAppDispatch } from '@hooks';
-import { closeViewModal } from 'src/store';
+import { closeViewModal, clearViewModal } from 'src/store';
 import { useEffect } from 'react';
 import { customStyles } from './custom-styles';
 
@@ -23,6 +23,7 @@ export const ViewedModal = () => {
   const isOpen = useAppSelector((state) => state.viewedModal.isOpen);
 
   useEffect(() => {
+    setView(undefined);
     if (!movieId) {
       return;
     }
@@ -52,6 +53,7 @@ export const ViewedModal = () => {
   }
 
   const onClose = () => {
+    dispatch(clearViewModal());
     dispatch(closeViewModal());
   };
 

@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import {
   getAllActors,
   createActor,
@@ -11,6 +11,7 @@ export enum ActorsActions {
   CREATE = 'CREATE_ACTORS',
   UPDATE = 'UPDATE_ACTORS',
   DELETE = 'DELETE_ACTORS',
+  CLEAR_ERRORS = 'CLEAR_ERRORS_ACTORS',
 }
 interface ICreateActor {
   name: string;
@@ -93,9 +94,13 @@ const dispatchDeleteActor = createAsyncThunk(
         return rejectWithValue(e);
       }),
 );
+
+const clearActorErrors = createAction(ActorsActions.CLEAR_ERRORS);
+
 export {
   dispatchGetActors,
   dispatchCreateActor,
   dispatchUpdateActor,
   dispatchDeleteActor,
+  clearActorErrors,
 };

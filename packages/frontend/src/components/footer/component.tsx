@@ -20,18 +20,18 @@ const Footer = () => {
           KinoBook
         </div>
         <div className={styles.info}>
-          <h5>Зв&apos;язок:</h5>
+          <h5>Contact:</h5>
           <ul>
             <li>
               <Icon name={IconName.MAIL} />
               <a href="mailto:nikolaiev.i03@gmail.com" target="blank">
-                Електронна пошта
+                Email
               </a>
             </li>
             <li>
               <Icon name={IconName.TELEGRAM} />
               <a href="https://t.me/n1kola1ev" target="blank">
-                Телеграм
+                Telegram
               </a>
             </li>
           </ul>

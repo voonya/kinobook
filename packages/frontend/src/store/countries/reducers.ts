@@ -6,6 +6,7 @@ import {
   dispatchCreateCountry,
   dispatchDeleteCountry,
   dispatchUpdateCountry,
+  clearCountriesErrors,
 } from './actions';
 
 export interface CountriesState {
@@ -77,6 +78,12 @@ const loading = createReducer(false, {
 const error = createReducer('', {
   [dispatchGetCountries.pending.type]: () => '',
   [dispatchGetCountries.rejected.type]: (_, { payload }) => payload,
+
+  [dispatchCreateCountry.pending.type]: () => '',
+  [dispatchCreateCountry.rejected.type]: (_, { payload }) => payload,
+  [dispatchUpdateCountry.pending.type]: () => '',
+  [dispatchUpdateCountry.rejected.type]: (_, { payload }) => payload,
+  [clearCountriesErrors.type]: () => '',
 });
 
 export const countriesReducer = combineReducers({

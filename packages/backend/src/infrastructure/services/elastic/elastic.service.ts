@@ -90,7 +90,17 @@ export class ElasticService implements IElasticService {
               ],
             },
           },
-          functions: [],
+          functions: [
+            {
+              gauss: {
+                releaseDate: {
+                  origin: 'now',
+                  scale: '1825d',
+                  decay: '0.99',
+                },
+              },
+            },
+          ] as any[],
           score_mode: 'sum',
           boost_mode: 'sum',
           min_score: 1,

@@ -6,6 +6,7 @@ import {
   dispatchCreateGenre,
   dispatchDeleteGenre,
   dispatchUpdateGenre,
+  clearGenresErrors,
 } from './actions';
 
 export interface GenresState {
@@ -77,6 +78,14 @@ const loading = createReducer(false, {
 const error = createReducer('', {
   [dispatchGetGenres.pending.type]: () => '',
   [dispatchGetGenres.rejected.type]: (_, { payload }) => payload,
+
+  [dispatchCreateGenre.pending.type]: () => '',
+  [dispatchCreateGenre.rejected.type]: (_, { payload }) => payload,
+
+  [dispatchUpdateGenre.pending.type]: () => '',
+  [dispatchUpdateGenre.rejected.type]: (_, { payload }) => payload,
+
+  [clearGenresErrors.type]: () => '',
 });
 
 export const genreReducer = combineReducers({

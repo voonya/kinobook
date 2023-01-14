@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import {
   getAllCountries,
   createCountry,
@@ -11,6 +11,7 @@ export enum CountriesActions {
   CREATE = 'CREATE_COUNTRIES',
   UPDATE = 'UPDATE_COUNTRIES',
   DELETE = 'DELETE_COUNTRIES',
+  CLEAR_ERRORS = 'CLEAR_ERRORS_COUNTRIES',
 }
 
 interface ICreateCountry {
@@ -89,9 +90,12 @@ const dispatchDeleteCountry = createAsyncThunk(
       }),
 );
 
+const clearCountriesErrors = createAction(CountriesActions.CLEAR_ERRORS);
+
 export {
   dispatchGetCountries,
   dispatchCreateCountry,
   dispatchUpdateCountry,
   dispatchDeleteCountry,
+  clearCountriesErrors,
 };

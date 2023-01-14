@@ -27,7 +27,6 @@ import {
 } from '@nestjs/common';
 
 @SetMetadata('roles', [Role.ADMIN, Role.MODERATOR])
-@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller(getPath(Routes.COUNTRIES))
 export class CountryController {
   constructor(
@@ -35,6 +34,7 @@ export class CountryController {
     private countryService: ICountryService,
   ) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.OK)
   @Post(CountryRoutes.CREATE)
   async create(@Body() data: CreateCountryDto) {
@@ -49,6 +49,7 @@ export class CountryController {
     return { countries };
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.OK)
   @Put(CountryRoutes.UPDATE_BY_ID)
   async updateById(
@@ -58,6 +59,7 @@ export class CountryController {
     return this.countryService.updateById(id, { name: data.name });
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.OK)
   @Delete(CountryRoutes.DELETE_BY_ID)
   async delteById(

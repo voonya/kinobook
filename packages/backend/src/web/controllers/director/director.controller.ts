@@ -27,7 +27,6 @@ import {
 } from '@nestjs/common';
 
 @SetMetadata('roles', [Role.ADMIN, Role.MODERATOR])
-@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller(getPath(Routes.DIRECTORS))
 export class DirectorController {
   constructor(
@@ -35,6 +34,7 @@ export class DirectorController {
     private directorService: IDirectorService,
   ) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.OK)
   @Post(DirectorRoutes.CREATE)
   async create(@Body() data: CreateDirectorDto) {
@@ -52,6 +52,7 @@ export class DirectorController {
     return { directors };
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.OK)
   @Put(DirectorRoutes.UPDATE_BY_ID)
   async updateById(
@@ -64,6 +65,7 @@ export class DirectorController {
     });
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.OK)
   @Delete(DirectorRoutes.DELETE_BY_ID)
   async delteById(

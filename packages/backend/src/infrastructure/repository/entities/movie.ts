@@ -96,9 +96,6 @@ export class MovieRepository implements IMovieRepository {
       this.prisma.movie.findMany({
         orderBy: [
           {
-            averageRate: { sort: 'desc', nulls: 'last' },
-          },
-          {
             releaseDate: { sort: 'desc', nulls: 'last' },
           },
         ],

@@ -12,6 +12,7 @@ import {
   dispatchCreateCountry,
   dispatchUpdateCountry,
   dispatchDeleteCountry,
+  clearCountriesErrors,
 } from 'src/store';
 
 const CountriesTabPage = () => {
@@ -51,6 +52,7 @@ const CountriesTabPage = () => {
   }, [countries, dispatch]);
 
   const onCreateHandler = (data: any) => {
+    dispatch(clearCountriesErrors());
     if (countryEdit) {
       dispatch(dispatchUpdateCountry({ id: countryEdit.id, name: data.name }));
 
@@ -61,6 +63,7 @@ const CountriesTabPage = () => {
   };
 
   const onEdit = (data: ICountry) => {
+    dispatch(clearCountriesErrors());
     setCountryEdit(data);
 
     setValue('name', data.name);
@@ -71,6 +74,7 @@ const CountriesTabPage = () => {
   };
 
   const onCancelHandler = () => {
+    dispatch(clearCountriesErrors());
     setCountryEdit(null);
     reset();
   };
@@ -85,7 +89,7 @@ const CountriesTabPage = () => {
           label="Name"
           labelRequiredMark
           {...register('name')}
-          error={errors.name?.message}
+          error={errors.name?.message || countries.error}
         />
         {countryEdit ? (
           <div className={styles.formControls}>

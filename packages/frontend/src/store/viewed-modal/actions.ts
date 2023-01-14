@@ -8,6 +8,7 @@ interface IOpenVieweModal {
 export enum ViewModalActions {
   OPEN = 'VIEW_MODAL_OPEN',
   CLOSE = 'VIEW_MODAL_CLOSE',
+  CLEAR = 'VIEW_MODAL_CLEAR',
 }
 
 const openViewModal = createAction(
@@ -16,5 +17,6 @@ const openViewModal = createAction(
 );
 
 const closeViewModal = createAction(ViewModalActions.CLOSE);
+const clearViewModal = createAction(ViewModalActions.CLEAR);
 
-export { openViewModal, closeViewModal };
+export { openViewModal, closeViewModal, clearViewModal };

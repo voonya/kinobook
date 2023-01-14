@@ -10,6 +10,7 @@ import {
   dispatchCreateGenre,
   dispatchUpdateGenre,
   dispatchDeleteGenre,
+  clearGenresErrors,
 } from 'src/store';
 import { GENRE_COLUMNS } from './table/columns';
 import styles from '../styles.module.scss';
@@ -54,6 +55,7 @@ const GenresTabPage = () => {
   const onCreateHandler = (data: any) => {
     setFormError('');
 
+    dispatch(clearGenresErrors());
     if (genreEdit) {
       dispatch(dispatchUpdateGenre({ id: genreEdit.id, name: data.name }));
 
@@ -64,6 +66,7 @@ const GenresTabPage = () => {
   };
 
   const onEdit = (data: IGenre) => {
+    dispatch(clearGenresErrors());
     setGenreEdit(data);
 
     setValue('name', data.name);
@@ -75,6 +78,7 @@ const GenresTabPage = () => {
 
   const onCancelHandler = () => {
     setGenreEdit(null);
+    dispatch(clearGenresErrors());
     setFormError('');
     reset();
   };
@@ -89,7 +93,7 @@ const GenresTabPage = () => {
           label="Name"
           labelRequiredMark
           {...register('name')}
-          error={errors.name?.message || formError}
+          error={errors.name?.message || formError || genres.error}
         />
         {genreEdit ? (
           <div className={styles.formControls}>

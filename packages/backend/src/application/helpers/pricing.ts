@@ -19,7 +19,7 @@ export async function getMegogoPrice(megogoLink?: string) {
   if (megogoLink) {
     const page = await getPage(megogoLink);
 
-    if (!page) return [];
+    if (!page) return null;
 
     const $ = cheerio.load(page);
 

@@ -6,7 +6,7 @@ import {
   deleteViewed,
 } from 'src/services';
 import type { ICreateViewed } from '@common';
-import { closeViewModal } from '../viewed-modal';
+import { closeViewModal, clearViewModal } from '../viewed-modal';
 
 export enum ViewedActions {
   GET_MOVIES_ID_VIEWED = 'GET_MOVIES_ID_VIEWED',
@@ -41,6 +41,7 @@ const dispatchCreateViewed = createAsyncThunk(
         if (data.error) {
           return rejectWithValue(data.error[0]);
         }
+        dispatch(clearViewModal());
         dispatch(closeViewModal());
 
         return data;
@@ -81,7 +82,7 @@ const dispatchUpdateViewed = createAsyncThunk(
         if (data.error) {
           return rejectWithValue(data.error[0]);
         }
-
+        dispatch(clearViewModal());
         dispatch(closeViewModal());
 
         return data;

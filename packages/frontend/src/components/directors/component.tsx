@@ -11,6 +11,7 @@ import {
   dispatchGetDirectors,
   dispatchUpdateDirector,
   dispatchDeleteDirector,
+  clearDirectorsErrors,
 } from 'src/store';
 import { useAppDispatch, useAppSelector, usePagination } from '@hooks';
 
@@ -52,6 +53,7 @@ const DirectorsTabPage = () => {
   }, [directors.data, directors.loading, dispatch]);
 
   const onCreateHandler = (data: any) => {
+    dispatch(clearDirectorsErrors());
     if (directorEdit) {
       dispatch(
         dispatchUpdateDirector({
@@ -70,6 +72,7 @@ const DirectorsTabPage = () => {
   };
 
   const onEdit = (data: IDirector) => {
+    dispatch(clearDirectorsErrors());
     setDirectorEdit(data);
 
     setValue('name', data.name);
@@ -81,6 +84,7 @@ const DirectorsTabPage = () => {
   };
 
   const onCancelHandler = () => {
+    dispatch(clearDirectorsErrors());
     setDirectorEdit(null);
     reset();
   };
@@ -102,7 +106,7 @@ const DirectorsTabPage = () => {
         <Input
           label="Surname"
           {...register('surname')}
-          error={errors.surname?.message}
+          error={errors.surname?.message || directors.error}
         />
         {directorEdit ? (
           <div className={styles.formControls}>

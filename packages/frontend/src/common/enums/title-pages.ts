@@ -3,16 +3,16 @@ import { SPARoutes } from './routes';
 type SPARoutesType = Record<SPARoutes, string>;
 
 export const PageTitle: Partial<SPARoutesType> = {
-  [SPARoutes.HOME]: 'KinoBook | Головна',
-  [SPARoutes.LOGIN]: 'KinoBook | Вхід',
-  [SPARoutes.REGISTER]: 'KinoBook | Реєстрація',
-  [SPARoutes.PROFILE]: 'KinoBook | Профіль',
-  [SPARoutes.MOVIE]: 'KinoBook | Фільм',
-  [SPARoutes.BOOKMARKS]: 'KinoBook | Нотатки',
-  [SPARoutes.CATALOGUE]: 'KinoBook | Каталог',
-  [SPARoutes.VIEWED]: 'KinoBook | Переглянуті',
-  [SPARoutes.CREATE_MOVIE]: 'KinoBook | Сторити фільм',
-  [SPARoutes.UPDATE_MOVIE]: 'KinoBook | Редагувати фільм',
-  [SPARoutes.DASHBOARD]: 'KinoBook | Дашборд',
+  [SPARoutes.HOME]: 'KinoBook | Main',
+  [SPARoutes.LOGIN]: 'KinoBook | Login',
+  [SPARoutes.REGISTER]: 'KinoBook | Register',
+  [SPARoutes.PROFILE]: 'KinoBook | Profile',
+  [SPARoutes.MOVIE]: 'KinoBook | Movie',
+  [SPARoutes.BOOKMARKS]: 'KinoBook | Bookmarks',
+  [SPARoutes.CATALOGUE]: 'KinoBook | Catalogue',
+  [SPARoutes.VIEWED]: 'KinoBook | Viewed',
+  [SPARoutes.CREATE_MOVIE]: 'KinoBook | Create film',
+  [SPARoutes.UPDATE_MOVIE]: 'KinoBook | Edit film',
+  [SPARoutes.DASHBOARD]: 'KinoBook | Dashboard',
   [SPARoutes.NOT_FOUND]: 'KinoBook | 404',
 };

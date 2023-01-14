@@ -19,6 +19,10 @@ const UserProvider = ({ children }: UserProviderProps) => {
       dispatch(getAuthUser())
         .then(() => dispatch(dispatchMoviesIdBookmarks()))
         .then(() => dispatch(dispatchMoviesIdViewed()));
+    } else if (hasUser) {
+      dispatch(dispatchMoviesIdBookmarks()).then(() =>
+        dispatch(dispatchMoviesIdViewed()),
+      );
     }
   }, [dispatch, hasToken, hasUser]);
 
