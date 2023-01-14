@@ -11,13 +11,6 @@ import { customStyles } from './custom-styles';
 
 import styles from './styles.module.scss';
 
-// interface IViewedModalProps {
-//   open: boolean;
-//   onClose?: () => void;
-//   movieId?: string;
-//   viewedId?: string;
-// }
-
 export const ViewedModal = () => {
   const [movie, setMovie] = useState<IMovie>();
   const [view, setView] = useState<IViewed>();

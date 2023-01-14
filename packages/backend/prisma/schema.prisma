@@ -16,9 +16,9 @@ enum Role {
 
 model User {
   id        String      @id @default(uuid()) @db.Uuid
-  username  String      @unique @db.VarChar(128)
-  email     String      @unique @db.VarChar(256)
-  password  String      @db.VarChar(256)
+  username  String      @unique @db.Text
+  email     String      @unique @db.Text
+  password  String      @db.Text
   role      Role        @default(USER)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @default(now())
@@ -31,22 +31,22 @@ model Auth {
   id           String   @id @default(uuid()) @db.Uuid
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId       String   @db.Uuid
-  refreshToken String   @db.VarChar(2048)
+  refreshToken String   @db.Text
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
 }
 
 model Movie {
   id          String      @id @default(uuid()) @db.Uuid
-  title       String      @db.VarChar(512)
-  description String      @db.VarChar(4096)
-  tagline     String?      @db.VarChar(512)
+  title       String      @db.Text
+  description String      @db.Text
+  tagline     String?      @db.Text
   releaseDate DateTime?
   runtime     Int?
   budget      BigInt?
   revenue     BigInt?
-  poster      String?      @db.VarChar(1024)
-  trailer     String?      @db.VarChar(1024)
+  poster      String?      @db.Text
+  trailer     String?      @db.Text
   averageRate Decimal?     @db.Decimal(3, 2)
   countVotes  BigInt?
   megogoLink    String?
@@ -62,8 +62,8 @@ model Movie {
 
 model Actor {
   id        String   @id @default(uuid()) @db.Uuid
-  name      String   @db.VarChar(256)
-  surname   String   @db.VarChar(256)
+  name      String   @db.Text
+  surname   String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   movies    Movie[]
@@ -71,8 +71,8 @@ model Actor {
 
 model Director {
   id        String   @id @default(uuid()) @db.Uuid
-  name      String   @db.VarChar(256)
-  surname   String   @db.VarChar(256)
+  name      String   @db.Text
+  surname   String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   movies    Movie[]
@@ -80,7 +80,7 @@ model Director {
 
 model Genre {
   id        String   @id @default(uuid()) @db.Uuid
-  name      String   @db.VarChar(128)
+  name      String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   movies    Movie[]
@@ -88,7 +88,7 @@ model Genre {
 
 model Country {
   id        String   @id @default(uuid()) @db.Uuid
-  name      String   @db.VarChar(128)
+  name      String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   movies    Movie[]
@@ -111,7 +111,7 @@ model Viewed {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId    String   @db.Uuid
   rate      Decimal?  @db.Decimal(3, 2)
-  description String? @db.VarChar(4096)
+  description String? @db.Text
   private   Boolean
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

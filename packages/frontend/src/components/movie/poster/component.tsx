@@ -37,7 +37,7 @@ const MoviePoster = ({
       <img
         src={posterSrc || defaultPoster}
         onError={({ currentTarget }) => {
-          currentTarget.onerror = null; // prevents looping
+          currentTarget.onerror = null;
           currentTarget.src = defaultPoster;
         }}
         alt="movie poster"

@@ -57,17 +57,6 @@ const loading = createReducer(false, {
   [dispatchUpdateViewed.rejected.type]: () => false,
 });
 
-// const loading = createReducer(false, {
-//   [getActors.pending.type]: () => true,
-//   [getActors.fulfilled.type]: () => false,
-//   [getActors.rejected.type]: () => false,
-// });
-
-// const error = createReducer('', {
-//   [getActors.pending.type]: () => '',
-//   [getActors.rejected.type]: (_, { payload }) => payload,
-// });
-
 export const viewedReducer = combineReducers({
   data,
   loading,

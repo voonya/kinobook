@@ -25,24 +25,6 @@ export class MovieRepository implements IMovieRepository {
       where: { id },
       include: defaultIncludingMovie,
     });
-    // const [movie, aggr] = await this.prisma.$transaction([
-    //   this.prisma.movie.findFirst({
-    //     where: { id },
-    //     include: defaultIncluding,
-    //   }),
-    //   this.prisma.viewed.aggregate({
-    //     _avg: {
-    //       rate: true,
-    //     },
-    //     _count: {
-    //       rate: true,
-    //     },
-    //     where: {
-    //       movieId: id,
-    //       private: false,
-    //     },
-    //   }),
-    // ]);
 
     return mapMovie(movie);
   }

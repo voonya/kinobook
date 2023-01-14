@@ -9,9 +9,6 @@ const convertObjectToQueryParam = (
   let param = '';
 
   Object.keys(data).forEach((key) => {
-    // if (data[key]) {
-    //   param += `${keyObj}[${key}]=${data[key]}&`;
-    // }
     param += `${keyObj}[${key}]=${data[key]}&`;
   });
 

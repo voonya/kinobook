@@ -61,12 +61,6 @@ const MovieFilter = ({ onFiltersApply }: MovieFilterProps) => {
     onFiltersApply?.(data);
   };
 
-  // const onChange = (dates: any) => {
-  //   const [start, end] = dates;
-  //   setStartDate(start);
-  //   setEndDate(end);
-  // };
-
   const onReset = () => {
     reset();
     setEndDate('');

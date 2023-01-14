@@ -8,7 +8,6 @@ class AuthRepository implements IAuthRepository {
     @Inject(forwardRef(() => PrismaService)) private prisma: PrismaService,
   ) {}
 
-  //
   create(userId: string, refreshToken: string) {
     return this.prisma.auth.create({ data: { userId, refreshToken } });
   }

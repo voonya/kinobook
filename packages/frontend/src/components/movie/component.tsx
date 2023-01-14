@@ -52,15 +52,6 @@ const Movie = ({ movie }: MovieProps) => {
     navigate(SPARoutes.UPDATE_MOVIE.replace(':id', movie.id));
   };
 
-  // const onDelete = () => {
-  //   setIsLoading(true);
-  //   deleteMovie(id).then((data) => {
-  //     if (!data.error) {
-  //       return fetchMovies();
-  //     }
-  //   }).finally(() => setIsLoading(false));
-  // }
-
   return (
     <Container
       style={{
