@@ -327,7 +327,7 @@ export class ElasticService implements IElasticService {
     if (filters.genres && filters.genres.length) {
       limitations.push({
         'terms': {
-          'genres.keyword': filters.genres,
+          'genres': filters.genres,
         },
       });
     }
@@ -335,7 +335,7 @@ export class ElasticService implements IElasticService {
     if (filters.countries && filters.countries.length) {
       limitations.push({
         'terms': {
-          'countries.keyword': filters.countries,
+          'countries': filters.countries,
         },
       });
     }
@@ -343,7 +343,7 @@ export class ElasticService implements IElasticService {
     if (filters.actors && filters.actors.length) {
       limitations.push({
         'terms': {
-          'actors.keyword': filters.actors,
+          'actors': filters.actors,
         },
       });
     }
@@ -351,7 +351,7 @@ export class ElasticService implements IElasticService {
     if (filters.directors && filters.directors.length) {
       limitations.push({
         'terms': {
-          'directors.keyword': filters.directors,
+          'directors': filters.directors,
         },
       });
     }

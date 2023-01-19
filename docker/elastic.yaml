@@ -9,10 +9,5 @@ services:
       - xpack.security.enabled=false
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xmx512m -Xms512m"
-    # networks:
-    #   - es-net
     ports:
       - 9200:9200
-# networks:
-#   es-net:
-#     driver: bridge
